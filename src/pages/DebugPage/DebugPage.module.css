@@ -1,0 +1,10 @@
+.section {
+  margin: var(--margin-standart);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.title {
+  margin-bottom: var(--margin-medium);
+}

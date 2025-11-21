@@ -36,8 +36,8 @@
   /* border */
   --border-standart: 1px solid
     color-mix(in srgb, var(--color-prusian-blue) 30%, transparent);
-  --form-border: 1px solid
-    color-mix(in srgb, var(--color-light-coral) 70%, transparent);
+  /* --form-border: 1px solid
+    color-mix(in srgb, var(--color-cadet-grey) 70%, transparent); */
 
   --border-radius-main: 4px;
   --border-radius-medium: 6px;
@@ -192,6 +192,7 @@ h1 {
   font-size: var(--huge-font-size);
   font-weight: var(--font-weight-4);
   color: var(--color-rich-black);
+  line-height: var(--line-height-standart);
 }
 
 h2 {
@@ -199,6 +200,7 @@ h2 {
   font-size: var(--big-plus-font-size);
   font-weight: var(--font-weight-2);
   color: var(--color-rich-black);
+  line-height: var(--line-height-standart);
 }
 
 h3 {
@@ -206,6 +208,7 @@ h3 {
   font-size: var(--medium-font-size);
   font-weight: var(--font-weight-4);
   color: var(--color-rich-black);
+  line-height: var(--line-height-standart);
 }
 
 h4 {
@@ -213,6 +216,7 @@ h4 {
   font-size: var(--standart-font-size);
   font-weight: var(--font-weight-4);
   color: var(--color-rich-black);
+  line-height: var(--line-height-standart);
 }
 
 p {
@@ -220,4 +224,5 @@ p {
   font-size: var(--standart-font-size);
   font-weight: var(--font-weight-3);
   color: var(--color-eerie-black);
+  line-height: var(--line-height-standart);
 }

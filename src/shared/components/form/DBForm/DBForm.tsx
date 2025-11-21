@@ -1,31 +1,32 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { FormInput } from "../FormInput/FormInput";
 import { FormRow } from "../FormRow/FormRow";
 import {
   Box,
   Button,
+  CircularProgress,
   IconButton,
   InputAdornment,
+  Stack,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { useEffect, useState } from "react";
 import { dbFormValidation } from "../../../utils/validation/dbFormValidation";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
+import type { DBSettings } from "../../../types/types";
+import { useQuery } from "@tanstack/react-query";
+import { getDBSettings } from "../../../../api/fish-logger-api";
+import {
+  useDBSettingsSave,
+  useDBSettingsTest,
+} from "../../../hooks/useDBSettings";
 
-type DBFormValuesProps = {
-  ipAddress: string;
-  port: number;
-  login: string;
-  password: string;
-  dbName: string;
-};
-
-const defaultDbValues: DBFormValuesProps = {
-  ipAddress: "192.162.1.56",
+const defaultDbValues: DBSettings = {
+  host: "192.162.1.56",
   port: 5432,
-  login: "",
+  user: "",
   password: "",
-  dbName: "fishing",
+  database: "fishing",
 };
 
 const baseButtonSx = {
@@ -37,114 +38,146 @@ const baseButtonSx = {
   textTransform: "var(--text-uppercase)",
 };
 
-type DbAction = "test" | "save";
-
-type DbStatus =
-  | { type: "success"; message: string }
-  | { type: "error"; message: string }
-  | null;
-
 export function DBForm() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<DBFormValuesProps>({
+    reset,
+    control,
+  } = useForm<DBSettings>({
     defaultValues: defaultDbValues,
   });
 
-  const onSubmit = (data: DBFormValuesProps) => {
-    console.log("DB Form Data:", data);
-  };
+  const {
+    data: dbSettings,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["DBSettings"],
+    queryFn: getDBSettings,
+  });
+
+  const [isTested, setIsTested] = useState(false);
+  const [testedValues, setTestedValues] = useState<DBSettings | null>(null);
+
+  const watchedValues = useWatch({ control });
+
+  const { testMutate, isTesting } = useDBSettingsTest();
+  const { saveMutate, isSaving } = useDBSettingsSave();
+
+  const handleTestSettings = handleSubmit((values) => {
+    setIsTested(false);
+    testMutate(values, {
+      onSuccess: () => {
+        setIsTested(true);
+        setTestedValues(values);
+      },
+      onError: () => setIsTested(false),
+    });
+    console.log("DB Form Data to test:", values);
+  });
+
+  const handleSaveSettings = handleSubmit((values) => {
+    saveMutate(values);
+    console.log("DB Form Data to save:", values);
+  });
+
+  useEffect(() => {
+    if (!testedValues) return;
+
+    const hasChanges =
+      JSON.stringify(testedValues) !== JSON.stringify(watchedValues);
+
+    if (hasChanges) {
+      setIsTested(false);
+    }
+  }, [watchedValues, testedValues]);
+
+  useEffect(() => {
+    if (dbSettings && !isError) {
+      reset(dbSettings);
+    }
+  }, [dbSettings, reset, isError]);
 
   const [showPassword, setShowPassword] = useState(false);
   const togglePassword = () => setShowPassword((prev) => !prev);
 
-  const [status, setStatus] = useState<DbStatus>(null);
-  const [isTesting, setIsTesting] = useState(false);
-
-  // Заготовка под реальный API
-  async function sendDbRequest(values: DBFormValuesProps, action: DbAction) {
-    const payload = { ...values, dbAction: action };
-
-    console.log("→ would send to backend:", payload);
-
-    // TODO тут потом заменить на fetch/axios:
-    // const res = await fetch("/api/db", { method: "POST", body: JSON.stringify(payload) });
-
-    await new Promise((resolve) => setTimeout(resolve, 800)); // имитация сети
-
-    // тут — заглушка результата:
-    if (action === "test") {
-      const ok = true;
-      if (!ok) throw new Error("Cannot connect to database");
-    }
-  }
-
-  const onTestConnection = async (values: DBFormValuesProps) => {
-    setStatus(null);
-    setIsTesting(true);
-    try {
-      await sendDbRequest(values, "test");
-      setStatus({ type: "success", message: "Connection successful" });
-    } catch (error) {
-      setStatus({
-        type: "error",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Connection failed. Check settings.",
-      });
-    } finally {
-      setIsTesting(false);
-    }
-  };
-
-  const onSave = async (values: DBFormValuesProps) => {
-    setStatus(null);
-    try {
-      await sendDbRequest(values, "save");
-      setStatus({ type: "success", message: "Settings saved" });
-    } catch (error) {
-      setStatus({
-        type: "error",
-        message:
-          error instanceof Error ? error.message : "Unable to save settings.",
-      });
-    }
-  };
-
   return (
     <Box
       component="form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSaveSettings}
       sx={{
         maxWidth: "50%",
         mt: "var(--margin-huge)",
         p: "var(--padding-big)",
         borderRadius: "var(--border-radius-medium)",
-        border: "var(--form-border)",
+        border: "var(--border-standart)",
         boxShadow: 3,
         bgcolor: "var(--form-background)",
         fontFamily: "var(--secondary-font)",
+
+        "@media (max-width:1024px)": {
+          maxWidth: "100%",
+        },
       }}
     >
-      <Typography
-        variant="inherit"
+      <Stack
+        direction="row"
+        spacing="var(--gap-mini)"
         mb="var(--margin-medium)"
-        component="h4"
-        color="var(--color-gunmetal)"
       >
-        DataBase connection
-      </Typography>
-      <FormRow label="IP Address">
+        <Stack
+          direction="row"
+          justifyContent="end"
+          alignItems="end"
+          spacing="var(--gap-main)"
+        >
+          <Typography
+            variant="inherit"
+            component="h4"
+            color="var(--color-gunmetal)"
+          >
+            DataBase connection
+          </Typography>
+
+          {isLoading && (
+            <Typography
+              component="p"
+              sx={{
+                fontSize: "var(--standart-font-size)",
+                fontFamily: "var(--secondary-font)",
+                color: "var(--color-jungle-green)",
+              }}
+            >
+              Loading settings...
+            </Typography>
+          )}
+
+          {isError && (
+            <Typography
+              component="p"
+              sx={{
+                fontSize: "var(--standart-font-size)",
+                fontFamily: "var(--secondary-font)",
+                color: "var(--color-bittersweet-shimmer)",
+              }}
+            >
+              {(error as Error)?.message || "Failed to load DB settings"}
+            </Typography>
+          )}
+        </Stack>
+      </Stack>
+
+      <FormRow label="Host">
         <FormInput
           fullWidth
           placeholder="192.162.1.56"
           inputMode="numeric"
-          {...register("ipAddress", dbFormValidation.ipAddress)}
-          error={!!errors.ipAddress}
-          helperText={errors.ipAddress?.message || " "}
+          {...register("host", dbFormValidation.ipAddress)}
+          error={!!errors.host}
+          helperText={errors.host?.message || " "}
         />
       </FormRow>
 
@@ -160,13 +193,13 @@ export function DBForm() {
         />
       </FormRow>
 
-      <FormRow label="Login">
+      <FormRow label="User">
         <FormInput
           fullWidth
           autoComplete="username"
-          {...register("login", dbFormValidation.login)}
-          error={!!errors.login}
-          helperText={errors.login?.message || " "}
+          {...register("user", dbFormValidation.login)}
+          error={!!errors.user}
+          helperText={errors.user?.message || " "}
         />
       </FormRow>
 
@@ -183,7 +216,7 @@ export function DBForm() {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton edge="end" onClick={togglePassword} tabIndex={-1}>
-                    {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                    {showPassword ? <BsEyeSlash /> : <BsEye />}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -192,12 +225,12 @@ export function DBForm() {
         />
       </FormRow>
 
-      <FormRow label="DB name">
+      <FormRow label="Database">
         <FormInput
           fullWidth
-          {...register("dbName", dbFormValidation.dbName)}
-          error={!!errors.dbName}
-          helperText={errors.dbName?.message || " "}
+          {...register("database", dbFormValidation.dbName)}
+          error={!!errors.database}
+          helperText={errors.database?.message || " "}
         />
       </FormRow>
       <Box
@@ -210,8 +243,8 @@ export function DBForm() {
         <Button
           type="button"
           variant="outlined"
-          disabled={isSubmitting || isTesting}
-          onClick={handleSubmit(onTestConnection)}
+          disabled={isSubmitting || isLoading || isTesting}
+          onClick={handleTestSettings}
           sx={{
             ...baseButtonSx,
             flex: 1,
@@ -224,14 +257,20 @@ export function DBForm() {
             },
           }}
         >
-          {isTesting ? "Testing..." : "Test connection"}
+          {isTesting ? (
+            <CircularProgress
+              size={14}
+              sx={{ display: "block", transformOrigin: "center" }}
+            />
+          ) : (
+            "Test connection"
+          )}
         </Button>
         <Button
           type="submit"
           variant="contained"
           disableElevation
-          disabled={isSubmitting || isTesting}
-          onClick={handleSubmit(onSave)}
+          disabled={isSubmitting || isLoading || isSaving || !isTested}
           sx={{
             ...baseButtonSx,
             flex: 1,
@@ -242,26 +281,16 @@ export function DBForm() {
             },
           }}
         >
-          Save
+          {isSaving ? (
+            <CircularProgress
+              size={14}
+              sx={{ display: "block", transformOrigin: "center" }}
+            />
+          ) : (
+            "Save"
+          )}
         </Button>
       </Box>
-
-      {status && (
-        <Box sx={{ height: "2rem", mt: "1.2rem" }}>
-          <Typography
-            sx={{
-              fontFamily: "var(--secondary-font)",
-              fontSize: "var(--medium-font-size)",
-              color:
-                status.type === "success"
-                  ? "var(--color-jungle-green)"
-                  : "var(--color-bittersweet-shimmer)",
-            }}
-          >
-            {status.message}
-          </Typography>
-        </Box>
-      )}
     </Box>
   );
 }

@@ -5,5 +5,5 @@ export function formatTimestamp(input: string | number | Date): string {
   const mm = String(date.getMinutes()).padStart(2, "0");
   const ss = String(date.getSeconds()).padStart(2, "0");
 
-  return `{${hh}:${mm}^${ss}}`;
+  return `${hh}:${mm}:${ss}`;
 }
