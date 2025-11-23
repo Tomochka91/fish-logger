@@ -38,22 +38,25 @@ export function DebugLogView({ messages, autoscroll }: DebugLogViewProps) {
       variant="outlined"
       sx={{
         flex: 1,
-        // minHeight: 320,
-        // maxHeight: "60vh",
+        minHeight: 0,
         overflowY: "auto",
-        p: 1.5,
+        p: "var(--pading-equal)",
         display: "flex",
         flexDirection: "column",
-        gap: 1,
-        fontFamily: "monospace",
-        fontSize: 14,
+        gap: "var(--gap-mini)",
+        fontFamily: "var(--secondary-font)",
+        fontSize: "var(--standart-font-size)",
       }}
     >
       {messages.length === 0 ? (
         <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ textAlign: "center", mt: 4 }}
+          sx={{
+            textAlign: "center",
+            mt: "var(--margin-big)",
+            fontFamily: "var(--secondary-font)",
+            fontSize: "var(--medium-font-size)",
+            color: "var(--color-rich-black)",
+          }}
         >
           No messages to show
         </Typography>
@@ -63,9 +66,10 @@ export function DebugLogView({ messages, autoscroll }: DebugLogViewProps) {
             key={msg.id}
             sx={{
               display: "flex",
-              gap: 1,
-              alignItems: "flex-start",
-              py: 0.5,
+              gap: "var(--gap-standart)",
+              justifyContent: "center",
+              alignItems: "center",
+              py: "var(--padding-mini)",
               borderBottom: "1px solid",
               borderColor: "divider",
               "&:last-of-type": {
@@ -75,8 +79,12 @@ export function DebugLogView({ messages, autoscroll }: DebugLogViewProps) {
           >
             <Typography
               variant="caption"
-              color="text.secondary"
-              sx={{ minWidth: 80, flexShrink: 0 }}
+              sx={{
+                width: "max-content",
+                color: "var(--color-cadet-grey)",
+                fontSize: "var(--mini-font-size)",
+                fontFamily: "var(--secondary-font)",
+              }}
             >
               {formatTimestamp(msg.timestamp)}
             </Typography>
@@ -84,8 +92,12 @@ export function DebugLogView({ messages, autoscroll }: DebugLogViewProps) {
             <Chip
               size="small"
               label={msg.source}
-              color={msg.source === "backend" ? "primary" : "default"}
-              sx={{ textTransform: "uppercase", fontSize: 10 }}
+              color={msg.source === "back" ? "primary" : "default"}
+              sx={{
+                textTransform: "uppercase",
+                fontSize: "var(--mini-font-size)",
+                fontFamily: "var(--secondary-font)",
+              }}
             />
 
             {msg.level && (
@@ -94,7 +106,11 @@ export function DebugLogView({ messages, autoscroll }: DebugLogViewProps) {
                 label={msg.level}
                 color={getLevelColor(msg.level)}
                 variant="outlined"
-                sx={{ textTransform: "uppercase", fontSize: 10 }}
+                sx={{
+                  textTransform: "uppercase",
+                  fontSize: "var(--mini-font-size)",
+                  fontFamily: "var(--secondary-font)",
+                }}
               />
             )}
 
@@ -105,6 +121,9 @@ export function DebugLogView({ messages, autoscroll }: DebugLogViewProps) {
                 whiteSpace: "pre-wrap",
                 wordBreak: "break-word",
                 flex: 1,
+                fontSize: "var(--small-font-size)",
+                fontFamily: "var(--secondary-font)",
+                fontWeight: "var(--font-weight-1)",
               }}
             >
               {msg.text}

@@ -26,8 +26,8 @@ export function DebugProvider({ children }: PropsWithChildren) {
         id: `${Date.now()} - ${Math.random}`,
         text: payload.text,
         level: payload.level ?? "info",
-        source: payload.source ?? "frontend",
-        timestamp: new Date().toISOString(),
+        source: payload.source ?? "front",
+        timestamp: new Date(),
       };
 
       dispatch({ type: "ADD_MESSAGE", payload: msg });

@@ -110,7 +110,7 @@ export function DBForm() {
       onSubmit={handleSaveSettings}
       sx={{
         maxWidth: "50%",
-        mt: "var(--margin-huge)",
+        mt: "var(--margin-big)",
         p: "var(--padding-big)",
         borderRadius: "var(--border-radius-medium)",
         border: "var(--border-standart)",

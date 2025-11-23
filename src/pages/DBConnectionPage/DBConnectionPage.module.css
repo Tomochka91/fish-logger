@@ -1,7 +1,3 @@
 .section {
   margin: var(--margin-standart);
 }
-
-.title {
-  margin-bottom: var(--margin-medium);
-}

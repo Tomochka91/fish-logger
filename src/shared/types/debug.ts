@@ -1,4 +1,4 @@
-export type DebugMessageSource = "frontend" | "backend";
+export type DebugMessageSource = "front" | "back";
 export type DebugMessageLevel = "info" | "warn" | "error";
 
 export interface DebugMessage {
@@ -6,5 +6,5 @@ export interface DebugMessage {
   text: string;
   source: DebugMessageSource;
   level?: DebugMessageLevel;
-  timestamp: string;
+  timestamp: Date;
 }

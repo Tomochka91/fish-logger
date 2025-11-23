@@ -24,7 +24,7 @@ export function DebugPage() {
 
   return (
     <section className={styles.section}>
-      <h2 className={styles.title}>Debug</h2>
+      <h2>Debug</h2>
       <DebugSearchBar value={search} onChange={setSearch} />
 
       <DebugLogView messages={filteredMessages} autoscroll={autoscroll} />
