@@ -3,8 +3,6 @@ import { FormInput } from "../FormInput/FormInput";
 import { FormRow } from "../FormRow/FormRow";
 import {
   Box,
-  Button,
-  CircularProgress,
   IconButton,
   InputAdornment,
   Stack,
@@ -20,6 +18,8 @@ import {
   useDBSettingsSave,
   useDBSettingsTest,
 } from "../../../hooks/useDBSettings";
+import { TestButton } from "../../ui/button/TestButton";
+import { SaveButton } from "../../ui/button/SaveButton";
 
 const defaultDbValues: DBSettings = {
   host: "192.162.1.56",
@@ -27,15 +27,6 @@ const defaultDbValues: DBSettings = {
   user: "",
   password: "",
   database: "fishing",
-};
-
-const baseButtonSx = {
-  fontFamily: "var(--secondary-font)",
-  fontSize: "var(--medium-font-size)",
-  lineHeight: "var(--line-height-medium)",
-  padding: "var(--padding-special)",
-  borderRadius: "var(--border-radius-medium)",
-  textTransform: "var(--text-uppercase)",
 };
 
 export function DBForm() {
@@ -233,6 +224,7 @@ export function DBForm() {
           helperText={errors.database?.message || " "}
         />
       </FormRow>
+
       <Box
         sx={{
           mt: "var(--margin-big)",
@@ -240,56 +232,15 @@ export function DBForm() {
           gap: "var(--gap-medium)",
         }}
       >
-        <Button
-          type="button"
-          variant="outlined"
-          disabled={isSubmitting || isLoading || isTesting}
+        <TestButton
+          loading={isTesting}
+          disabled={isSubmitting || isLoading}
           onClick={handleTestSettings}
-          sx={{
-            ...baseButtonSx,
-            flex: 1,
-            color: "var(--color-gunmetal)",
-            bgcolor: "var(--color-lemon-chiffon)",
-            borderColor: "var(--color-lemon-chiffon)",
-            "&:hover": {
-              bgcolor: "var(--color-vanilla)",
-              borderColor: "var(--color-vanilla)",
-            },
-          }}
-        >
-          {isTesting ? (
-            <CircularProgress
-              size={14}
-              sx={{ display: "block", transformOrigin: "center" }}
-            />
-          ) : (
-            "Test connection"
-          )}
-        </Button>
-        <Button
-          type="submit"
-          variant="contained"
-          disableElevation
-          disabled={isSubmitting || isLoading || isSaving || !isTested}
-          sx={{
-            ...baseButtonSx,
-            flex: 1,
-            color: "var(--color-gunmetal)",
-            bgcolor: "var(--color-tropical-mint)",
-            "&:hover": {
-              bgcolor: "var(--color-mint)",
-            },
-          }}
-        >
-          {isSaving ? (
-            <CircularProgress
-              size={14}
-              sx={{ display: "block", transformOrigin: "center" }}
-            />
-          ) : (
-            "Save"
-          )}
-        </Button>
+        />
+        <SaveButton
+          loading={isSaving}
+          disabled={isSubmitting || isLoading || !isTested}
+        />
       </Box>
     </Box>
   );

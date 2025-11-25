@@ -10,7 +10,7 @@ export function FormRow({ label, children }: FormRowProps) {
     <Stack
       direction="row"
       spacing="var(--gap-standart)"
-      alignItems="center"
+      alignItems="flex-start"
       marginBottom="var(--margin-mini)"
     >
       <Box sx={{ width: "30%" }}>

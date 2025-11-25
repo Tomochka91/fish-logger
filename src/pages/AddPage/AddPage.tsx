@@ -1,3 +1,11 @@
+import { AddLoggerForm } from "../../shared/components/form/AddLoggerForm/AddLoggerForm";
+import styles from "./AddPage.module.css";
+
 export function AddPage() {
-  return <h1>Add logger</h1>;
+  return (
+    <section className={styles.section}>
+      <h2>Add logger</h2>
+      <AddLoggerForm />
+    </section>
+  );
 }

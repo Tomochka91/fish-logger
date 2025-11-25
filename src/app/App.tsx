@@ -39,9 +39,9 @@ function App() {
             fontFamily: "var(--main-font)",
             fontSize: "var(--medium-font-size)",
             maxWidth: "50rem",
-            padding: "1.6rem 2.4rem",
+            padding: "var(--padding-main)",
             backgroundColor: "var(--color-lemon-chiffon)",
-            color: "var(--color-blue-munsell)",
+            color: "var(--color-gunmetal)",
           },
         }}
       />
