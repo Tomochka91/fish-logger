@@ -6,7 +6,7 @@ type ClearButtonProps = {
   onClick: () => void;
 };
 
-export function ClearButton({ label = "Clear", onClick }: ClearButtonProps) {
+export function ClearButton({ label = "Reset", onClick }: ClearButtonProps) {
   return (
     <AppButton
       variant="outlined"
@@ -14,7 +14,7 @@ export function ClearButton({ label = "Clear", onClick }: ClearButtonProps) {
       startIcon={<BsTrash3 />}
       onClick={onClick}
       sx={{
-        minWidth: "18rem",
+        // minWidth: "18rem",
         "&:hover": {
           bgcolor: "var(--color-lemon-chiffon)",
         },

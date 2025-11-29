@@ -5,7 +5,7 @@ const baseButtonSx: SxProps<Theme> = {
   fontFamily: "var(--secondary-font)",
   fontSize: "var(--medium-font-size)",
   lineHeight: "var(--line-height-medium)",
-  padding: "var(--padding-extra)",
+  padding: "var(--padding-special-small)",
   borderRadius: "var(--border-radius-medium)",
   textTransform: "var(--text-uppercase)",
   gap: "var(--gap-standart)",

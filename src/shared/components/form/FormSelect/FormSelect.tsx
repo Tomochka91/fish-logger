@@ -14,7 +14,7 @@ const selectMenuListSx = {
   p: "0.4rem 0",
   "& .MuiMenuItem-root": {
     fontFamily: "var(--secondary-font)",
-    fontSize: "var(--medium-font-size)",
+    fontSize: "var(--standart-font-size)",
     color: "var(--color-gunmetal)",
     "&:hover": {
       backgroundColor: "var(--color-mint-cream)",

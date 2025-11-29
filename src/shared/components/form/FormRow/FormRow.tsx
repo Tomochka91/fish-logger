@@ -3,17 +3,18 @@ import { Box, Stack, Typography } from "@mui/material";
 type FormRowProps = {
   label: string;
   children: React.ReactNode;
+  labelWidth?: string | number;
 };
 
-export function FormRow({ label, children }: FormRowProps) {
+export function FormRow({ label, children, labelWidth = "30%" }: FormRowProps) {
   return (
     <Stack
       direction="row"
       spacing="var(--gap-standart)"
       alignItems="flex-start"
-      marginBottom="var(--margin-mini)"
+      // marginBottom="var(--margin-mini)"
     >
-      <Box sx={{ width: "30%" }}>
+      <Box sx={{ width: labelWidth, flexShrink: 0 }}>
         <Typography
           component="label"
           sx={{

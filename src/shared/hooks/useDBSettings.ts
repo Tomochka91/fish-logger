@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import type { DBSettings } from "../types/types";
-import { postDBSettings } from "../../api/fish-logger-api";
+import { postDBSettings } from "../../api/apiDB";
 import toast from "react-hot-toast";
 
 export function useDBSettingsTest() {

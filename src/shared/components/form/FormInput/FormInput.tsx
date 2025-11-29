@@ -17,10 +17,10 @@ export const FormInput = styled(TextField)({
     },
   },
   "& .MuiInputBase-input": {
-    fontSize: "var(--medium-font-size)",
+    fontSize: "var(--standart-font-size)",
     fontFamily: "var(--secondary-font)",
     color: "var(--color-gunmetal)",
-    padding: "var(--padding-special)",
+    padding: "var(--padding-special-small)",
   },
   "& .MuiInputBase-input::placeholder": {
     color: "var(--color-honeydew)",

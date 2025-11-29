@@ -1,5 +1,4 @@
 .section {
-  margin: var(--margin-standart);
   display: flex;
   flex-direction: column;
   gap: var(--gap-standart);

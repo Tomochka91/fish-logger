@@ -5,7 +5,7 @@ export const FormAutocomplete = styled(Autocomplete)({
     padding: 0,
   },
   [`& .${autocompleteClasses.inputRoot} .MuiInputBase-input`]: {
-    padding: "var(--padding-special) !important",
+    padding: "var(--padding-special-small) !important",
   },
 
   "& .MuiAutocomplete-popupIndicator, & .MuiAutocomplete-clearIndicator": {

@@ -1,5 +1,5 @@
-import { CircularProgress } from "@mui/material";
 import { AppButton } from "./AppButton";
+import { LoaderMini } from "../loader/LoaderMini";
 
 type SaveButtonProps = {
   loading?: boolean;
@@ -20,7 +20,6 @@ export function SaveButton({
       disabled={disabled || loading}
       sx={{
         flex: 1,
-        padding: "var(--padding-special)",
         minWidth: "auto",
         color: "var(--color-gunmetal)",
         bgcolor: "var(--color-tropical-mint)",
@@ -29,14 +28,7 @@ export function SaveButton({
         },
       }}
     >
-      {loading ? (
-        <CircularProgress
-          size={14}
-          sx={{ display: "block", transformOrigin: "center" }}
-        />
-      ) : (
-        label
-      )}
+      {loading ? <LoaderMini /> : label}
     </AppButton>
   );
 }

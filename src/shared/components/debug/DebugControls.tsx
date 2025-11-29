@@ -15,7 +15,7 @@ export function DebugControls({
 }: DebugControlsProps) {
   return (
     <Stack direction="row" justifyContent="space-between" alignItems="center">
-      <ClearButton onClick={onClear} label="Reset logs" />
+      <ClearButton onClick={onClear} label="Clear logs" />
       <AutoscrollButton onToggle={onToggleAutoscroll} autoscroll={autoscroll} />
     </Stack>
   );

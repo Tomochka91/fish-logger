@@ -1,3 +1,7 @@
 .section {
-  margin: var(--margin-standart);
+  display: flex;
+  flex-direction: column;
+  /* gap: var(--gap-standart); */
+  /* flex: 1; */
+  min-height: 0;
 }

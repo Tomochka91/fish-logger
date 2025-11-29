@@ -12,7 +12,7 @@ export const defaultAutocompleteSlotProps = {
     sx: {
       p: 0,
       m: 0,
-      maxHeight: "22rem",
+      // maxHeight: "22rem",
       border: "1px solid var(--color-honeydew)",
       borderRadius: "var(--border-radius-main)",
 
@@ -24,7 +24,7 @@ export const defaultAutocompleteSlotProps = {
 
       "& .MuiAutocomplete-option": {
         fontFamily: "var(--secondary-font)",
-        fontSize: "var(--medium-font-size)",
+        fontSize: "var(--standart-font-size)",
         color: "var(--color-gunmetal)",
 
         '&[aria-selected="true"]': {

@@ -24,9 +24,9 @@ export const BaseSelect = styled(Select)({
 
   "& .MuiSelect-select": {
     fontFamily: "var(--secondary-font)",
-    fontSize: "var(--medium-font-size)",
+    fontSize: "var(--standart-font-size)",
     color: "var(--color-gunmetal)",
-    padding: "var(--padding-special)",
+    padding: "var(--padding-special-small)",
     display: "flex",
     alignItems: "center",
   },

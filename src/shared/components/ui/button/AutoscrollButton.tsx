@@ -19,7 +19,8 @@ export function AutoscrollButton({
       startIcon={isOn ? <BsPause /> : <BsPlay />}
       onClick={onToggle}
       sx={{
-        minWidth: "28rem",
+        justifyContent: "space-between",
+        minWidth: "22rem",
         "&:hover": {
           bgcolor: "var(--color-tropical-mint)",
         },

@@ -11,9 +11,9 @@ import {
 import { useEffect, useState } from "react";
 import { dbFormValidation } from "../../../utils/validation/dbFormValidation";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
-import type { DBSettings } from "../../../types/types";
+import type { DBSettings } from "../../../types";
 import { useQuery } from "@tanstack/react-query";
-import { getDBSettings } from "../../../../api/fish-logger-api";
+import { getDBSettings } from "../../../../api/apiDB";
 import {
   useDBSettingsSave,
   useDBSettingsTest,
@@ -101,7 +101,7 @@ export function DBForm() {
       onSubmit={handleSaveSettings}
       sx={{
         maxWidth: "50%",
-        mt: "var(--margin-big)",
+        mt: "var(--margin-standart)",
         p: "var(--padding-big)",
         borderRadius: "var(--border-radius-medium)",
         border: "var(--border-standart)",
@@ -206,7 +206,17 @@ export function DBForm() {
             input: {
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton edge="end" onClick={togglePassword} tabIndex={-1}>
+                  <IconButton
+                    edge="end"
+                    onClick={togglePassword}
+                    tabIndex={-1}
+                    sx={{
+                      "& svg": {
+                        width: "1.8rem",
+                        height: "1.8rem",
+                      },
+                    }}
+                  >
                     {showPassword ? <BsEyeSlash /> : <BsEye />}
                   </IconButton>
                 </InputAdornment>

@@ -6,6 +6,7 @@ import {
   InputAdornment,
   MenuItem,
   Stack,
+  type SelectProps,
 } from "@mui/material";
 import { FormRow } from "../FormRow/FormRow";
 import { FormSelect } from "../FormSelect/FormSelect";
@@ -17,16 +18,33 @@ import { useState } from "react";
 import { defaultAutocompleteSlotProps } from "../FormAutocomplete/AutocompleteSlotProps";
 import { FormCheckbox } from "../FormCheckBox/FormCheckBox";
 import { ClearButton } from "../../ui/button/ClearButton";
-import { SaveButton } from "../../ui/button/SaveButton";
+import { type LoggerType } from "../../../types";
+import { TypeSettings } from "./TypeSettings";
 
 const backendLoggers = [
   { id: 1, name: "logger_A" },
   { id: 2, name: "logger_B" },
 ];
 
+// const defaultLoggerValues = {};
+
 export function AddLoggerForm() {
+  // const {
+  //   register,
+  //   formState: { errors, isSubmitting },
+  //   reset,
+  // } = useForm({ defaultValues: defaultLoggerValues });
+
   const autocompleteOptionName = backendLoggers.map((name) => name.name);
   const [loggerName, setLoggerName] = useState("");
+
+  const [type, setType] = useState<LoggerType>("");
+  const handleTypeChange: SelectProps["onChange"] = (event) => {
+    const value = event.target.value as LoggerType;
+    setType(value);
+  };
+
+  const [autostart, setAutostart] = useState(false);
   const [enable, setEnable] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -41,9 +59,8 @@ export function AddLoggerForm() {
         sx={{
           display: "flex",
           width: "100%",
-          mt: "var(--margin-big)",
-          mb: "var(--margin-big)",
-          p: "var(--padding-special)",
+          marginBlock: "var(--margin-standart)",
+          p: "var(--pading-equal)",
           borderRadius: "var(--border-radius-medium)",
           border: "var(--border-standart)",
           boxShadow: 1,
@@ -51,7 +68,7 @@ export function AddLoggerForm() {
         }}
       >
         <Stack direction="column" spacing="var(--gap-mini)" flex="1">
-          <FormRow label="name">
+          <FormRow label="Logger name" labelWidth="25%">
             <FormAutocomplete
               freeSolo
               forcePopupIcon
@@ -69,9 +86,13 @@ export function AddLoggerForm() {
             <HelperText></HelperText>
           </FormRow>
 
-          <FormRow label="type">
+          <FormRow label="Logger type" labelWidth="25%">
             <FormControl fullWidth>
-              <FormSelect variant="outlined">
+              <FormSelect
+                variant="outlined"
+                value={type}
+                onChange={handleTypeChange}
+              >
                 <MenuItem value={"easy_serial"}>Easy Serial</MenuItem>
                 <MenuItem value={"mbox"}>Mbox</MenuItem>
                 <MenuItem value={"modbus_rtu"}>Modbus RTU</MenuItem>
@@ -81,25 +102,24 @@ export function AddLoggerForm() {
             </FormControl>
           </FormRow>
 
-          <FormRow label="enable">
+          <FormRow label="Autostart" labelWidth="25%">
             <Box
               sx={{
-                height: "6.4rem",
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
+                gap: "var(--gap-mini)",
+                alignItems: "center",
               }}
             >
               <FormCheckbox
-                checked={enable}
-                onChange={(e) => setEnable(e.target.checked)}
+                checked={autostart}
+                onChange={(e) => setAutostart(e.target.checked)}
                 // sx={{
                 //   ...(error && {
                 //     color: "var(--color-indian-red)",
                 //   }),
                 // }}
               />
-              <HelperText></HelperText>
+              {/* <HelperText>err</HelperText> */}
             </Box>
           </FormRow>
         </Stack>
@@ -112,11 +132,11 @@ export function AddLoggerForm() {
         />
 
         <Stack flex="1" direction="column" spacing="var(--gap-mini)">
-          <FormRow label="db_user">
+          <FormRow label="DB user" labelWidth="25%">
             <FormInput fullWidth helperText={" "} />
           </FormRow>
 
-          <FormRow label="db_password">
+          <FormRow label="DB password" labelWidth="25%">
             <FormInput
               fullWidth
               type={showPassword ? "text" : "password"}
@@ -130,6 +150,12 @@ export function AddLoggerForm() {
                         edge="end"
                         onClick={togglePassword}
                         tabIndex={-1}
+                        sx={{
+                          "& svg": {
+                            width: "1.8rem",
+                            height: "1.8rem",
+                          },
+                        }}
                       >
                         {showPassword ? <BsEyeSlash /> : <BsEye />}
                       </IconButton>
@@ -140,11 +166,35 @@ export function AddLoggerForm() {
             />
           </FormRow>
 
-          <FormRow label="table">
+          <FormRow label="DB table" labelWidth="25%">
             <FormInput fullWidth helperText={" "} />
+          </FormRow>
+
+          <FormRow label="Enable DB writing" labelWidth="25%">
+            <Box
+              sx={{
+                display: "flex",
+                gap: "var(--gap-mini)",
+                alignItems: "center",
+              }}
+            >
+              <FormCheckbox
+                checked={enable}
+                onChange={(e) => setEnable(e.target.checked)}
+                // sx={{
+                //   ...(error && {
+                //     color: "var(--color-indian-red)",
+                //   }),
+                // }}
+              />
+              {/* <HelperText>err</HelperText> */}
+            </Box>
           </FormRow>
         </Stack>
       </Box>
+
+      {/* настройки в зависимости от type */}
+      <TypeSettings type={type} />
 
       <ClearButton onClick={onClear} label="Reset" />
       {/* <SaveButton loading={isSaving} disabled={!isValid} /> */}

@@ -1,19 +1,19 @@
 import { AppButton } from "./AppButton";
 import { LoaderMini } from "../loader/LoaderMini";
 
-type TestButtonProps = {
+type UpdateButtonProps = {
   loading?: boolean;
   disabled?: boolean;
   onClick: () => void;
   label?: string;
 };
 
-export function TestButton({
+export function UpdateButton({
   loading = false,
   disabled = false,
   onClick,
-  label = "Test connection",
-}: TestButtonProps) {
+  label = "Update",
+}: UpdateButtonProps) {
   return (
     <AppButton
       type="button"
@@ -21,11 +21,11 @@ export function TestButton({
       disabled={disabled || loading}
       onClick={onClick}
       sx={{
-        flex: 1,
-        minWidth: "auto",
+        padding: "var(--padding-mini)",
+        boxShadow: 0,
+        border: "var(--border-standart)",
         color: "var(--color-gunmetal)",
         bgcolor: "var(--color-lemon-chiffon)",
-        borderColor: "var(--color-lemon-chiffon)",
         "&:hover": {
           bgcolor: "var(--color-vanilla)",
           borderColor: "var(--color-vanilla)",

@@ -54,7 +54,8 @@
   --padding-main: 1.6rem 1.2rem;
   --padding-secondary: 1.2rem 1rem;
   --padding-special: 1.2rem 1.6rem;
-  --padding-extra: 1rem 2.6rem;
+  --padding-special-small: 0.8rem 1.2rem;
+  --padding-extra: 1.8rem 1.2rem 0.2rem 1.2rem;
   --pading-equal: 1.2rem;
   --padding-mini: 0.4rem;
 

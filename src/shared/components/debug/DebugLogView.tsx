@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import type { DebugMessage, DebugMessageLevel } from "../../types/debug";
+import type { DebugMessage, DebugMessageLevel } from "../../types";
 import { Box, Chip, Paper, Typography } from "@mui/material";
 import { formatTimestamp } from "../../utils/formatTimestamp";
 

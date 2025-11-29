@@ -1,3 +1,5 @@
 .section {
-  margin: var(--margin-standart);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }

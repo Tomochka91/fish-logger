@@ -17,7 +17,6 @@
   font-size: var(--title-font-size-adaptive);
   line-height: var(--line-heigh-standart);
   color: var(--color-rich-black);
-  margin-bottom: var(--margin-huge);
   letter-spacing: var(--letter-spacing-standart);
 }
 
