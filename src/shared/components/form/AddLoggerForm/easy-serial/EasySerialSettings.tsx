@@ -25,7 +25,7 @@ export function EasySerialSettings() {
     >
       <SettingsTabs value={tab} onChange={handleTabChange}>
         <SettingsTab label="com-port" />
-        <SettingsTab label="framer" />
+        <SettingsTab label="framer/parser" />
       </SettingsTabs>
 
       {tab === 0 && <ComPortTab />}

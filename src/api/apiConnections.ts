@@ -1,2 +1,9 @@
+import type { LoggerList } from "../shared/types";
+import { request } from "./apiClient";
+
 // LOGGERS
-export const getLoggers = async () => {};
+export const getLoggerList = async (): Promise<LoggerList> => {
+  const data = await request<LoggerList>("/connections/");
+  console.log(data);
+  return data;
+};
