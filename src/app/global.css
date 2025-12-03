@@ -162,7 +162,11 @@ body {
   display: flex;
 }
 
-@media (width<=1024px) {
+@media (width<=1440px) {
+  html {
+    font-size: 50%;
+  }
+
   .frame {
     margin: 1rem 1rem;
   }
@@ -202,7 +206,7 @@ h6 {
 
 h1 {
   font-family: var(--secondary-font);
-  font-size: var(--huge-font-size);
+  font-size: var(--big-plus-font-size);
   font-weight: var(--font-weight-4);
   color: var(--color-rich-black);
   line-height: var(--line-height-standart);
@@ -210,7 +214,7 @@ h1 {
 
 h2 {
   font-family: var(--secondary-font);
-  font-size: var(--big-plus-font-size);
+  font-size: var(--big-font-size);
   font-weight: var(--font-weight-2);
   color: var(--color-rich-black);
   line-height: var(--line-height-standart);

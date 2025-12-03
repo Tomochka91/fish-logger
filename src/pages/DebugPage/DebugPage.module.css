@@ -5,3 +5,9 @@
   flex: 1;
   min-height: 0;
 }
+
+@media (width <= 768px) {
+  .section h2 {
+    display: none;
+  }
+}

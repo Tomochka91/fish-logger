@@ -1,4 +1,4 @@
-import { BsTrash3 } from "react-icons/bs";
+import { BsTrash } from "react-icons/bs";
 import { AppButton } from "./AppButton";
 
 type ClearButtonProps = {
@@ -11,7 +11,7 @@ export function ClearButton({ label = "Reset", onClick }: ClearButtonProps) {
     <AppButton
       variant="outlined"
       size="large"
-      startIcon={<BsTrash3 />}
+      startIcon={<BsTrash />}
       onClick={onClick}
       sx={{
         // minWidth: "18rem",

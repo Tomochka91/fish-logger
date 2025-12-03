@@ -14,13 +14,11 @@ export function EasySerialSettings() {
   return (
     <Box
       sx={{
-        width: "50%",
-        mb: "var(--margin-medium)",
-        p: "var(--padding-mini)",
-        borderRadius: "var(--border-radius-medium)",
-        border: "var(--border-standart)",
-        boxShadow: 1,
-        fontFamily: "var(--secondary-font)",
+        // width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        flex: 1,
+        minHeight: 0,
       }}
     >
       <SettingsTabs value={tab} onChange={handleTabChange}>
@@ -28,9 +26,11 @@ export function EasySerialSettings() {
         <SettingsTab label="framer/parser" />
       </SettingsTabs>
 
-      {tab === 0 && <ComPortTab />}
+      <Box sx={{ flex: 1, minHeight: 0, display: "flex" }}>
+        {tab === 0 && <ComPortTab />}
 
-      {tab === 1 && <FramerTab />}
+        {tab === 1 && <FramerTab />}
+      </Box>
     </Box>
   );
 }

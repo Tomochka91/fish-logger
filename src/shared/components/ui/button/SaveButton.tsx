@@ -7,6 +7,16 @@ type SaveButtonProps = {
   label?: string;
 };
 
+const btnSx = {
+  flex: 1,
+  minWidth: "auto",
+  color: "var(--color-gunmetal)",
+  bgcolor: "var(--color-tropical-mint)",
+  "&:hover": {
+    bgcolor: "var(--color-mint)",
+  },
+};
+
 export function SaveButton({
   loading = false,
   disabled = false,

@@ -30,6 +30,7 @@ export function mapLoggerToFormValues(logger: Logger): LoggerFormValues {
             terminator: logger.easy_serial.parser.terminator,
             separator: logger.easy_serial.parser.separator,
             encoding: logger.easy_serial.parser.encoding,
+            fields: logger.easy_serial.parser.fields,
           },
         }
       : null,

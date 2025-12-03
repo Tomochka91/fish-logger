@@ -11,8 +11,7 @@ export function FormRow({ label, children, labelWidth = "30%" }: FormRowProps) {
     <Stack
       direction="row"
       spacing="var(--gap-standart)"
-      alignItems="flex-start"
-      // marginBottom="var(--margin-mini)"
+      // alignItems="flex-start"
     >
       <Box sx={{ width: labelWidth, flexShrink: 0 }}>
         <Typography

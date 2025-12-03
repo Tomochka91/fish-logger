@@ -1,4 +1,4 @@
-import { Box, FormControl, MenuItem } from "@mui/material";
+import { Box, Divider, FormControl, MenuItem } from "@mui/material";
 import { FormRow } from "../../FormRow/FormRow";
 import { FormSelect } from "../../FormSelect/FormSelect";
 import { UpdateButton } from "../../../ui/button/UpdateButton";
@@ -49,23 +49,98 @@ export function ComPortTab() {
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      gap="var(--gap-mini)"
-      width="100%"
-      borderTop="var(--border-standart)"
-      paddingBlock="var(--pading-equal) .8rem"
-    >
+    <Box width="100%" display="grid" gridTemplateColumns="1fr min-content 1fr">
       <Box
-        display="grid"
-        gridTemplateColumns="5fr 1fr"
-        columnGap="var(--gap-mini)"
+        display="flex"
+        flexDirection="column"
+        gap="var(--gap-mini)"
+        width="100%"
+        borderTop="var(--border-standart)"
+        paddingBlock="var(--pading-equal) .8rem"
       >
-        <FormRow label="Port" labelWidth="30%">
+        <Box
+          display="grid"
+          gridTemplateColumns="5fr 1fr"
+          columnGap="var(--gap-mini)"
+        >
+          <FormRow label="Port" labelWidth="30%">
+            <FormControl fullWidth>
+              <Controller
+                name="easy_serial.port.port"
+                control={control}
+                render={({ field }) => (
+                  <FormSelect
+                    {...field}
+                    variant="outlined"
+                    value={field.value ?? ""}
+                    onChange={(e) => field.onChange(e.target.value)}
+                  >
+                    {serialPorts?.map((val) => (
+                      <MenuItem key={val.name} value={val.name}>
+                        {val.name}
+                      </MenuItem>
+                    ))}
+                  </FormSelect>
+                )}
+              />
+            </FormControl>
+          </FormRow>
+          <UpdateButton onClick={handleUpdate} />
+          <HelperText sx={{ gridColumn: "1/-1" }}>
+            {selectedPortData?.description ?? " "}
+          </HelperText>
+        </Box>
+
+        <FormRow label="Baudrate" labelWidth="25%">
           <FormControl fullWidth>
             <Controller
-              name="easy_serial.port.port"
+              name="easy_serial.port.baudrate"
+              control={control}
+              render={({ field }) => (
+                <FormSelect
+                  {...field}
+                  variant="outlined"
+                  value={field.value ?? ""}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                >
+                  {baudrate.map((val) => (
+                    <MenuItem key={val} value={val}>
+                      {val}
+                    </MenuItem>
+                  ))}
+                </FormSelect>
+              )}
+            />
+          </FormControl>
+        </FormRow>
+
+        <FormRow label="Databits" labelWidth="25%">
+          <FormControl fullWidth>
+            <Controller
+              name="easy_serial.port.databits"
+              control={control}
+              render={({ field }) => (
+                <FormSelect
+                  {...field}
+                  variant="outlined"
+                  value={field.value ?? ""}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                >
+                  {databits.map((val) => (
+                    <MenuItem key={val} value={val}>
+                      {val}
+                    </MenuItem>
+                  ))}
+                </FormSelect>
+              )}
+            />
+          </FormControl>
+        </FormRow>
+
+        <FormRow label="Parity" labelWidth="25%">
+          <FormControl fullWidth>
+            <Controller
+              name="easy_serial.port.parity"
               control={control}
               render={({ field }) => (
                 <FormSelect
@@ -74,9 +149,9 @@ export function ComPortTab() {
                   value={field.value ?? ""}
                   onChange={(e) => field.onChange(e.target.value)}
                 >
-                  {serialPorts?.map((val) => (
-                    <MenuItem key={val.name} value={val.name}>
-                      {val.name}
+                  {parity.map((val) => (
+                    <MenuItem key={val} value={val}>
+                      {val}
                     </MenuItem>
                   ))}
                 </FormSelect>
@@ -84,139 +159,72 @@ export function ComPortTab() {
             />
           </FormControl>
         </FormRow>
-        <UpdateButton onClick={handleUpdate} />
-        <HelperText sx={{ gridColumn: "1/-1" }}>
-          {selectedPortData?.description ?? " "}
-        </HelperText>
-      </Box>
 
-      <FormRow label="Baudrate" labelWidth="25%">
-        <FormControl fullWidth>
-          <Controller
-            name="easy_serial.port.baudrate"
-            control={control}
-            render={({ field }) => (
-              <FormSelect
-                {...field}
-                variant="outlined"
-                value={field.value ?? ""}
-                onChange={(e) => field.onChange(Number(e.target.value))}
-              >
-                {baudrate.map((val) => (
-                  <MenuItem key={val} value={val}>
-                    {val}
-                  </MenuItem>
-                ))}
-              </FormSelect>
-            )}
-          />
-        </FormControl>
-      </FormRow>
-
-      <FormRow label="Databits" labelWidth="25%">
-        <FormControl fullWidth>
-          <Controller
-            name="easy_serial.port.databits"
-            control={control}
-            render={({ field }) => (
-              <FormSelect
-                {...field}
-                variant="outlined"
-                value={field.value ?? ""}
-                onChange={(e) => field.onChange(Number(e.target.value))}
-              >
-                {databits.map((val) => (
-                  <MenuItem key={val} value={val}>
-                    {val}
-                  </MenuItem>
-                ))}
-              </FormSelect>
-            )}
-          />
-        </FormControl>
-      </FormRow>
-
-      <FormRow label="Parity" labelWidth="25%">
-        <FormControl fullWidth>
-          <Controller
-            name="easy_serial.port.parity"
-            control={control}
-            render={({ field }) => (
-              <FormSelect
-                {...field}
-                variant="outlined"
-                value={field.value ?? ""}
-                onChange={(e) => field.onChange(e.target.value)}
-              >
-                {parity.map((val) => (
-                  <MenuItem key={val} value={val}>
-                    {val}
-                  </MenuItem>
-                ))}
-              </FormSelect>
-            )}
-          />
-        </FormControl>
-      </FormRow>
-
-      <FormRow label="Stopbits" labelWidth="25%">
-        <FormControl fullWidth>
-          <Controller
-            name="easy_serial.port.stopbits"
-            control={control}
-            render={({ field }) => (
-              <FormSelect
-                {...field}
-                variant="outlined"
-                value={field.value ?? ""}
-                onChange={(e) => field.onChange(Number(e.target.value))}
-              >
-                {stopbits.map((val) => (
-                  <MenuItem key={val} value={val}>
-                    {val.toFixed(1)}
-                  </MenuItem>
-                ))}
-              </FormSelect>
-            )}
-          />
-        </FormControl>
-      </FormRow>
-
-      <FormRow label="Flowcontrol" labelWidth="25%">
-        <FormControl fullWidth>
-          <Controller
-            name="easy_serial.port.flowcontrol"
-            control={control}
-            render={({ field }) => (
-              <FormSelect
-                {...field}
-                variant="outlined"
-                value={field.value ?? ""}
-                onChange={(e) => field.onChange(e.target.value)}
-              >
-                {flowcontrol.map((val) => (
-                  <MenuItem key={val} value={val}>
-                    {val}
-                  </MenuItem>
-                ))}
-              </FormSelect>
-            )}
-          />
-        </FormControl>
-      </FormRow>
-
-      <FormRow label="Autoconnect" labelWidth="25%">
-        <Controller
-          name="easy_serial.port.autoconnect"
-          control={control}
-          render={({ field }) => (
-            <FormCheckbox
-              checked={!!field.value}
-              onChange={(e) => field.onChange(e.target.checked)}
+        <FormRow label="Stopbits" labelWidth="25%">
+          <FormControl fullWidth>
+            <Controller
+              name="easy_serial.port.stopbits"
+              control={control}
+              render={({ field }) => (
+                <FormSelect
+                  {...field}
+                  variant="outlined"
+                  value={field.value ?? ""}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                >
+                  {stopbits.map((val) => (
+                    <MenuItem key={val} value={val}>
+                      {val.toFixed(1)}
+                    </MenuItem>
+                  ))}
+                </FormSelect>
+              )}
             />
-          )}
-        />
-      </FormRow>
+          </FormControl>
+        </FormRow>
+
+        <FormRow label="Flowcontrol" labelWidth="25%">
+          <FormControl fullWidth>
+            <Controller
+              name="easy_serial.port.flowcontrol"
+              control={control}
+              render={({ field }) => (
+                <FormSelect
+                  {...field}
+                  variant="outlined"
+                  value={field.value ?? ""}
+                  onChange={(e) => field.onChange(e.target.value)}
+                >
+                  {flowcontrol.map((val) => (
+                    <MenuItem key={val} value={val}>
+                      {val}
+                    </MenuItem>
+                  ))}
+                </FormSelect>
+              )}
+            />
+          </FormControl>
+        </FormRow>
+
+        <FormRow label="Autoconnect" labelWidth="25%">
+          <Controller
+            name="easy_serial.port.autoconnect"
+            control={control}
+            render={({ field }) => (
+              <FormCheckbox
+                checked={!!field.value}
+                onChange={(e) => field.onChange(e.target.checked)}
+              />
+            )}
+          />
+        </FormRow>
+      </Box>
+      <Divider
+        orientation="vertical"
+        variant="middle"
+        flexItem
+        sx={{ marginInline: "2rem" }}
+      />
     </Box>
   );
 }

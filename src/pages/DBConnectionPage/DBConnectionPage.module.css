@@ -3,3 +3,13 @@
   flex-direction: column;
   min-height: 0;
 }
+
+@media (width <= 768px) {
+  .section h2 {
+    display: none;
+  }
+
+  .section form {
+    margin-top: 0;
+  }
+}

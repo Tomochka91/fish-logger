@@ -1,18 +1,20 @@
 import type { SerialPortSettings } from "./serial-port";
 
+export type EasySerialFieldType = "string" | "int" | "float" | "datetime";
+
 export type EasySerialField = {
   index: number;
-  type: string;
+  name: string;
+  type: EasySerialFieldType;
   format: string | null;
 };
 
 export type EasySerialParserSettings = {
-  preamble: string;
+  preamble: string | null;
   terminator: string;
   separator: string;
   encoding: string;
   fields: EasySerialField[];
-  variables: Record<string, number>;
 };
 
 export type EasySerialSettings = {

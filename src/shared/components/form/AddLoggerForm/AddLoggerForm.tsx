@@ -17,7 +17,11 @@ import { useState } from "react";
 import { defaultAutocompleteSlotProps } from "../FormAutocomplete/AutocompleteSlotProps";
 import { FormCheckbox } from "../FormCheckBox/FormCheckBox";
 import { ClearButton } from "../../ui/button/ClearButton";
-import { type LoggerList, type LoggerType } from "../../../types";
+import {
+  type EasySerialField,
+  type LoggerList,
+  type LoggerType,
+} from "../../../types";
 import { TypeSettings } from "./TypeSettings";
 import { useQuery } from "@tanstack/react-query";
 import { getLoggerList } from "../../../../api/apiConnections";
@@ -46,10 +50,11 @@ export type LoggerFormValues = {
       autoconnect: boolean;
     };
     parser: {
-      preamble: string | null;
+      preamble: string;
       terminator: string;
       separator: string;
       encoding: string;
+      fields: EasySerialField[];
     };
   } | null; // для других типов логгеров может быть null
 };
@@ -73,10 +78,11 @@ const defaultLoggerValues: LoggerFormValues = {
       autoconnect: false,
     },
     parser: {
-      preamble: null,
+      preamble: "",
       terminator: "\\n",
       separator: ";",
       encoding: "utf-8",
+      fields: [],
     },
   },
 };
@@ -129,8 +135,10 @@ export function AddLoggerForm() {
           flexDirection: "column",
           gap: "var(--gap-standart)",
           width: "100%",
-          marginBlock: "var(--margin-standart)",
+          marginTop: "var(--margin-standart)",
           fontFamily: "var(--secondary-font)",
+          flex: 1,
+          minHeight: 0,
         }}
       >
         <Box
@@ -142,6 +150,10 @@ export function AddLoggerForm() {
             border: "var(--border-standart)",
             boxShadow: 1,
             fontFamily: "var(--secondary-font)",
+            // overflowY: "auto",
+
+            // flexShrink: 0, // <-- 💥 ВАЖНО
+            // minHeight: "auto", // <-- 💥 ВАЖНО
           }}
         >
           <Stack direction="column" spacing="var(--gap-mini)" flex="1">
@@ -340,8 +352,16 @@ export function AddLoggerForm() {
         {/* настройки в зависимости от type */}
         <TypeSettings type={selectedType} />
 
-        <ClearButton onClick={onClear} label="Reset" />
-        <SaveButton loading={isSubmitting} disabled={!isValid} />
+        <Box
+          sx={{
+            display: "inline-flex",
+            gap: "var(--gap-standart)",
+            flexShrink: 0, // 💥 критично
+          }}
+        >
+          <ClearButton onClick={onClear} label="Reset" />
+          <SaveButton loading={isSubmitting} disabled={!isValid} />
+        </Box>
       </Box>
     </FormProvider>
   );
