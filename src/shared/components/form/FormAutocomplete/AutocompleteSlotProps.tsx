@@ -12,7 +12,6 @@ export const defaultAutocompleteSlotProps = {
     sx: {
       p: 0,
       m: 0,
-      // maxHeight: "22rem",
       border: "1px solid var(--color-honeydew)",
       borderRadius: "var(--border-radius-main)",
 

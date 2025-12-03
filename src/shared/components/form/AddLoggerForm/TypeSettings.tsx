@@ -16,18 +16,15 @@ export function TypeSettings({ type }: TypeSettingsProps) {
     <Box
       sx={{
         width: "100%",
-        // mb: "var(--margin-medium)",
         p: "var(--padding-mini)",
         borderRadius: "var(--border-radius-medium)",
         border: "var(--border-standart)",
         boxShadow: 1,
-        fontFamily: "var(--secondary-font)",
-
         display: "flex",
         flexDirection: "column",
         flex: 1,
-        minHeight: 0, // 💥 самое главное
-        overflow: "auto", // позволяет внутренним табам ужиматься
+        minHeight: 0,
+        overflow: "auto",
       }}
     >
       {renderSettings(type)}

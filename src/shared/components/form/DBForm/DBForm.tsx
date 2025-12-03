@@ -163,6 +163,7 @@ export function DBForm() {
 
       <FormRow label="Host">
         <FormInput
+          id="host"
           fullWidth
           placeholder="192.162.1.56"
           inputMode="numeric"
@@ -174,6 +175,7 @@ export function DBForm() {
 
       <FormRow label="Port">
         <FormInput
+          id="port"
           fullWidth
           placeholder="5432"
           inputMode="numeric"
@@ -186,6 +188,7 @@ export function DBForm() {
 
       <FormRow label="User">
         <FormInput
+          id="user"
           fullWidth
           autoComplete="username"
           {...register("user", dbFormValidation.login)}
@@ -196,6 +199,7 @@ export function DBForm() {
 
       <FormRow label="Password">
         <FormInput
+          id="password"
           fullWidth
           type={showPassword ? "text" : "password"}
           autoComplete="current-password"
@@ -228,6 +232,7 @@ export function DBForm() {
 
       <FormRow label="Database">
         <FormInput
+          id="database"
           fullWidth
           {...register("database", dbFormValidation.dbName)}
           error={!!errors.database}

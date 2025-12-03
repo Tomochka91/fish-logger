@@ -8,7 +8,7 @@ import { type SerialPort } from "../../../../types";
 import { getSerialPorts } from "../../../../../api/apiSerialPorts";
 import { Controller, useFormContext } from "react-hook-form";
 import { type LoggerFormValues } from "../AddLoggerForm";
-import { HelperText } from "../../FormHelpetText/HelperText";
+import { HelperText } from "../../FormHelperText/HelperText";
 import { useMemo } from "react";
 
 const baudrate: number[] = [
@@ -49,19 +49,28 @@ export function ComPortTab() {
   };
 
   return (
-    <Box width="100%" display="grid" gridTemplateColumns="1fr min-content 1fr">
+    <Box
+      sx={{
+        width: "100%",
+        display: "grid",
+        gridTemplateColumns: "1fr min-content 1fr",
+      }}
+    >
       <Box
-        display="flex"
-        flexDirection="column"
-        gap="var(--gap-mini)"
-        width="100%"
-        borderTop="var(--border-standart)"
-        paddingBlock="var(--pading-equal) .8rem"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--gap-mini)",
+          borderTop: "var(--border-standart)",
+          paddingBlock: "var(--pading-equal) .8rem",
+        }}
       >
         <Box
-          display="grid"
-          gridTemplateColumns="5fr 1fr"
-          columnGap="var(--gap-mini)"
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "5fr 1fr",
+            columnGap: "var(--gap-mini)",
+          }}
         >
           <FormRow label="Port" labelWidth="30%">
             <FormControl fullWidth>
@@ -206,18 +215,19 @@ export function ComPortTab() {
           </FormControl>
         </FormRow>
 
-        <FormRow label="Autoconnect" labelWidth="25%">
-          <Controller
-            name="easy_serial.port.autoconnect"
-            control={control}
-            render={({ field }) => (
+        <Controller
+          name="easy_serial.port.autoconnect"
+          control={control}
+          render={({ field }) => (
+            <FormRow label="Autoconnect" labelWidth="25%">
               <FormCheckbox
-                checked={!!field.value}
+                id="autoconnect"
+                checked={field.value}
                 onChange={(e) => field.onChange(e.target.checked)}
               />
-            )}
-          />
-        </FormRow>
+            </FormRow>
+          )}
+        />
       </Box>
       <Divider
         orientation="vertical"

@@ -5,11 +5,10 @@ import {
   IconButton,
   InputAdornment,
   MenuItem,
-  Stack,
 } from "@mui/material";
 import { FormRow } from "../FormRow/FormRow";
 import { FormSelect } from "../FormSelect/FormSelect";
-import { HelperText } from "../FormHelpetText/HelperText";
+import { HelperText } from "../FormHelperText/HelperText";
 import { FormAutocomplete } from "../FormAutocomplete/FormAutocomplete";
 import { FormInput } from "../FormInput/FormInput";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
@@ -41,12 +40,12 @@ export type LoggerFormValues = {
   // easy_serial (часть формы, когда выбран type="easy_serial")
   easy_serial: {
     port: {
-      port: string; // "/dev/ttyUSB0"
-      baudrate: number; // 9600
-      databits: number; // 8
-      parity: string; // "None"
-      stopbits: number; // 1, 1.5, 2
-      flowcontrol: string; // "None"
+      port: string;
+      baudrate: number;
+      databits: number;
+      parity: string;
+      stopbits: number;
+      flowcontrol: string;
       autoconnect: boolean;
     };
     parser: {
@@ -143,20 +142,17 @@ export function AddLoggerForm() {
       >
         <Box
           sx={{
-            display: "flex",
             width: "100%",
+            display: "grid",
+            gridTemplateColumns: "1fr min-content 1fr",
             p: "var(--pading-equal)",
             borderRadius: "var(--border-radius-medium)",
             border: "var(--border-standart)",
             boxShadow: 1,
             fontFamily: "var(--secondary-font)",
-            // overflowY: "auto",
-
-            // flexShrink: 0, // <-- 💥 ВАЖНО
-            // minHeight: "auto", // <-- 💥 ВАЖНО
           }}
         >
-          <Stack direction="column" spacing="var(--gap-mini)" flex="1">
+          <Box>
             <FormRow label="Logger name" labelWidth="25%">
               <Controller
                 name="name"
@@ -225,27 +221,28 @@ export function AddLoggerForm() {
               </FormControl>
             </FormRow>
 
-            <FormRow label="Autostart" labelWidth="25%">
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: "var(--gap-mini)",
-                  alignItems: "center",
-                }}
-              >
-                <Controller
-                  name="autostart"
-                  control={control}
-                  render={({ field }) => (
+            <Box
+              sx={{
+                display: "flex",
+                gap: "var(--gap-mini)",
+                alignItems: "center",
+              }}
+            >
+              <Controller
+                name="autostart"
+                control={control}
+                render={({ field }) => (
+                  <FormRow label="Autostart" labelWidth="25%">
                     <FormCheckbox
+                      id="autostart"
                       checked={field.value}
                       onChange={(e) => field.onChange(e.target.checked)}
                     />
-                  )}
-                />
-              </Box>
-            </FormRow>
-          </Stack>
+                  </FormRow>
+                )}
+              />
+            </Box>
+          </Box>
 
           <Divider
             orientation="vertical"
@@ -254,28 +251,30 @@ export function AddLoggerForm() {
             sx={{ marginInline: "2rem" }}
           />
 
-          <Stack flex="1" direction="column" spacing="var(--gap-mini)">
-            <FormRow label="DB user" labelWidth="25%">
-              <Controller
-                name="db_user"
-                control={control}
-                render={({ field }) => (
+          <Box>
+            <Controller
+              name="db_user"
+              control={control}
+              render={({ field }) => (
+                <FormRow label="DB user" labelWidth="25%">
                   <FormInput
                     {...field}
+                    id="db-user"
                     fullWidth
                     helperText={errors.db_user?.message ?? " "}
                   />
-                )}
-              />
-            </FormRow>
+                </FormRow>
+              )}
+            />
 
-            <FormRow label="DB password" labelWidth="25%">
-              <Controller
-                name="db_password"
-                control={control}
-                render={({ field }) => (
+            <Controller
+              name="db_password"
+              control={control}
+              render={({ field }) => (
+                <FormRow label="DB password" labelWidth="25%">
                   <FormInput
                     {...field}
+                    id="password"
                     fullWidth
                     type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
@@ -302,37 +301,39 @@ export function AddLoggerForm() {
                       },
                     }}
                   />
-                )}
-              />
-            </FormRow>
+                </FormRow>
+              )}
+            />
 
-            <FormRow label="DB table" labelWidth="25%">
-              <Controller
-                name="table_name"
-                control={control}
-                render={({ field }) => (
+            <Controller
+              name="table_name"
+              control={control}
+              render={({ field }) => (
+                <FormRow label="DB table" labelWidth="25%">
                   <FormInput
                     {...field}
+                    id="table-name"
                     fullWidth
                     helperText={errors.table_name?.message ?? " "}
                   />
-                )}
-              />
-            </FormRow>
+                </FormRow>
+              )}
+            />
 
-            <FormRow label="Enable DB writing" labelWidth="25%">
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: "var(--gap-mini)",
-                  alignItems: "center",
-                }}
-              >
-                <Controller
-                  name="enabled"
-                  control={control}
-                  render={({ field }) => (
+            <Box
+              sx={{
+                display: "flex",
+                gap: "var(--gap-mini)",
+                alignItems: "center",
+              }}
+            >
+              <Controller
+                name="enabled"
+                control={control}
+                render={({ field }) => (
+                  <FormRow label="Enable DB writing" labelWidth="25%">
                     <FormCheckbox
+                      id="enable-db-writing"
                       checked={field.value}
                       onChange={(e) => field.onChange(e.target.checked)}
                       sx={{
@@ -341,22 +342,21 @@ export function AddLoggerForm() {
                         }),
                       }}
                     />
-                  )}
-                />
-                <HelperText>{errors.enabled?.message ?? " "}</HelperText>
-              </Box>
-            </FormRow>
-          </Stack>
+                  </FormRow>
+                )}
+              />
+              <HelperText>{errors.enabled?.message ?? " "}</HelperText>
+            </Box>
+          </Box>
         </Box>
 
-        {/* настройки в зависимости от type */}
         <TypeSettings type={selectedType} />
 
         <Box
           sx={{
             display: "inline-flex",
             gap: "var(--gap-standart)",
-            flexShrink: 0, // 💥 критично
+            flexShrink: 0,
           }}
         >
           <ClearButton onClick={onClear} label="Reset" />

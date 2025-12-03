@@ -14,7 +14,6 @@ export function EasySerialSettings() {
   return (
     <Box
       sx={{
-        // width: "100%",
         display: "flex",
         flexDirection: "column",
         flex: 1,

@@ -38,7 +38,6 @@ export function FormSelect(props: FormSelectProps) {
     <BaseSelect
       {...rest}
       MenuProps={{
-        // сначала наши дефолты
         PaperProps: {
           sx: {
             ...selectMenuPaperSx,
@@ -51,7 +50,6 @@ export function FormSelect(props: FormSelectProps) {
             ...MenuProps?.sx,
           },
         },
-        // потом то, что передали извне (на случай, если нужно что-то переопределить)
         ...MenuProps,
       }}
     />
