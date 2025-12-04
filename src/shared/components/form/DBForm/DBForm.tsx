@@ -255,6 +255,7 @@ export function DBForm() {
         <SaveButton
           loading={isSaving}
           disabled={isSubmitting || isLoading || !isTested}
+          fullWidth
         />
       </Box>
     </Box>

@@ -11,8 +11,8 @@ import { FormSelect } from "../FormSelect/FormSelect";
 import { HelperText } from "../FormHelperText/HelperText";
 import { FormAutocomplete } from "../FormAutocomplete/FormAutocomplete";
 import { FormInput } from "../FormInput/FormInput";
-import { BsEye, BsEyeSlash } from "react-icons/bs";
-import { useState } from "react";
+import { BsEye, BsEyeSlash, BsTrash } from "react-icons/bs";
+import { useEffect, useState } from "react";
 import { defaultAutocompleteSlotProps } from "../FormAutocomplete/AutocompleteSlotProps";
 import { FormCheckbox } from "../FormCheckBox/FormCheckBox";
 import { ClearButton } from "../../ui/button/ClearButton";
@@ -27,6 +27,7 @@ import { getLoggerList } from "../../../../api/apiConnections";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { SaveButton } from "../../ui/button/SaveButton";
 import { mapLoggerToFormValues } from "./addLoggerForm.mapper";
+import { ConfirmDialog } from "../../ui/dialog/ConfirmDialog";
 
 export type LoggerFormValues = {
   name: string;
@@ -124,6 +125,34 @@ export function AddLoggerForm() {
 
   const selectedType = watch("type");
 
+  const selectedLogger = watch("name");
+  const existingLogger =
+    loggerList?.find((log) => log.name === selectedLogger) ?? null;
+
+  useEffect(() => {
+    if (existingLogger) {
+      const mapped = mapLoggerToFormValues(existingLogger);
+      reset(mapped);
+    }
+  }, [existingLogger, reset]);
+
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleOpenConfirmDialog = () => {
+    if (!selectedLogger) return;
+    setIsConfirmDialogOpen(true);
+  };
+
+  const handleCloseConfirmDialog = () => {
+    if (isDeleting) return;
+    setIsConfirmDialogOpen(false);
+  };
+
+  const handleConfirmDelete = () => {
+    console.log("Deleting logger");
+  };
+
   return (
     <FormProvider {...methods}>
       <Box
@@ -154,45 +183,70 @@ export function AddLoggerForm() {
         >
           <Box>
             <FormRow label="Logger name" labelWidth="25%">
-              <Controller
-                name="name"
-                control={control}
-                render={({ field }) => {
-                  const { value, onChange, ref } = field;
-
-                  const handleSelectLogger = (
-                    _event: React.SyntheticEvent,
-                    newInputValue: string | null
-                  ) => {
-                    const name = newInputValue ?? "";
-                    onChange(name);
-                    const logger = loggerList?.find((log) => log.name === name);
-                    if (logger) {
-                      const mapped = mapLoggerToFormValues(logger);
-                      reset(mapped);
-                    }
-                  };
-
-                  return (
-                    <FormAutocomplete
-                      freeSolo
-                      forcePopupIcon
-                      options={autocompleteOptions}
-                      inputValue={value}
-                      onInputChange={handleSelectLogger}
-                      renderInput={(params) => (
-                        <FormInput
-                          {...params}
-                          inputRef={ref}
-                          placeholder="New logger"
-                          helperText={errors.name?.message ?? " "}
-                        />
-                      )}
-                      slotProps={defaultAutocompleteSlotProps}
-                    />
-                  );
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "var(--gap-standart)",
                 }}
-              />
+              >
+                <Controller
+                  name="name"
+                  control={control}
+                  render={({ field }) => {
+                    const { value, onChange, ref } = field;
+
+                    const handleSelectLogger = (
+                      _event: React.SyntheticEvent,
+                      newInputValue: string | null
+                    ) => {
+                      const name = newInputValue ?? "";
+                      onChange(name);
+
+                      if (!name) return;
+                      // const logger = loggerList?.find((log) => log.name === name);
+                      // if (logger) {
+                      //   const mapped = mapLoggerToFormValues(logger);
+                      //   reset(mapped);
+                      // }
+                    };
+
+                    return (
+                      <FormAutocomplete
+                        fullWidth
+                        freeSolo
+                        forcePopupIcon
+                        options={autocompleteOptions}
+                        inputValue={value}
+                        onInputChange={handleSelectLogger}
+                        renderInput={(params) => (
+                          <FormInput
+                            {...params}
+                            inputRef={ref}
+                            placeholder="New logger"
+                            helperText={errors.name?.message ?? " "}
+                          />
+                        )}
+                        slotProps={defaultAutocompleteSlotProps}
+                      />
+                    );
+                  }}
+                />
+
+                {existingLogger && (
+                  <IconButton
+                    onClick={handleOpenConfirmDialog}
+                    size="small"
+                    sx={{
+                      color: "var(--color-indian-red)",
+                      flexShrink: 0,
+                      alignSelf: "flex-start",
+                    }}
+                  >
+                    <BsTrash color="var(--color-indian-red)" />
+                  </IconButton>
+                )}
+              </Box>
             </FormRow>
 
             <FormRow label="Logger type" labelWidth="25%">
@@ -360,9 +414,24 @@ export function AddLoggerForm() {
           }}
         >
           <ClearButton onClick={onClear} label="Reset" />
-          <SaveButton loading={isSubmitting} disabled={!isValid} />
+          <SaveButton
+            loading={isSubmitting}
+            disabled={!isValid}
+            startIcon={true}
+          />
         </Box>
       </Box>
+
+      <ConfirmDialog
+        open={isConfirmDialogOpen}
+        loading={isDeleting}
+        title="Delete logger"
+        description={`Are you sure you want to delete this logger: '${existingLogger?.name}'?`}
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        onClose={handleCloseConfirmDialog}
+        onConfirm={handleConfirmDelete}
+      />
     </FormProvider>
   );
 }

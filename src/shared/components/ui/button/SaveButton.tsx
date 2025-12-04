@@ -1,41 +1,41 @@
 import { AppButton } from "./AppButton";
 import { LoaderMini } from "../loader/LoaderMini";
+import type { SxProps } from "@mui/material";
+import type { Theme } from "@emotion/react";
+import { BsSave } from "react-icons/bs";
 
 type SaveButtonProps = {
   loading?: boolean;
   disabled?: boolean;
   label?: string;
-};
-
-const btnSx = {
-  flex: 1,
-  minWidth: "auto",
-  color: "var(--color-gunmetal)",
-  bgcolor: "var(--color-tropical-mint)",
-  "&:hover": {
-    bgcolor: "var(--color-mint)",
-  },
+  startIcon: boolean;
+  fullWidth?: boolean;
+  sx?: SxProps<Theme>;
 };
 
 export function SaveButton({
   loading = false,
   disabled = false,
   label = "Save",
+  startIcon = false,
+  fullWidth = false,
+  sx,
 }: SaveButtonProps) {
   return (
     <AppButton
       type="submit"
       variant="contained"
-      //   disableElevation
       disabled={disabled || loading}
+      startIcon={startIcon ? <BsSave color="var(--color-white)" /> : ""}
       sx={{
-        flex: 1,
         minWidth: "auto",
         color: "var(--color-gunmetal)",
         bgcolor: "var(--color-tropical-mint)",
         "&:hover": {
           bgcolor: "var(--color-mint)",
         },
+        ...(fullWidth && { flex: 1 }),
+        ...sx,
       }}
     >
       {loading ? <LoaderMini /> : label}

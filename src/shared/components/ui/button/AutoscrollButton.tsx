@@ -15,8 +15,7 @@ export function AutoscrollButton({
   return (
     <AppButton
       variant={isOn ? "contained" : "outlined"}
-      size="small"
-      startIcon={isOn ? <BsPause /> : <BsPlay />}
+      startIcon={isOn ? <BsPause color="var(--color-gunmetal)" /> : <BsPlay />}
       onClick={onToggle}
       sx={{
         justifyContent: "space-between",

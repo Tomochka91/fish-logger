@@ -4,24 +4,22 @@ import type { SxProps, Theme } from "@mui/material/styles";
 const baseButtonSx: SxProps<Theme> = {
   fontFamily: "var(--secondary-font)",
   fontSize: "var(--medium-font-size)",
-  lineHeight: "var(--line-height-medium)",
+  lineHeight: "var(--line-height-standart)",
+  color: "var(--color-gunmetal)",
   padding: "var(--padding-special-small)",
+  border: "var(--border-standart)",
   borderRadius: "var(--border-radius-medium)",
   textTransform: "var(--text-uppercase)",
   gap: "var(--gap-standart)",
-  color: "var(--color-gunmetal)",
   boxShadow: 2,
-  border: "var(--border-standart)",
   whiteSpace: "nowrap",
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
 
   "& .MuiButton-startIcon": {
-    minWidth: "2rem",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    marginLeft: 0,
+    marginRight: 0,
   },
 };
 

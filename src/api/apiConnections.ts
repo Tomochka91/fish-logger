@@ -4,6 +4,5 @@ import { request } from "./apiClient";
 // LOGGERS
 export const getLoggerList = async (): Promise<LoggerList> => {
   const data = await request<LoggerList>("/connections/");
-  console.log(data);
   return data;
 };
