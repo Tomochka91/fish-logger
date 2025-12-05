@@ -16,7 +16,7 @@ export function TypeSettings({ type }: TypeSettingsProps) {
     <Box
       sx={{
         width: "100%",
-        p: "var(--padding-mini)",
+        p: "var(--pading-equal)",
         borderRadius: "var(--border-radius-medium)",
         border: "var(--border-standart)",
         boxShadow: 1,

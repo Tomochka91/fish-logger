@@ -13,7 +13,7 @@ export function mapLoggerToFormValues(logger: Logger): LoggerFormValues {
     table_name: logger.table_name ?? "",
     // тут пока простая логика:
     enabled: Boolean(logger.db_user || logger.table_name),
-
+    query_template: logger.query_template ?? "",
     easy_serial: isEasySerial
       ? {
           port: {

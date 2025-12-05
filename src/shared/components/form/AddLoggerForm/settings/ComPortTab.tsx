@@ -49,13 +49,7 @@ export function ComPortTab() {
   };
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        display: "grid",
-        gridTemplateColumns: "1fr min-content 1fr",
-      }}
-    >
+    <>
       <Box
         sx={{
           display: "flex",
@@ -235,6 +229,6 @@ export function ComPortTab() {
         flexItem
         sx={{ marginInline: "2rem" }}
       />
-    </Box>
+    </>
   );
 }

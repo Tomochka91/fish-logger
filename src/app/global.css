@@ -163,9 +163,9 @@ body {
 }
 
 @media (width<=1440px) {
-  html {
+  /* html {
     font-size: 50%;
-  }
+  } */
 
   .frame {
     margin: 1rem 1rem;

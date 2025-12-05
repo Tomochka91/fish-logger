@@ -37,7 +37,7 @@ export type LoggerFormValues = {
   db_password: string;
   table_name: string;
   enabled: boolean;
-
+  query_template: string;
   // easy_serial (часть формы, когда выбран type="easy_serial")
   easy_serial: {
     port: {
@@ -67,6 +67,7 @@ const defaultLoggerValues: LoggerFormValues = {
   db_password: "",
   table_name: "",
   enabled: false,
+  query_template: "",
   easy_serial: {
     port: {
       port: "",

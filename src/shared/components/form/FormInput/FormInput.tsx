@@ -2,7 +2,11 @@ import { TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 export const FormInput = styled(TextField)({
+  "& .MuiOutlinedInput-input": {
+    lineHeight: "var(--line-height-medium)",
+  },
   "& .MuiOutlinedInput-root": {
+    padding: 0,
     background: "var(--color-mint-cream)",
     borderRadius: "var(--border-radius-main)",
     "& fieldset": {

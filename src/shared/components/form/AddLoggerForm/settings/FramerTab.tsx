@@ -60,14 +60,7 @@ export function FramerTab() {
   };
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        display: "grid",
-        gridTemplateColumns: "1fr min-content 1fr",
-        gridTemplateRows: "auto 1fr",
-      }}
-    >
+    <>
       <Box
         sx={{
           flex: 1,
@@ -124,7 +117,6 @@ export function FramerTab() {
         flexItem
         sx={{ marginInline: "2rem" }}
       />
-
       <Box
         sx={{
           gridColumn: "1/-1",
@@ -244,6 +236,6 @@ export function FramerTab() {
           })}
         </Box>
       </Box>
-    </Box>
+    </>
   );
 }

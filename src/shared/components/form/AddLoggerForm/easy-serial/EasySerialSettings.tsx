@@ -3,6 +3,7 @@ import { useState, type SyntheticEvent } from "react";
 import { SettingsTab, SettingsTabs } from "../../../ui/tab/TabStyled";
 import { ComPortTab } from "../settings/ComPortTab";
 import { FramerTab } from "../settings/FramerTab";
+import { DBWriter } from "../settings/DBWriterTab";
 
 export function EasySerialSettings() {
   const [tab, setTab] = useState(0);
@@ -23,12 +24,24 @@ export function EasySerialSettings() {
       <SettingsTabs value={tab} onChange={handleTabChange}>
         <SettingsTab label="com-port" />
         <SettingsTab label="framer/parser" />
+        <SettingsTab label="db-writer" />
       </SettingsTabs>
 
-      <Box sx={{ flex: 1, minHeight: 0, display: "flex" }}>
+      <Box
+        sx={{
+          flex: 1,
+          minHeight: 0,
+          width: "100%",
+          display: "grid",
+          gridTemplateColumns: "1fr min-content 1fr",
+          gridTemplateRows: "auto 1fr",
+        }}
+      >
         {tab === 0 && <ComPortTab />}
 
         {tab === 1 && <FramerTab />}
+
+        {tab === 2 && <DBWriter />}
       </Box>
     </Box>
   );
