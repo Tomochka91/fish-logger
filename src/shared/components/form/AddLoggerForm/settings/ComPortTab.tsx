@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { type SerialPort } from "../../../../types";
 import { getSerialPorts } from "../../../../../api/apiSerialPorts";
 import { Controller, useFormContext } from "react-hook-form";
-import { type LoggerFormValues } from "../AddLoggerForm";
+import { type LoggerFormValues } from "../AddLoggerForm.types";
 import { HelperText } from "../../FormHelperText/HelperText";
 import { useMemo } from "react";
 
@@ -22,13 +22,7 @@ const flowcontrol: string[] = ["None", "RTSCTS", "XONXOFF"];
 export function ComPortTab() {
   const { control, watch } = useFormContext<LoggerFormValues>();
 
-  const {
-    data: serialPorts,
-    refetch,
-    isError,
-    error,
-    isLoading,
-  } = useQuery<SerialPort[]>({
+  const { data: serialPorts, refetch } = useQuery<SerialPort[]>({
     queryKey: ["serial-port"],
     queryFn: getSerialPorts,
   });

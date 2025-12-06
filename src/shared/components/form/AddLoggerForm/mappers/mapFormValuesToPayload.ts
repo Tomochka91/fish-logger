@@ -1,5 +1,5 @@
 import type { EasySerialField, LoggerType } from "../../../../types";
-import type { LoggerFormValues } from "../AddLoggerForm";
+import type { LoggerFormValues } from "../AddLoggerForm.types";
 
 const DEFAULT_SERIAL_TIMEOUT = 1;
 

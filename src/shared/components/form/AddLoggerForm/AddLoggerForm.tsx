@@ -12,86 +12,31 @@ import { HelperText } from "../FormHelperText/HelperText";
 import { FormAutocomplete } from "../FormAutocomplete/FormAutocomplete";
 import { FormInput } from "../FormInput/FormInput";
 import { BsEye, BsEyeSlash, BsTrash } from "react-icons/bs";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { defaultAutocompleteSlotProps } from "../FormAutocomplete/AutocompleteSlotProps";
 import { FormCheckbox } from "../FormCheckBox/FormCheckBox";
 import { ClearButton } from "../../ui/button/ClearButton";
-import {
-  type EasySerialField,
-  type LoggerList,
-  type LoggerType,
-} from "../../../types";
+import { type LoggerList, type LoggerType } from "../../../types";
 import { TypeSettings } from "./TypeSettings";
 import { useQuery } from "@tanstack/react-query";
 import { getLoggerList } from "../../../../api/apiConnections";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { SaveButton } from "../../ui/button/SaveButton";
 import { mapLoggerToFormValues } from "./mappers/addLoggerForm.mapper";
 import { ConfirmDialog } from "../../ui/dialog/ConfirmDialog";
 import { useDeleteLogger } from "../../../hooks/useDeleteLogger";
 import { useSaveLogger } from "../../../hooks/useSaveLogger";
-
-export type LoggerFormValues = {
-  name: string;
-  type: LoggerType;
-  autostart: boolean;
-  db_user: string;
-  db_password: string;
-  table_name: string;
-  enabled: boolean;
-  query_template: string;
-  easy_serial: {
-    port: {
-      port: string;
-      baudrate: number;
-      databits: number;
-      parity: string;
-      stopbits: number;
-      flowcontrol: string;
-      autoconnect: boolean;
-    };
-    parser: {
-      preamble: string;
-      terminator: string;
-      separator: string;
-      encoding: string;
-      fields: EasySerialField[];
-    };
-  } | null;
-};
-
-const defaultLoggerValues: LoggerFormValues = {
-  name: "",
-  type: "",
-  autostart: false,
-  db_user: "",
-  db_password: "",
-  table_name: "",
-  enabled: false,
-  query_template: "",
-  easy_serial: {
-    port: {
-      port: "",
-      baudrate: 9600,
-      databits: 8,
-      parity: "None",
-      stopbits: 1,
-      flowcontrol: "None",
-      autoconnect: false,
-    },
-    parser: {
-      preamble: "",
-      terminator: "\\n",
-      separator: ";",
-      encoding: "utf-8",
-      fields: [],
-    },
-  },
-};
+import {
+  defaultLoggerValues,
+  type LoggerFormValues,
+} from "./AddLoggerForm.types";
+import { useLoggerFormState } from "../../../hooks/useLoggerFormState";
 
 export function AddLoggerForm() {
+  const { state, setState } = useLoggerFormState();
+
   const methods = useForm<LoggerFormValues>({
-    defaultValues: defaultLoggerValues,
+    defaultValues: state.values as LoggerFormValues,
     mode: "onChange",
   });
 
@@ -103,12 +48,27 @@ export function AddLoggerForm() {
     formState: { errors, isValid },
   } = methods;
 
+  const watchedValues = useWatch<LoggerFormValues>({ control });
+
+  useEffect(() => {
+    setState({ values: watchedValues as LoggerFormValues });
+  }, [watchedValues, setState]);
+
   const { data: loggerList } = useQuery<LoggerList>({
     queryKey: ["logger-list"],
     queryFn: getLoggerList,
   });
 
-  const autocompleteOptions = loggerList?.map((log) => log.name) ?? [];
+  const autocompleteOptions = useMemo(
+    () => loggerList?.map((log) => log.name) ?? [],
+    [loggerList]
+  );
+
+  const getLoggerByName = useCallback(
+    (name: string | null | undefined) =>
+      loggerList?.find((log) => log.name === name) ?? null,
+    [loggerList]
+  );
 
   const [showPassword, setShowPassword] = useState(false);
   const togglePassword = () => setShowPassword((prev) => !prev);
@@ -120,15 +80,7 @@ export function AddLoggerForm() {
   const selectedType = watch("type");
 
   const selectedLoggerName = watch("name");
-  const selectedLoggerObj =
-    loggerList?.find((log) => log.name === selectedLoggerName) ?? null;
-
-  useEffect(() => {
-    if (selectedLoggerObj) {
-      const mapped = mapLoggerToFormValues(selectedLoggerObj);
-      reset(mapped);
-    }
-  }, [selectedLoggerObj, reset]);
+  const selectedLoggerObj = getLoggerByName(selectedLoggerName);
 
   const { saveLogger, isSaving, isEditMode } = useSaveLogger(selectedLoggerObj);
 
@@ -137,6 +89,7 @@ export function AddLoggerForm() {
       onSuccess: () => {
         if (!isEditMode) {
           reset(defaultLoggerValues);
+          setState({ values: defaultLoggerValues });
         }
       },
     });
@@ -217,7 +170,17 @@ export function AddLoggerForm() {
                       const name = newInputValue ?? "";
                       onChange(name);
 
-                      if (!name) return;
+                      if (!name) {
+                        reset(defaultLoggerValues);
+                        return;
+                      }
+
+                      const logger = getLoggerByName(name);
+
+                      if (logger) {
+                        const mapped = mapLoggerToFormValues(logger);
+                        reset(mapped);
+                      }
                     };
 
                     return (
@@ -267,7 +230,7 @@ export function AddLoggerForm() {
                     <FormSelect
                       {...field}
                       variant="outlined"
-                      value={field.value}
+                      value={field.value ?? ""}
                       onChange={(event) =>
                         field.onChange(event.target.value as LoggerType)
                       }
@@ -401,7 +364,7 @@ export function AddLoggerForm() {
                       checked={field.value}
                       onChange={(e) => field.onChange(e.target.checked)}
                       sx={{
-                        ...(errors && {
+                        ...(errors.enabled && {
                           color: "var(--color-indian-red)",
                         }),
                       }}

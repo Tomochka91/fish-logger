@@ -4,8 +4,13 @@ export const BaseSelect = styled(Select)({
   background: "var(--color-mint-cream)",
   borderRadius: "var(--border-radius-main)",
 
+  "& .MuiInputBase-root": {
+    transition: "none",
+  },
+
   "& .MuiOutlinedInput-notchedOutline": {
     borderColor: "var(--color-honeydew)",
+    transition: "none",
   },
 
   "&:hover .MuiOutlinedInput-notchedOutline": {
@@ -29,5 +34,6 @@ export const BaseSelect = styled(Select)({
     padding: "var(--padding-special-small)",
     display: "flex",
     alignItems: "center",
+    transition: "none",
   },
 });

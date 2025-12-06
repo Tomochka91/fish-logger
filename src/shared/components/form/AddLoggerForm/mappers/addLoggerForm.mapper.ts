@@ -1,5 +1,5 @@
 import type { Logger } from "../../../../types";
-import type { LoggerFormValues } from "../AddLoggerForm";
+import type { LoggerFormValues } from "../AddLoggerForm.types";
 
 export function mapLoggerToFormValues(logger: Logger): LoggerFormValues {
   const isEasySerial = logger.type === "easy_serial" && logger.easy_serial;

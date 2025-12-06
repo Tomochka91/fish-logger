@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import type { Logger } from "../types";
 import { useCreateLogger } from "./useCreateLogger";
 import { useUpdateLogger } from "./useUpdateLogger";
-import type { LoggerFormValues } from "../components/form/AddLoggerForm/AddLoggerForm";
+import type { LoggerFormValues } from "../components/form/AddLoggerForm/AddLoggerForm.types";
 
 export function useSaveLogger(selectedLogger: Logger | null) {
   const { createLogger, isCreating } = useCreateLogger();

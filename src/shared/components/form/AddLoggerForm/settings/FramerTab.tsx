@@ -14,7 +14,7 @@ import {
   useWatch,
 } from "react-hook-form";
 import { FormInput } from "../../FormInput/FormInput";
-import type { LoggerFormValues } from "../AddLoggerForm";
+import type { LoggerFormValues } from "../AddLoggerForm.types";
 import { BsPlus, BsTrash } from "react-icons/bs";
 import type { EasySerialField, EasySerialFieldType } from "../../../../types";
 import { HelperText } from "../../FormHelperText/HelperText";
@@ -200,7 +200,7 @@ export function FramerTab() {
                       <FormSelect
                         {...field}
                         variant="outlined"
-                        value={field.value}
+                        value={field.value ?? ""}
                         onChange={(e) =>
                           field.onChange(e.target.value as EasySerialFieldType)
                         }

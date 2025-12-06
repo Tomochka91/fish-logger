@@ -32,11 +32,14 @@ const selectMenuListSx = {
 export type FormSelectProps = SelectProps;
 
 export function FormSelect(props: FormSelectProps) {
-  const { MenuProps, ...rest } = props;
+  const { MenuProps, value, ...rest } = props;
+
+  const safeValue = value === undefined || value === null ? "" : value;
 
   return (
     <BaseSelect
       {...rest}
+      value={safeValue}
       MenuProps={{
         PaperProps: {
           sx: {

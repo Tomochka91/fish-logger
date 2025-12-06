@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Logger } from "../types";
-import type { LoggerFormValues } from "../components/form/AddLoggerForm/AddLoggerForm";
+import type { LoggerFormValues } from "../components/form/AddLoggerForm/AddLoggerForm.types";
 import toast from "react-hot-toast";
 import { updateLogger } from "../../api/apiConnections";
 

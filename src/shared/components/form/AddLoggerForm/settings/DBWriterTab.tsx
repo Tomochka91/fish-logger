@@ -1,5 +1,5 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { type LoggerFormValues } from "../AddLoggerForm";
+import { type LoggerFormValues } from "../AddLoggerForm.types";
 import { Box, Divider } from "@mui/material";
 import { FormRow } from "../../FormRow/FormRow";
 import { FormInput } from "../../FormInput/FormInput";

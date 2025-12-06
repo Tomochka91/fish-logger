@@ -8,7 +8,7 @@ type SaveButtonProps = {
   loading?: boolean;
   disabled?: boolean;
   label?: string;
-  startIcon: boolean;
+  startIcon?: boolean;
   fullWidth?: boolean;
   sx?: SxProps<Theme>;
 };
