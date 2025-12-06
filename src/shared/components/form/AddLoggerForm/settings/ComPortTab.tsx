@@ -25,21 +25,19 @@ export function ComPortTab() {
   const { data: serialPorts, refetch } = useQuery<SerialPort[]>({
     queryKey: ["serial-port"],
     queryFn: getSerialPorts,
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
-  // если планируем на него завязать какой-то UI
-  // (например, дизейблить ручной выбор порта при autoconnect = false), тогда можно оставить и использовать.
-  // const autoconnect = watch("easy_serial.port.autoconnect");
   const selectedPort = watch("easy_serial.port.port");
   const selectedPortData = useMemo(
     () => serialPorts?.find((port) => port.name === selectedPort),
     [serialPorts, selectedPort]
   );
 
-  // const queryClient = useQueryClient(); // если нужно будет обновить после POST/PUT/другого действия
   const handleUpdate = () => {
     refetch();
-    // queryClient.invalidateQueries({ queryKey: ["serial-port"] });
   };
 
   return (

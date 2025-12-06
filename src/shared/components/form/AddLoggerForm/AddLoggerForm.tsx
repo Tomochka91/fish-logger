@@ -57,6 +57,9 @@ export function AddLoggerForm() {
   const { data: loggerList } = useQuery<LoggerList>({
     queryKey: ["logger-list"],
     queryFn: getLoggerList,
+    staleTime: 5 * 60 * 1000, // 5 минут кэш считаем свежим
+    refetchOnMount: false, // не рефетчить при каждом монтировании
+    refetchOnWindowFocus: false,
   });
 
   const autocompleteOptions = useMemo(
