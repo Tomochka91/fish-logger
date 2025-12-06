@@ -215,6 +215,7 @@ export function DBForm() {
                     onClick={togglePassword}
                     tabIndex={-1}
                     sx={{
+                      margin: 0,
                       "& svg": {
                         width: "1.8rem",
                         height: "1.8rem",

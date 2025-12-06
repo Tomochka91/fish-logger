@@ -32,8 +32,8 @@ export type ModbusRtuLogger = LoggerBase & {
   modbus_rtu: ModbusRTUSettings;
 };
 
-// общий тип логгера из API
+// Logger from API
 export type Logger = EasySerialLogger | ModbusRtuLogger;
 
-// список логгеров
+// Logger list
 export type LoggerList = Logger[];

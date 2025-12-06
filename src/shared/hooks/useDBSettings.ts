@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import type { DBSettings } from "../types/types";
+import type { DBSettings } from "../types";
 import { postDBSettings } from "../../api/apiDB";
 import toast from "react-hot-toast";
 

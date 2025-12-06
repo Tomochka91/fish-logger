@@ -8,7 +8,7 @@ interface LoaderMiniProps {
 }
 
 export function LoaderMini({
-  size = 16,
+  size = 14,
   thickness = 2,
   color = "var(--color-indian-red)",
   secondaryColor = "rgba(0, 0, 0, 0.1)",

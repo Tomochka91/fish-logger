@@ -26,8 +26,10 @@ import { useQuery } from "@tanstack/react-query";
 import { getLoggerList } from "../../../../api/apiConnections";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { SaveButton } from "../../ui/button/SaveButton";
-import { mapLoggerToFormValues } from "./addLoggerForm.mapper";
+import { mapLoggerToFormValues } from "./mappers/addLoggerForm.mapper";
 import { ConfirmDialog } from "../../ui/dialog/ConfirmDialog";
+import { useDeleteLogger } from "../../../hooks/useDeleteLogger";
+import { useSaveLogger } from "../../../hooks/useSaveLogger";
 
 export type LoggerFormValues = {
   name: string;
@@ -38,7 +40,6 @@ export type LoggerFormValues = {
   table_name: string;
   enabled: boolean;
   query_template: string;
-  // easy_serial (часть формы, когда выбран type="easy_serial")
   easy_serial: {
     port: {
       port: string;
@@ -56,7 +57,7 @@ export type LoggerFormValues = {
       encoding: string;
       fields: EasySerialField[];
     };
-  } | null; // для других типов логгеров может быть null
+  } | null;
 };
 
 const defaultLoggerValues: LoggerFormValues = {
@@ -99,14 +100,10 @@ export function AddLoggerForm() {
     handleSubmit,
     reset,
     watch,
-    formState: { isSubmitting, errors, isValid },
+    formState: { errors, isValid },
   } = methods;
 
-  const {
-    data: loggerList,
-    isLoading: isLoadingLoggers,
-    isError: isLoggerError,
-  } = useQuery<LoggerList>({
+  const { data: loggerList } = useQuery<LoggerList>({
     queryKey: ["logger-list"],
     queryFn: getLoggerList,
   });
@@ -120,28 +117,37 @@ export function AddLoggerForm() {
     reset(defaultLoggerValues);
   };
 
-  const onSubmit = (values: LoggerFormValues) => {
-    console.log("submit values", values);
-  };
-
   const selectedType = watch("type");
 
-  const selectedLogger = watch("name");
-  const existingLogger =
-    loggerList?.find((log) => log.name === selectedLogger) ?? null;
+  const selectedLoggerName = watch("name");
+  const selectedLoggerObj =
+    loggerList?.find((log) => log.name === selectedLoggerName) ?? null;
 
   useEffect(() => {
-    if (existingLogger) {
-      const mapped = mapLoggerToFormValues(existingLogger);
+    if (selectedLoggerObj) {
+      const mapped = mapLoggerToFormValues(selectedLoggerObj);
       reset(mapped);
     }
-  }, [existingLogger, reset]);
+  }, [selectedLoggerObj, reset]);
+
+  const { saveLogger, isSaving, isEditMode } = useSaveLogger(selectedLoggerObj);
+
+  const onSubmit = (values: LoggerFormValues) => {
+    saveLogger(values, {
+      onSuccess: () => {
+        if (!isEditMode) {
+          reset(defaultLoggerValues);
+        }
+      },
+    });
+  };
 
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+
+  const { removeLogger, isDeleting } = useDeleteLogger();
 
   const handleOpenConfirmDialog = () => {
-    if (!selectedLogger) return;
+    if (!selectedLoggerObj) return;
     setIsConfirmDialogOpen(true);
   };
 
@@ -151,7 +157,14 @@ export function AddLoggerForm() {
   };
 
   const handleConfirmDelete = () => {
-    console.log("Deleting logger");
+    if (!selectedLoggerObj) return;
+
+    removeLogger(selectedLoggerObj.id, {
+      onSuccess: () => {
+        setIsConfirmDialogOpen(false);
+        reset(defaultLoggerValues);
+      },
+    });
   };
 
   return (
@@ -205,11 +218,6 @@ export function AddLoggerForm() {
                       onChange(name);
 
                       if (!name) return;
-                      // const logger = loggerList?.find((log) => log.name === name);
-                      // if (logger) {
-                      //   const mapped = mapLoggerToFormValues(logger);
-                      //   reset(mapped);
-                      // }
                     };
 
                     return (
@@ -234,7 +242,7 @@ export function AddLoggerForm() {
                   }}
                 />
 
-                {existingLogger && (
+                {selectedLoggerObj && (
                   <IconButton
                     onClick={handleOpenConfirmDialog}
                     size="small"
@@ -343,6 +351,7 @@ export function AddLoggerForm() {
                               onClick={togglePassword}
                               tabIndex={-1}
                               sx={{
+                                marginRight: 0,
                                 "& svg": {
                                   width: "1.8rem",
                                   height: "1.8rem",
@@ -386,7 +395,7 @@ export function AddLoggerForm() {
                 name="enabled"
                 control={control}
                 render={({ field }) => (
-                  <FormRow label="Enable DB writing" labelWidth="25%">
+                  <FormRow label="DB writing" labelWidth="25%">
                     <FormCheckbox
                       id="enable-db-writing"
                       checked={field.value}
@@ -416,8 +425,9 @@ export function AddLoggerForm() {
         >
           <ClearButton onClick={onClear} label="Reset" />
           <SaveButton
-            loading={isSubmitting}
+            loading={isSaving}
             disabled={!isValid}
+            label={isEditMode ? "Update logger" : "Create logger"}
             startIcon={true}
           />
         </Box>
@@ -427,7 +437,7 @@ export function AddLoggerForm() {
         open={isConfirmDialogOpen}
         loading={isDeleting}
         title="Delete logger"
-        description={`Are you sure you want to delete this logger: '${existingLogger?.name}'?`}
+        description={`Are you sure you want to delete this logger: '${selectedLoggerObj?.name}'?`}
         confirmLabel="Delete"
         cancelLabel="Cancel"
         onClose={handleCloseConfirmDialog}

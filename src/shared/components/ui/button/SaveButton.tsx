@@ -26,7 +26,7 @@ export function SaveButton({
       type="submit"
       variant="contained"
       disabled={disabled || loading}
-      startIcon={startIcon ? <BsSave color="var(--color-white)" /> : ""}
+      startIcon={startIcon ? <BsSave color="var(--color-white)" /> : undefined}
       sx={{
         minWidth: "auto",
         color: "var(--color-gunmetal)",
