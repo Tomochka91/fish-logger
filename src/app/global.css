@@ -163,12 +163,14 @@ body {
 }
 
 @media (width<=1440px) {
-  /* html {
-    font-size: 50%;
-  } */
-
   .frame {
     margin: 1rem 1rem;
+  }
+}
+
+@media (width<=1024px) {
+  html {
+    font-size: 50%;
   }
 }
 

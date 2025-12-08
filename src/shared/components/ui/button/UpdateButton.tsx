@@ -1,11 +1,14 @@
 import { AppButton } from "./AppButton";
 import { LoaderMini } from "../loader/LoaderMini";
+import type { SxProps } from "@mui/material";
+import type { Theme } from "@emotion/react";
 
 type UpdateButtonProps = {
   loading?: boolean;
   disabled?: boolean;
   onClick: () => void;
   label?: string;
+  sx?: SxProps<Theme>;
 };
 
 export function UpdateButton({
@@ -13,6 +16,7 @@ export function UpdateButton({
   disabled = false,
   onClick,
   label = "Update",
+  sx,
 }: UpdateButtonProps) {
   return (
     <AppButton
@@ -21,7 +25,7 @@ export function UpdateButton({
       disabled={disabled || loading}
       onClick={onClick}
       sx={{
-        padding: "var(--padding-mini)",
+        padding: "0.9rem 1.2rem",
         boxShadow: 0,
         border: "var(--border-standart)",
         color: "var(--color-gunmetal)",
@@ -30,6 +34,7 @@ export function UpdateButton({
           bgcolor: "var(--color-vanilla)",
           borderColor: "var(--color-vanilla)",
         },
+        ...sx,
       }}
     >
       {loading ? <LoaderMini /> : label}

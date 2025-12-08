@@ -63,27 +63,42 @@ export function ComPortTab() {
               <Controller
                 name="easy_serial.port.port"
                 control={control}
-                render={({ field }) => (
-                  <FormSelect
-                    {...field}
-                    variant="outlined"
-                    value={field.value ?? ""}
-                    onChange={(e) => field.onChange(e.target.value)}
-                  >
-                    {serialPorts?.map((val) => (
-                      <MenuItem key={val.name} value={val.name}>
-                        {val.name}
-                      </MenuItem>
-                    ))}
-                  </FormSelect>
-                )}
+                rules={{ required: "Port is required" }}
+                render={({ field, fieldState }) => {
+                  const ports = serialPorts ?? [];
+                  const currentValue = field.value ?? "";
+                  const isValidValue = ports.some(
+                    (p) => p.name === currentValue
+                  );
+
+                  return (
+                    <>
+                      <FormSelect
+                        {...field}
+                        variant="outlined"
+                        value={isValidValue ? currentValue : ""}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      >
+                        {ports.map((val) => (
+                          <MenuItem key={val.name} value={val.name}>
+                            {val.name}
+                          </MenuItem>
+                        ))}
+                      </FormSelect>
+                      <HelperText sx={{ gridColumn: "1/-1" }}>
+                        {fieldState.error
+                          ? fieldState.error?.message
+                          : selectedPortData
+                          ? selectedPortData?.description
+                          : " "}
+                      </HelperText>
+                    </>
+                  );
+                }}
               />
             </FormControl>
           </FormRow>
-          <UpdateButton onClick={handleUpdate} />
-          <HelperText sx={{ gridColumn: "1/-1" }}>
-            {selectedPortData?.description ?? " "}
-          </HelperText>
+          <UpdateButton onClick={handleUpdate} sx={{ alignSelf: "start" }} />
         </Box>
 
         <FormRow label="Baudrate" labelWidth="25%">
@@ -208,7 +223,7 @@ export function ComPortTab() {
             <FormRow label="Autoconnect" labelWidth="25%">
               <FormCheckbox
                 id="autoconnect"
-                checked={field.value}
+                checked={!!field.value}
                 onChange={(e) => field.onChange(e.target.checked)}
               />
             </FormRow>

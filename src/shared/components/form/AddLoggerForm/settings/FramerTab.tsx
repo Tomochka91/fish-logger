@@ -76,7 +76,12 @@ export function FramerTab() {
           control={control}
           render={({ field }) => (
             <FormRow label="Preamble" labelWidth="25%">
-              <FormInput {...field} id="preamble" fullWidth />
+              <FormInput
+                {...field}
+                value={field.value ?? ""}
+                id="preamble"
+                fullWidth
+              />
             </FormRow>
           )}
         />
@@ -84,9 +89,16 @@ export function FramerTab() {
         <Controller
           name="easy_serial.parser.terminator"
           control={control}
-          render={({ field }) => (
+          rules={{ required: "Terminator is required" }}
+          render={({ field, fieldState }) => (
             <FormRow label="Terminator" labelWidth="25%">
-              <FormInput {...field} id="terminator" fullWidth />
+              <FormInput
+                {...field}
+                value={field.value ?? ""}
+                id="terminator"
+                fullWidth
+                helperText={fieldState.error?.message}
+              />
             </FormRow>
           )}
         />
@@ -96,7 +108,12 @@ export function FramerTab() {
           control={control}
           render={({ field }) => (
             <FormRow label="Separator" labelWidth="25%">
-              <FormInput {...field} id="separator" fullWidth />
+              <FormInput
+                {...field}
+                value={field.value ?? ""}
+                id="separator"
+                fullWidth
+              />
             </FormRow>
           )}
         />
@@ -106,7 +123,12 @@ export function FramerTab() {
           control={control}
           render={({ field }) => (
             <FormRow label="Encoding" labelWidth="25%">
-              <FormInput {...field} id="encoding" fullWidth />
+              <FormInput
+                {...field}
+                value={field.value ?? ""}
+                id="encoding"
+                fullWidth
+              />
             </FormRow>
           )}
         />
@@ -156,7 +178,12 @@ export function FramerTab() {
           }}
         >
           {fields.length === 0 && (
-            <HelperText sx={{ padding: "var(--padding-mini)" }}>
+            <HelperText
+              sx={{
+                fontSize: "var(--small-font-size)",
+                padding: "var(--padding-mini)",
+              }}
+            >
               There are no fields yet. Click + to add.
             </HelperText>
           )}
@@ -169,7 +196,7 @@ export function FramerTab() {
                 key={item.id}
                 sx={{
                   ...tableSx,
-                  padding: "var(--padding-mini) 0",
+                  padding: "1rem 2px 0",
                   "&:nth-of-type(odd)": {
                     backgroundColor: "var(--color-honeydew)",
                     "& .MuiOutlinedInput-root": {
@@ -182,14 +209,32 @@ export function FramerTab() {
                   name={`easy_serial.parser.fields.${index}.name`}
                   control={control}
                   render={({ field }) => (
-                    <FormInput {...field} placeholder="value" />
+                    <FormInput
+                      {...field}
+                      value={field.value ?? ""}
+                      placeholder="value"
+                      helperText={" "}
+                    />
                   )}
                 />
 
                 <Controller
                   name={`easy_serial.parser.fields.${index}.index`}
                   control={control}
-                  render={({ field }) => <FormInput {...field} type="number" />}
+                  rules={{
+                    validate: (val) =>
+                      val >= 0
+                        ? true
+                        : "index must be greater than or equal to 0",
+                  }}
+                  render={({ field, fieldState }) => (
+                    <FormInput
+                      {...field}
+                      value={field.value ?? ""}
+                      type="number"
+                      helperText={fieldState.error?.message ?? " "}
+                    />
+                  )}
                 />
 
                 <FormControl fullWidth>
@@ -197,19 +242,24 @@ export function FramerTab() {
                     name={`easy_serial.parser.fields.${index}.type`}
                     control={control}
                     render={({ field }) => (
-                      <FormSelect
-                        {...field}
-                        variant="outlined"
-                        value={field.value ?? ""}
-                        onChange={(e) =>
-                          field.onChange(e.target.value as EasySerialFieldType)
-                        }
-                      >
-                        <MenuItem value="string">string</MenuItem>
-                        <MenuItem value="int">int</MenuItem>
-                        <MenuItem value="float">float</MenuItem>
-                        <MenuItem value="datetime">datetime</MenuItem>
-                      </FormSelect>
+                      <>
+                        <FormSelect
+                          {...field}
+                          value={field.value ?? ""}
+                          variant="outlined"
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.value as EasySerialFieldType
+                            )
+                          }
+                        >
+                          <MenuItem value="string">string</MenuItem>
+                          <MenuItem value="int">int</MenuItem>
+                          <MenuItem value="float">float</MenuItem>
+                          <MenuItem value="datetime">datetime</MenuItem>
+                        </FormSelect>
+                        <HelperText> </HelperText>
+                      </>
                     )}
                   />
                 </FormControl>
@@ -220,15 +270,21 @@ export function FramerTab() {
                   render={({ field }) => (
                     <FormInput
                       {...field}
+                      value={field.value ?? ""}
                       disabled={currentType !== "datetime"}
                       placeholder={
                         currentType === "datetime" ? "%Y-%m-%d %H:%M" : ""
                       }
+                      helperText={" "}
                     />
                   )}
                 />
 
-                <IconButton onClick={() => remove(index)} size="small">
+                <IconButton
+                  onClick={() => remove(index)}
+                  size="small"
+                  sx={{ mb: "1rem" }}
+                >
                   <BsTrash color="var(--color-indian-red)" />
                 </IconButton>
               </Box>

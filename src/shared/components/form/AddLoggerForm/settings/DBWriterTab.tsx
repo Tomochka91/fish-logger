@@ -25,6 +25,7 @@ export function DBWriter() {
             <FormRow label="DB Writer" labelWidth="25%">
               <FormInput
                 {...field}
+                value={field.value ?? ""}
                 id="db-writer"
                 fullWidth
                 multiline

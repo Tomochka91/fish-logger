@@ -57,8 +57,8 @@ export function AddLoggerForm() {
   const { data: loggerList } = useQuery<LoggerList>({
     queryKey: ["logger-list"],
     queryFn: getLoggerList,
-    staleTime: 5 * 60 * 1000, // 5 минут кэш считаем свежим
-    refetchOnMount: false, // не рефетчить при каждом монтировании
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
 
@@ -80,8 +80,8 @@ export function AddLoggerForm() {
     reset(defaultLoggerValues);
   };
 
-  const selectedType = watch("type");
-
+  const enabled = watch("enabled");
+  const type = watch("type");
   const selectedLoggerName = watch("name");
   const selectedLoggerObj = getLoggerByName(selectedLoggerName);
 
@@ -198,6 +198,7 @@ export function AddLoggerForm() {
                           <FormInput
                             {...params}
                             inputRef={ref}
+                            value={params.inputProps.value ?? ""}
                             placeholder="New logger"
                             helperText={errors.name?.message ?? " "}
                           />
@@ -229,24 +230,29 @@ export function AddLoggerForm() {
                 <Controller
                   name="type"
                   control={control}
-                  render={({ field }) => (
-                    <FormSelect
-                      {...field}
-                      variant="outlined"
-                      value={field.value ?? ""}
-                      onChange={(event) =>
-                        field.onChange(event.target.value as LoggerType)
-                      }
-                    >
-                      <MenuItem value={""}>Not selected</MenuItem>
-                      <MenuItem value={"easy_serial"}>Easy Serial</MenuItem>
-                      <MenuItem value={"mbox"}>Mbox</MenuItem>
-                      <MenuItem value={"modbus_rtu"}>Modbus RTU</MenuItem>
-                      <MenuItem value={"modbus_tcp"}>Modbus TCP</MenuItem>
-                    </FormSelect>
+                  rules={{ required: "Select logger type" }}
+                  render={({ field, fieldState }) => (
+                    <>
+                      <FormSelect
+                        {...field}
+                        value={field.value ?? ""}
+                        variant="outlined"
+                        onChange={(event) =>
+                          field.onChange(event.target.value as LoggerType)
+                        }
+                      >
+                        <MenuItem value={""}>Not selected</MenuItem>
+                        <MenuItem value={"easy_serial"}>Easy Serial</MenuItem>
+                        <MenuItem value={"mbox"}>Mbox</MenuItem>
+                        <MenuItem value={"modbus_rtu"}>Modbus RTU</MenuItem>
+                        <MenuItem value={"modbus_tcp"}>Modbus TCP</MenuItem>
+                      </FormSelect>
+                      <HelperText>
+                        {fieldState.error?.message ?? " "}
+                      </HelperText>
+                    </>
                   )}
                 />
-                <HelperText>{errors.type?.message ?? " "}</HelperText>
               </FormControl>
             </FormRow>
 
@@ -264,7 +270,7 @@ export function AddLoggerForm() {
                   <FormRow label="Autostart" labelWidth="25%">
                     <FormCheckbox
                       id="autostart"
-                      checked={field.value}
+                      checked={!!field.value}
                       onChange={(e) => field.onChange(e.target.checked)}
                     />
                   </FormRow>
@@ -284,13 +290,22 @@ export function AddLoggerForm() {
             <Controller
               name="db_user"
               control={control}
-              render={({ field }) => (
+              rules={{
+                validate: (value) =>
+                  enabled
+                    ? value
+                      ? true
+                      : "Required when DB writing enabled"
+                    : true,
+              }}
+              render={({ field, fieldState }) => (
                 <FormRow label="DB user" labelWidth="25%">
                   <FormInput
                     {...field}
+                    value={field.value ?? ""}
                     id="db-user"
                     fullWidth
-                    helperText={errors.db_user?.message ?? " "}
+                    helperText={fieldState.error?.message ?? " "}
                   />
                 </FormRow>
               )}
@@ -299,15 +314,24 @@ export function AddLoggerForm() {
             <Controller
               name="db_password"
               control={control}
-              render={({ field }) => (
+              rules={{
+                validate: (value) =>
+                  enabled
+                    ? value
+                      ? true
+                      : "Required when DB writing enabled"
+                    : true,
+              }}
+              render={({ field, fieldState }) => (
                 <FormRow label="DB password" labelWidth="25%">
                   <FormInput
                     {...field}
+                    value={field.value ?? ""}
                     id="password"
                     fullWidth
                     type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
-                    helperText={errors.db_password?.message ?? " "}
+                    helperText={fieldState.error?.message ?? " "}
                     slotProps={{
                       input: {
                         endAdornment: (
@@ -338,13 +362,22 @@ export function AddLoggerForm() {
             <Controller
               name="table_name"
               control={control}
-              render={({ field }) => (
+              rules={{
+                validate: (value) =>
+                  enabled
+                    ? value
+                      ? true
+                      : "Required when DB writing enabled"
+                    : true,
+              }}
+              render={({ field, fieldState }) => (
                 <FormRow label="DB table" labelWidth="25%">
                   <FormInput
                     {...field}
+                    value={field.value ?? ""}
                     id="table-name"
                     fullWidth
-                    helperText={errors.table_name?.message ?? " "}
+                    helperText={fieldState.error?.message ?? " "}
                   />
                 </FormRow>
               )}
@@ -364,13 +397,8 @@ export function AddLoggerForm() {
                   <FormRow label="DB writing" labelWidth="25%">
                     <FormCheckbox
                       id="enable-db-writing"
-                      checked={field.value}
+                      checked={!!field.value}
                       onChange={(e) => field.onChange(e.target.checked)}
-                      sx={{
-                        ...(errors.enabled && {
-                          color: "var(--color-indian-red)",
-                        }),
-                      }}
                     />
                   </FormRow>
                 )}
@@ -380,7 +408,7 @@ export function AddLoggerForm() {
           </Box>
         </Box>
 
-        <TypeSettings type={selectedType} />
+        <TypeSettings type={type} />
 
         <Box
           sx={{

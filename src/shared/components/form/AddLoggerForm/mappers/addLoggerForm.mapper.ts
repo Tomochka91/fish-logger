@@ -11,7 +11,6 @@ export function mapLoggerToFormValues(logger: Logger): LoggerFormValues {
     db_user: logger.db_user ?? "",
     db_password: logger.db_password ?? "",
     table_name: logger.table_name ?? "",
-    // тут пока простая логика:
     enabled: Boolean(logger.db_user || logger.table_name),
     query_template: logger.query_template ?? "",
     easy_serial: isEasySerial
@@ -27,10 +26,16 @@ export function mapLoggerToFormValues(logger: Logger): LoggerFormValues {
           },
           parser: {
             preamble: logger.easy_serial.parser.preamble ?? "",
-            terminator: logger.easy_serial.parser.terminator,
-            separator: logger.easy_serial.parser.separator,
-            encoding: logger.easy_serial.parser.encoding,
-            fields: logger.easy_serial.parser.fields,
+            terminator: logger.easy_serial.parser.terminator ?? "\\n",
+            separator: logger.easy_serial.parser.separator ?? ";",
+            encoding: logger.easy_serial.parser.encoding ?? "utf-8",
+            fields:
+              logger.easy_serial.parser.fields?.map((field) => ({
+                ...field,
+                name: field.name ?? "",
+                index: field.index ?? 0,
+                format: field.format ?? "",
+              })) ?? [],
           },
         }
       : null,

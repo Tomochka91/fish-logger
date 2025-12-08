@@ -41,9 +41,9 @@ export function mapFormValuesToPayload(
     type: values.type,
     enabled: values.enabled,
     autostart: values.autostart,
-    db_user: values.db_user.trim(),
+    db_user: values.db_user,
     db_password: values.db_password,
-    table_name: values.table_name.trim(),
+    table_name: values.table_name,
     query_template: values.query_template,
     easy_serial:
       values.type === "easy_serial" && values.easy_serial
