@@ -16,6 +16,7 @@ export function useSaveLogger(selectedLogger: Logger | null) {
       const onSuccess = () => {
         options?.onSuccess?.();
       };
+      // нужно обнулить остальные логгеры (обнулить те поля, которые не совпадают с type.loggertype)
 
       if (isEditMode && selectedLogger) {
         updateLoggerMutate({ id: selectedLogger.id, values }, { onSuccess });

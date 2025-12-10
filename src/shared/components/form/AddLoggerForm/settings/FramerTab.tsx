@@ -14,7 +14,7 @@ import {
   useWatch,
 } from "react-hook-form";
 import { FormInput } from "../../FormInput/FormInput";
-import type { LoggerFormValues } from "../AddLoggerForm.types";
+import type { LoggerFormValues } from "../loggerForm.types";
 import { BsPlus, BsTrash } from "react-icons/bs";
 import type { EasySerialField, EasySerialFieldType } from "../../../../types";
 import { HelperText } from "../../FormHelperText/HelperText";
@@ -35,6 +35,7 @@ const tableSx = {
   justifyContent: "center",
   backgroundColor: "white",
   borderBottom: "var(--border-standart)",
+  borderInline: "var(--border-standart)",
 };
 
 export function FramerTab() {

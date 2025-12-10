@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
-import type { LoggerType } from "../../../types";
+import type { LoggerTypeRegistry } from "../../../types";
 import { EasySerialSettings } from "./easy-serial/EasySerialSettings";
 import { MboxSettings } from "./mbox/MboxSettings";
 import { ModbusRtuSettings } from "./modbus/ModbusRtuSettings";
 import { ModbusTcpSettings } from "./modbus/ModbusTcpSettings";
 
 interface TypeSettingsProps {
-  type: LoggerType;
+  type: LoggerTypeRegistry;
 }
 
 export function TypeSettings({ type }: TypeSettingsProps) {
@@ -32,7 +32,7 @@ export function TypeSettings({ type }: TypeSettingsProps) {
   );
 }
 
-function renderSettings(type: LoggerType) {
+function renderSettings(type: LoggerTypeRegistry) {
   switch (type) {
     case "easy_serial":
       return <EasySerialSettings />;

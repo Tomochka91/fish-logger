@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { type SerialPort } from "../../../../types";
 import { getSerialPorts } from "../../../../../api/apiSerialPorts";
 import { Controller, useFormContext } from "react-hook-form";
-import { type LoggerFormValues } from "../AddLoggerForm.types";
+import type { LoggerFormValues } from "../loggerForm.types";
 import { HelperText } from "../../FormHelperText/HelperText";
 import { useMemo } from "react";
 
@@ -19,7 +19,11 @@ const parity: string[] = ["None", "Even", "Odd", "Mark", "Space"];
 const stopbits: number[] = [1.0, 1.5, 2.0];
 const flowcontrol: string[] = ["None", "RTSCTS", "XONXOFF"];
 
-export function ComPortTab() {
+type ComPortTabProps = {
+  fieldPrefix: "easy_serial" | "modbus_rtu";
+};
+
+export function ComPortTab({ fieldPrefix }: ComPortTabProps) {
   const { control, watch } = useFormContext<LoggerFormValues>();
 
   const { data: serialPorts, refetch } = useQuery<SerialPort[]>({
@@ -30,7 +34,9 @@ export function ComPortTab() {
     refetchOnWindowFocus: false,
   });
 
-  const selectedPort = watch("easy_serial.port.port");
+  const portFieldName = `${fieldPrefix}.port.port` as const;
+
+  const selectedPort = watch(portFieldName);
   const selectedPortData = useMemo(
     () => serialPorts?.find((port) => port.name === selectedPort),
     [serialPorts, selectedPort]
@@ -61,7 +67,7 @@ export function ComPortTab() {
           <FormRow label="Port" labelWidth="30%">
             <FormControl fullWidth>
               <Controller
-                name="easy_serial.port.port"
+                name={portFieldName}
                 control={control}
                 rules={{ required: "Port is required" }}
                 render={({ field, fieldState }) => {
@@ -85,7 +91,9 @@ export function ComPortTab() {
                           </MenuItem>
                         ))}
                       </FormSelect>
-                      <HelperText sx={{ gridColumn: "1/-1" }}>
+                      <HelperText
+                        sx={{ gridColumn: "1/-1", minHeight: "1.6rem" }}
+                      >
                         {fieldState.error
                           ? fieldState.error?.message
                           : selectedPortData
@@ -104,7 +112,7 @@ export function ComPortTab() {
         <FormRow label="Baudrate" labelWidth="25%">
           <FormControl fullWidth>
             <Controller
-              name="easy_serial.port.baudrate"
+              name={`${fieldPrefix}.port.baudrate`}
               control={control}
               render={({ field }) => (
                 <FormSelect
@@ -127,7 +135,7 @@ export function ComPortTab() {
         <FormRow label="Databits" labelWidth="25%">
           <FormControl fullWidth>
             <Controller
-              name="easy_serial.port.databits"
+              name={`${fieldPrefix}.port.databits`}
               control={control}
               render={({ field }) => (
                 <FormSelect
@@ -150,7 +158,7 @@ export function ComPortTab() {
         <FormRow label="Parity" labelWidth="25%">
           <FormControl fullWidth>
             <Controller
-              name="easy_serial.port.parity"
+              name={`${fieldPrefix}.port.parity`}
               control={control}
               render={({ field }) => (
                 <FormSelect
@@ -173,7 +181,7 @@ export function ComPortTab() {
         <FormRow label="Stopbits" labelWidth="25%">
           <FormControl fullWidth>
             <Controller
-              name="easy_serial.port.stopbits"
+              name={`${fieldPrefix}.port.stopbits`}
               control={control}
               render={({ field }) => (
                 <FormSelect
@@ -196,7 +204,7 @@ export function ComPortTab() {
         <FormRow label="Flowcontrol" labelWidth="25%">
           <FormControl fullWidth>
             <Controller
-              name="easy_serial.port.flowcontrol"
+              name={`${fieldPrefix}.port.flowcontrol`}
               control={control}
               render={({ field }) => (
                 <FormSelect
@@ -217,7 +225,7 @@ export function ComPortTab() {
         </FormRow>
 
         <Controller
-          name="easy_serial.port.autoconnect"
+          name={`${fieldPrefix}.port.autoconnect`}
           control={control}
           render={({ field }) => (
             <FormRow label="Autoconnect" labelWidth="25%">

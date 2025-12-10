@@ -1,22 +1,21 @@
 import type { EasySerialSettings } from "./logger-easy-serial";
 import type { ModbusRTUSettings } from "./logger-modbus-rtu";
 
-export type LoggerType =
-  | ""
+export type LoggerTypeRegistry =
   | "easy_serial"
   | "mbox"
   | "modbus_rtu"
   | "modbus_tcp";
 
 export type LoggerBase = {
-  id: number;
+  id?: number;
   name: string;
-  type: LoggerType;
-  enabled: boolean;
+  type: LoggerTypeRegistry;
   autostart: boolean;
   db_user: string | null;
   db_password: string | null;
   table_name: string | null;
+  enabled: boolean;
   query_template: string | null;
 };
 

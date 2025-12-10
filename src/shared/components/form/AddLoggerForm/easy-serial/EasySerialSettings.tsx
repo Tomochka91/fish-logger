@@ -37,7 +37,7 @@ export function EasySerialSettings() {
           gridTemplateRows: "auto 1fr",
         }}
       >
-        {tab === 0 && <ComPortTab />}
+        {tab === 0 && <ComPortTab fieldPrefix="easy_serial" />}
 
         {tab === 1 && <FramerTab />}
 

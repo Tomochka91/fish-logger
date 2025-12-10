@@ -31,11 +31,27 @@ export type NewLoggerPayload = {
       fields: EasySerialField[];
     };
   } | null;
+  modbus_rtu: {
+    port: {
+      port: string;
+      baudrate: number;
+      databits: number;
+      parity: string;
+      stopbits: number;
+      flowcontrol: string;
+      autoconnect: boolean;
+      timeout: number;
+    };
+    slaves: unknown[];
+  } | null;
 };
 
 export function mapFormValuesToPayload(
   values: LoggerFormValues
 ): NewLoggerPayload {
+  const isEasySerial = values.type === "easy_serial";
+  const isModbusRtu = values.type === "modbus_rtu";
+  //нужно универсальное обнуливание
   return {
     name: values.name.trim(),
     type: values.type,
@@ -46,7 +62,7 @@ export function mapFormValuesToPayload(
     table_name: values.table_name,
     query_template: values.query_template,
     easy_serial:
-      values.type === "easy_serial" && values.easy_serial
+      isEasySerial && values.easy_serial
         ? {
             port: {
               ...values.easy_serial.port,
@@ -55,6 +71,16 @@ export function mapFormValuesToPayload(
             parser: {
               ...values.easy_serial.parser,
             },
+          }
+        : null,
+    modbus_rtu:
+      isModbusRtu && values.modbus_rtu
+        ? {
+            port: {
+              ...values.modbus_rtu.port,
+              timeout: DEFAULT_SERIAL_TIMEOUT,
+            },
+            slaves: [],
           }
         : null,
   };

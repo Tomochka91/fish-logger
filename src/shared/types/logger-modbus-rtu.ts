@@ -6,7 +6,7 @@ export type ModbusRTUVariable = {
   encoding: string;
   k: number;
   b: number;
-  default: number;
+  default: number | null;
 };
 
 export type ModbusRTUSlave = {

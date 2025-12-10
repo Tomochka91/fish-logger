@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { type LoggerFormValues } from "../../components/form/AddLoggerForm/AddLoggerForm.types";
+import { type LoggerFormValues } from "../../components/form/AddLoggerForm/loggerForm.types";
 
 export type LoggerFormPersistedState = {
-  values: Partial<LoggerFormValues>;
+  values: LoggerFormValues;
 };
 
 export const LoggerFormStateContext = createContext<

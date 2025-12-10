@@ -16,21 +16,23 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { defaultAutocompleteSlotProps } from "../FormAutocomplete/AutocompleteSlotProps";
 import { FormCheckbox } from "../FormCheckBox/FormCheckBox";
 import { ClearButton } from "../../ui/button/ClearButton";
-import { type LoggerList, type LoggerType } from "../../../types";
+import { type LoggerList } from "../../../types";
 import { TypeSettings } from "./TypeSettings";
 import { useQuery } from "@tanstack/react-query";
 import { getLoggerList } from "../../../../api/apiConnections";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { SaveButton } from "../../ui/button/SaveButton";
-import { mapLoggerToFormValues } from "./mappers/addLoggerForm.mapper";
+import { mapLoggerToFormValues } from "./mappers/mapLoggerToFormValues";
 import { ConfirmDialog } from "../../ui/dialog/ConfirmDialog";
 import { useDeleteLogger } from "../../../hooks/useDeleteLogger";
 import { useSaveLogger } from "../../../hooks/useSaveLogger";
-import {
-  defaultLoggerValues,
-  type LoggerFormValues,
-} from "./AddLoggerForm.types";
+
 import { useLoggerFormState } from "../../../hooks/useLoggerFormState";
+import type { LoggerFormValues } from "./loggerForm.types";
+import { createLoggerDefaultValues } from "./loggerDefaults";
+import type { UsedLoggerType } from "./loggerRegistry";
+
+const NEW_LOGGER_DEFAULTS = createLoggerDefaultValues("easy_serial");
 
 export function AddLoggerForm() {
   const { state, setState } = useLoggerFormState();
@@ -45,10 +47,14 @@ export function AddLoggerForm() {
     handleSubmit,
     reset,
     watch,
+    getValues,
     formState: { errors, isValid },
   } = methods;
 
   const watchedValues = useWatch<LoggerFormValues>({ control });
+  const enabled = watch("enabled");
+  const type = watch("type");
+  const selectedLoggerName = watch("name");
 
   useEffect(() => {
     setState({ values: watchedValues as LoggerFormValues });
@@ -77,22 +83,18 @@ export function AddLoggerForm() {
   const togglePassword = () => setShowPassword((prev) => !prev);
 
   const onClear = () => {
-    reset(defaultLoggerValues);
+    reset(NEW_LOGGER_DEFAULTS);
+    setState({ values: NEW_LOGGER_DEFAULTS });
   };
 
-  const enabled = watch("enabled");
-  const type = watch("type");
-  const selectedLoggerName = watch("name");
   const selectedLoggerObj = getLoggerByName(selectedLoggerName);
-
   const { saveLogger, isSaving, isEditMode } = useSaveLogger(selectedLoggerObj);
 
   const onSubmit = (values: LoggerFormValues) => {
     saveLogger(values, {
       onSuccess: () => {
         if (!isEditMode) {
-          reset(defaultLoggerValues);
-          setState({ values: defaultLoggerValues });
+          onClear();
         }
       },
     });
@@ -113,12 +115,12 @@ export function AddLoggerForm() {
   };
 
   const handleConfirmDelete = () => {
-    if (!selectedLoggerObj) return;
+    if (!selectedLoggerObj || selectedLoggerObj.id == null) return;
 
     removeLogger(selectedLoggerObj.id, {
       onSuccess: () => {
         setIsConfirmDialogOpen(false);
-        reset(defaultLoggerValues);
+        reset(NEW_LOGGER_DEFAULTS);
       },
     });
   };
@@ -174,7 +176,7 @@ export function AddLoggerForm() {
                       onChange(name);
 
                       if (!name) {
-                        reset(defaultLoggerValues);
+                        reset(NEW_LOGGER_DEFAULTS);
                         return;
                       }
 
@@ -237,15 +239,32 @@ export function AddLoggerForm() {
                         {...field}
                         value={field.value ?? ""}
                         variant="outlined"
-                        onChange={(event) =>
-                          field.onChange(event.target.value as LoggerType)
-                        }
+                        onChange={(event) => {
+                          const nextType = event.target.value as UsedLoggerType;
+                          const current = getValues();
+                          const defaults = createLoggerDefaultValues(nextType);
+                          const merged: LoggerFormValues = {
+                            ...defaults,
+                            name: current.name,
+                            db_user: current.db_user,
+                            db_password: current.db_password,
+                            table_name: current.table_name,
+                            autostart: current.autostart,
+                            enabled: current.enabled,
+                            query_template: current.query_template,
+                          };
+                          reset(merged);
+                          setState({ values: merged });
+                          //нужно подтянуть дефолты при смене типа логгера
+                          // field.onChange(
+                          //   event.target.value as LoggerTypeRegistry
+                          // );
+                        }}
                       >
-                        <MenuItem value={""}>Not selected</MenuItem>
                         <MenuItem value={"easy_serial"}>Easy Serial</MenuItem>
-                        <MenuItem value={"mbox"}>Mbox</MenuItem>
+                        {/* <MenuItem value={"mbox"}>Mbox</MenuItem> */}
                         <MenuItem value={"modbus_rtu"}>Modbus RTU</MenuItem>
-                        <MenuItem value={"modbus_tcp"}>Modbus TCP</MenuItem>
+                        {/* <MenuItem value={"modbus_tcp"}>Modbus TCP</MenuItem> */}
                       </FormSelect>
                       <HelperText>
                         {fieldState.error?.message ?? " "}
