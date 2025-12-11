@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
 import { useState, type SyntheticEvent } from "react";
 import { SettingsTab, SettingsTabs } from "../../../ui/tab/TabStyled";
-import { ComPortTab } from "../settings/ComPortTab";
-import { FramerTab } from "../settings/FramerTab";
-import { DBWriter } from "../settings/DBWriterTab";
+import { ComPortTab } from "../tabSettings/ComPortTab";
+import { FramerTab } from "../tabSettings/FramerTab";
+import { DBWriterTab } from "../tabSettings/DBWriterTab";
 
 export function EasySerialSettings() {
   const [tab, setTab] = useState(0);
@@ -41,7 +41,7 @@ export function EasySerialSettings() {
 
         {tab === 1 && <FramerTab />}
 
-        {tab === 2 && <DBWriter />}
+        {tab === 2 && <DBWriterTab />}
       </Box>
     </Box>
   );

@@ -1,7 +1,8 @@
 import { Box } from "@mui/material";
 import { useState, type SyntheticEvent } from "react";
 import { SettingsTab, SettingsTabs } from "../../../ui/tab/TabStyled";
-import { ComPortTab } from "../settings/ComPortTab";
+import { ComPortTab } from "../tabSettings/ComPortTab";
+import { PollIntervalTab } from "../tabSettings/PollIntervalTab";
 
 export function ModbusRtuSettings() {
   const [tab, setTab] = useState(0);
@@ -36,6 +37,8 @@ export function ModbusRtuSettings() {
         }}
       >
         {tab === 0 && <ComPortTab fieldPrefix="modbus_rtu" />}
+
+        {tab === 1 && <PollIntervalTab />}
       </Box>
     </Box>
   );

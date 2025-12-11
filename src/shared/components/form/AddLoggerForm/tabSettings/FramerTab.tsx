@@ -19,6 +19,7 @@ import { BsPlus, BsTrash } from "react-icons/bs";
 import type { EasySerialField, EasySerialFieldType } from "../../../../types";
 import { HelperText } from "../../FormHelperText/HelperText";
 import { FormSelect } from "../../FormSelect/FormSelect";
+import { makeNumberChangeHandler } from "../../../../utils/numberField";
 
 const tableColumnHeading = [
   { key: "name", label: "Variable Name" },
@@ -233,6 +234,7 @@ export function FramerTab() {
                       {...field}
                       value={field.value ?? ""}
                       type="number"
+                      onChange={makeNumberChangeHandler(field)}
                       helperText={fieldState.error?.message ?? " "}
                     />
                   )}

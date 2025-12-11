@@ -91,6 +91,7 @@ export function AddLoggerForm() {
   const { saveLogger, isSaving, isEditMode } = useSaveLogger(selectedLoggerObj);
 
   const onSubmit = (values: LoggerFormValues) => {
+    console.log(values);
     saveLogger(values, {
       onSuccess: () => {
         if (!isEditMode) {
@@ -255,10 +256,6 @@ export function AddLoggerForm() {
                           };
                           reset(merged);
                           setState({ values: merged });
-                          //нужно подтянуть дефолты при смене типа логгера
-                          // field.onChange(
-                          //   event.target.value as LoggerTypeRegistry
-                          // );
                         }}
                       >
                         <MenuItem value={"easy_serial"}>Easy Serial</MenuItem>

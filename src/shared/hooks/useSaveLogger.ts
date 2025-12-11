@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import type { Logger } from "../types";
 import { useCreateLogger } from "./useCreateLogger";
 import { useUpdateLogger } from "./useUpdateLogger";
-import type { LoggerFormValues } from "../components/form/AddLoggerForm/AddLoggerForm.types";
+import type { LoggerFormValues } from "../components/form/AddLoggerForm/loggerForm.types";
 
 export function useSaveLogger(selectedLogger: Logger | null) {
   const { createLogger, isCreating } = useCreateLogger();
@@ -16,10 +16,9 @@ export function useSaveLogger(selectedLogger: Logger | null) {
       const onSuccess = () => {
         options?.onSuccess?.();
       };
-      // нужно обнулить остальные логгеры (обнулить те поля, которые не совпадают с type.loggertype)
 
       if (isEditMode && selectedLogger) {
-        updateLoggerMutate({ id: selectedLogger.id, values }, { onSuccess });
+        updateLoggerMutate({ id: selectedLogger.id!, values }, { onSuccess });
       } else {
         createLogger(values, { onSuccess });
       }

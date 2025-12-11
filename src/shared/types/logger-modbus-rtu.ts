@@ -10,6 +10,7 @@ export type ModbusRTUVariable = {
 };
 
 export type ModbusRTUSlave = {
+  slave_name: string;
   slave_id: number;
   variables: ModbusRTUVariable[];
 };

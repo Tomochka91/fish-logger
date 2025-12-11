@@ -1,6 +1,3 @@
-// import type { LoggerFormValues } from "../shared/components/form/AddLoggerForm/AddLoggerForm.types";
-import type { LoggerFormValues } from "../shared/components/form/AddLoggerForm/loggerForm.types";
-import { mapFormValuesToPayload } from "../shared/components/form/AddLoggerForm/mappers/mapFormValuesToPayload";
 import type { Logger, LoggerList } from "../shared/types";
 import { request } from "./apiClient";
 
@@ -10,12 +7,7 @@ export const getLoggerList = async (): Promise<LoggerList> => {
   return data;
 };
 
-export const postLogger = async (
-  formValues: LoggerFormValues
-): Promise<Logger> => {
-  const payload = mapFormValuesToPayload(formValues);
-  console.log(payload);
-
+export const postLogger = async (payload: Logger): Promise<Logger> => {
   return await request<Logger>("/connections/", {
     method: "POST",
     body: JSON.stringify(payload),
@@ -24,10 +16,8 @@ export const postLogger = async (
 
 export const updateLogger = async (
   id: number,
-  formValues: LoggerFormValues
+  payload: Logger
 ): Promise<Logger> => {
-  const payload = mapFormValuesToPayload(formValues);
-
   return await request<Logger>(`/connections/${id}`, {
     method: "PUT",
     body: JSON.stringify(payload),

@@ -3,8 +3,9 @@ import type { LoggerFormValues } from "../loggerForm.types";
 import { Box, Divider } from "@mui/material";
 import { FormRow } from "../../FormRow/FormRow";
 import { FormInput } from "../../FormInput/FormInput";
+import { makeNumberChangeHandler } from "../../../../utils/numberField";
 
-export function DBWriter() {
+export function PollIntervalTab() {
   const { control } = useFormContext<LoggerFormValues>();
   return (
     <>
@@ -19,17 +20,22 @@ export function DBWriter() {
         }}
       >
         <Controller
-          name="query_template"
+          name="modbus_rtu.poll_interval"
           control={control}
-          render={({ field }) => (
-            <FormRow label="DB Writer" labelWidth="25%">
+          rules={{
+            validate: (val) =>
+              val >= 1 ? true : "interval must be greater than or equal to 1",
+          }}
+          render={({ field, fieldState }) => (
+            <FormRow label="Poll interval" labelWidth="25%">
               <FormInput
                 {...field}
                 value={field.value ?? ""}
-                id="db-writer"
+                type="number"
+                id="poll-interval"
                 fullWidth
-                multiline
-                maxRows={15}
+                onChange={makeNumberChangeHandler(field)}
+                helperText={fieldState.error?.message ?? " "}
               />
             </FormRow>
           )}

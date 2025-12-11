@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Logger } from "../types";
-import type { LoggerFormValues } from "../components/form/AddLoggerForm/AddLoggerForm.types";
+import type { LoggerFormValues } from "../components/form/AddLoggerForm/loggerForm.types";
 import toast from "react-hot-toast";
 import { updateLogger } from "../../api/apiConnections";
+import { mapFormValuesToPayload } from "../components/form/AddLoggerForm/mappers/mapFormValuesToPayload";
 
 export function useUpdateLogger() {
   const queryClient = useQueryClient();
@@ -11,7 +12,10 @@ export function useUpdateLogger() {
     Error,
     { id: number; values: LoggerFormValues }
   >({
-    mutationFn: ({ id, values }) => updateLogger(id, values),
+    mutationFn: ({ id, values }) => {
+      const payload = mapFormValuesToPayload(values);
+      return updateLogger(id, payload);
+    },
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["logger-list"] });
