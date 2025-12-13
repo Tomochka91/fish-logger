@@ -19,11 +19,20 @@ export function SlavesTab({ fieldPrefix }: SlavesTabProps) {
     name: arrayName,
   });
 
+  const createDefaultVariable = () => ({
+    name: "",
+    address: 0,
+    encoding: "u16" as const,
+    k: 1.0,
+    b: 0,
+    default: null,
+  });
+
   const handleAddFieldSlave = () => {
     append({
       slave_name: "",
       slave_id: 1,
-      variables: [],
+      variables: [createDefaultVariable()],
     });
   };
 
@@ -46,7 +55,7 @@ export function SlavesTab({ fieldPrefix }: SlavesTabProps) {
         <IconButton
           onClick={handleAddFieldSlave}
           size="large"
-          sx={{ padding: "1rem" }}
+          sx={{ padding: "1rem", marginBlockStart: "1rem" }}
         >
           <BsPlus />
         </IconButton>
@@ -63,6 +72,7 @@ export function SlavesTab({ fieldPrefix }: SlavesTabProps) {
         {fields.length === 0 && (
           <HelperText
             sx={{
+              marginBlockStart: "1rem",
               fontSize: "var(--small-font-size)",
               padding: "var(--padding-mini)",
               textAlign: "start",

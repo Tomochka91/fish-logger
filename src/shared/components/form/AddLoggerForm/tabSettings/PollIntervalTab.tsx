@@ -23,8 +23,8 @@ export function PollIntervalTab() {
           name="modbus_rtu.poll_interval"
           control={control}
           rules={{
-            validate: (val) =>
-              val >= 1 ? true : "interval must be greater than or equal to 1",
+            required: "Poll interval is required",
+            validate: (val) => val >= 0.1 || "interval must be ≥ 0.1",
           }}
           render={({ field, fieldState }) => (
             <FormRow label="Poll interval" labelWidth="25%">
@@ -34,6 +34,7 @@ export function PollIntervalTab() {
                 type="number"
                 id="poll-interval"
                 fullWidth
+                slotProps={{ htmlInput: { min: "0.1" } }}
                 onChange={makeNumberChangeHandler(field)}
                 helperText={fieldState.error?.message ?? " "}
               />

@@ -3,8 +3,10 @@ import { Select, styled } from "@mui/material";
 export const BaseSelect = styled(Select)({
   background: "var(--color-mint-cream)",
   borderRadius: "var(--border-radius-main)",
+  lineHeight: "var(--line-height-standart)",
 
   "& .MuiInputBase-root": {
+    lineHeight: "var(--line-height-standart)",
     transition: "none",
   },
 

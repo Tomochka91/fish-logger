@@ -35,9 +35,10 @@ const tableSx = {
   alignItems: "center",
   justifyContent: "center",
   backgroundColor: "white",
-  borderBottom: "var(--border-standart)",
-  borderInline: "var(--border-standart)",
+  border: "var(--border-standart)",
 };
+
+const typeValues = ["string", "int", "float", "datetime"];
 
 export function FramerTab() {
   const { control } = useFormContext<LoggerFormValues>();
@@ -68,21 +69,20 @@ export function FramerTab() {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          gap: "var(--gap-mini)",
-          borderTop: "var(--border-standart)",
-          paddingBlock: "var(--pading-equal)",
+          paddingBlock: "var(--pading-equal) 2px",
         }}
       >
         <Controller
           name="easy_serial.parser.preamble"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormRow label="Preamble" labelWidth="25%">
               <FormInput
                 {...field}
                 value={field.value ?? ""}
                 id="preamble"
                 fullWidth
+                helperText={fieldState.error?.message ?? " "}
               />
             </FormRow>
           )}
@@ -99,7 +99,7 @@ export function FramerTab() {
                 value={field.value ?? ""}
                 id="terminator"
                 fullWidth
-                helperText={fieldState.error?.message}
+                helperText={fieldState.error?.message ?? " "}
               />
             </FormRow>
           )}
@@ -108,13 +108,14 @@ export function FramerTab() {
         <Controller
           name="easy_serial.parser.separator"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormRow label="Separator" labelWidth="25%">
               <FormInput
                 {...field}
                 value={field.value ?? ""}
                 id="separator"
                 fullWidth
+                helperText={fieldState.error?.message ?? " "}
               />
             </FormRow>
           )}
@@ -123,13 +124,14 @@ export function FramerTab() {
         <Controller
           name="easy_serial.parser.encoding"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormRow label="Encoding" labelWidth="25%">
               <FormInput
                 {...field}
                 value={field.value ?? ""}
                 id="encoding"
                 fullWidth
+                helperText={fieldState.error?.message ?? " "}
               />
             </FormRow>
           )}
@@ -145,7 +147,6 @@ export function FramerTab() {
         sx={{
           gridColumn: "1/-1",
           marginTop: "var(--border-standart)",
-          borderTop: "var(--border-standart)",
           display: "flex",
           flexDirection: "column",
           minHeight: 0,
@@ -198,12 +199,16 @@ export function FramerTab() {
                 key={item.id}
                 sx={{
                   ...tableSx,
+                  borderTop: 0,
                   padding: "1rem 2px 0",
                   "&:nth-of-type(odd)": {
                     backgroundColor: "var(--color-honeydew)",
                     "& .MuiOutlinedInput-root": {
                       backgroundColor: "white",
                     },
+                  },
+                  "&:last-of-type": {
+                    borderBottom: "var(--border-standart)",
                   },
                 }}
               >
@@ -224,6 +229,7 @@ export function FramerTab() {
                   name={`easy_serial.parser.fields.${index}.index`}
                   control={control}
                   rules={{
+                    required: "Index is required",
                     validate: (val) =>
                       val >= 0
                         ? true
@@ -232,6 +238,7 @@ export function FramerTab() {
                   render={({ field, fieldState }) => (
                     <FormInput
                       {...field}
+                      slotProps={{ htmlInput: { step: 1, min: 0 } }}
                       value={field.value ?? ""}
                       type="number"
                       onChange={makeNumberChangeHandler(field)}
@@ -256,10 +263,11 @@ export function FramerTab() {
                             )
                           }
                         >
-                          <MenuItem value="string">string</MenuItem>
-                          <MenuItem value="int">int</MenuItem>
-                          <MenuItem value="float">float</MenuItem>
-                          <MenuItem value="datetime">datetime</MenuItem>
+                          {typeValues.map((val) => (
+                            <MenuItem key={val} value={val}>
+                              {val}
+                            </MenuItem>
+                          ))}
                         </FormSelect>
                         <HelperText> </HelperText>
                       </>

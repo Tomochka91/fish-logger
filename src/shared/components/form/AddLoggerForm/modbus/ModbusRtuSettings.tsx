@@ -4,6 +4,7 @@ import { SettingsTab, SettingsTabs } from "../../../ui/tab/TabStyled";
 import { ComPortTab } from "../tabSettings/ComPortTab";
 import { PollIntervalTab } from "../tabSettings/PollIntervalTab";
 import { SlavesTab } from "../tabSettings/SlavesTab/SlavesTab";
+import { DBWriterTab } from "../tabSettings/DBWriterTab";
 
 export function ModbusRtuSettings() {
   const [tab, setTab] = useState(0);
@@ -25,6 +26,7 @@ export function ModbusRtuSettings() {
         <SettingsTab label="com-port" />
         <SettingsTab label="poll interval" />
         <SettingsTab label="slaves" />
+        <SettingsTab label="db-writer" />
       </SettingsTabs>
 
       <Box
@@ -42,6 +44,8 @@ export function ModbusRtuSettings() {
         {tab === 1 && <PollIntervalTab />}
 
         {tab === 2 && <SlavesTab fieldPrefix="modbus_rtu" />}
+
+        {tab === 3 && <DBWriterTab />}
       </Box>
     </Box>
   );
