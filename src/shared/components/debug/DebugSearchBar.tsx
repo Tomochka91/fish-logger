@@ -27,7 +27,7 @@ export function DebugSearchBar({ value, onChange }: DebugSearchBarProps) {
       slotProps={{
         input: {
           startAdornment: (
-            <InputAdornment position="start">
+            <InputAdornment position="start" sx={{ paddingLeft: "5px" }}>
               <BsSearch />
             </InputAdornment>
           ),

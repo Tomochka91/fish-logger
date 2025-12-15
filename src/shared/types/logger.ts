@@ -36,3 +36,16 @@ export type Logger = EasySerialLogger | ModbusRtuLogger;
 
 // Logger list
 export type LoggerList = Logger[];
+
+// Logs
+export type LogsMessage = {
+  success: boolean;
+  data: {
+    conn_id: number;
+    name: string;
+    registered: boolean;
+    messages: string[];
+    errors: string[];
+  };
+  error: string;
+};

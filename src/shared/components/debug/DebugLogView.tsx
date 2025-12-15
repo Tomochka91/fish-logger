@@ -35,7 +35,7 @@ export function DebugLogView({ messages, autoscroll }: DebugLogViewProps) {
   return (
     <Paper
       ref={containerRef}
-      variant="outlined"
+      elevation={1}
       sx={{
         flex: 1,
         minHeight: 0,

@@ -197,6 +197,7 @@ export function AddLoggerForm() {
                         options={autocompleteOptions}
                         inputValue={value}
                         onInputChange={handleSelectLogger}
+                        slotProps={defaultAutocompleteSlotProps}
                         renderInput={(params) => (
                           <FormInput
                             {...params}
@@ -206,7 +207,6 @@ export function AddLoggerForm() {
                             helperText={errors.name?.message ?? " "}
                           />
                         )}
-                        slotProps={defaultAutocompleteSlotProps}
                       />
                     );
                   }}

@@ -1,4 +1,4 @@
-import type { Logger, LoggerList } from "../shared/types";
+import type { LogsMessage, Logger, LoggerList } from "../shared/types";
 import { request } from "./apiClient";
 
 // LOGGERS
@@ -28,4 +28,8 @@ export const deleteLogger = async (id: number) => {
   return await request<void>(`/connections/${id}`, {
     method: "DELETE",
   });
+};
+
+export const getLogsMessage = async (id: number): Promise<LogsMessage> => {
+  return await request<LogsMessage>(`/connections/runtime/${id}/logs`);
 };
