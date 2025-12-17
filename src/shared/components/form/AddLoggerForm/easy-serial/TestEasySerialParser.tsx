@@ -57,7 +57,8 @@ export function TestEasySerialParser() {
           value={rawText}
           onChange={(e) => setRawText(e.target.value)}
           multiline
-          minRows={3}
+          minRows={8}
+          maxRows={8}
           placeholder="Paste raw text here…"
           fullWidth
           helperText={" "}
@@ -82,10 +83,15 @@ export function TestEasySerialParser() {
         sx={{
           flex: 1,
           padding: "var(--padding-mini)",
-          minHeight: 0,
-          fontFamily: "inherit",
+          minHeight: "14.4rem",
+          maxHeight: "14.4rem",
+          overflowY: "auto",
+          overflowX: "hidden",
           whiteSpace: "pre-wrap",
-          fontSize: "14px",
+          overflowWrap: "anywhere",
+          wordBreak: "break-word",
+          fontFamily: "inherit",
+          fontSize: "var(--standart-font-size)",
         }}
       >
         {output || (
