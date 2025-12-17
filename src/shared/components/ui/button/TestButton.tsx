@@ -1,11 +1,13 @@
 import { AppButton } from "./AppButton";
 import { LoaderMini } from "../loader/LoaderMini";
+import type { SxProps, Theme } from "@mui/material/styles";
 
 type TestButtonProps = {
   loading?: boolean;
   disabled?: boolean;
   onClick: () => void;
   label?: string;
+  sx?: SxProps<Theme>;
 };
 
 export function TestButton({
@@ -13,6 +15,7 @@ export function TestButton({
   disabled = false,
   onClick,
   label = "Test connection",
+  sx,
 }: TestButtonProps) {
   return (
     <AppButton
@@ -30,6 +33,7 @@ export function TestButton({
           bgcolor: "var(--color-vanilla)",
           borderColor: "var(--color-vanilla)",
         },
+        ...sx,
       }}
     >
       {loading ? <LoaderMini /> : label}

@@ -7,6 +7,9 @@ export function Sidebar() {
     <aside className={styles.sidebar}>
       <Logo />
       <MainNav />
+      <div className={styles["sidebar-footer"]}>
+        © {new Date().getFullYear()} TTL &amp; SEM — engineering team
+      </div>
     </aside>
   );
 }

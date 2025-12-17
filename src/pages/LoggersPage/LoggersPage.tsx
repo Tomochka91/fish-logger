@@ -39,7 +39,7 @@ export function LoggersPage() {
     queryKey: ["runtime-logs", selectedId],
     queryFn: () => getLogsMessage(selectedId!),
     enabled: selectedId !== null,
-    refetchInterval: 5000,
+    refetchInterval: 1000,
   });
 
   const { messages, errors } = useMemo<{
@@ -91,7 +91,7 @@ export function LoggersPage() {
         >
           {hasMessages && (
             <Paper
-              elevation={1}
+              elevation={24}
               sx={{
                 flex: 1,
                 minHeight: 0,
@@ -114,7 +114,7 @@ export function LoggersPage() {
 
           {hasErrors && (
             <Paper
-              elevation={1}
+              elevation={24}
               sx={{
                 flex: 1,
                 minHeight: 0,

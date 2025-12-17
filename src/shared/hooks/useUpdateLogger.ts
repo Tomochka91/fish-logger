@@ -4,12 +4,13 @@ import type { LoggerFormValues } from "../components/form/AddLoggerForm/loggerFo
 import toast from "react-hot-toast";
 import { updateLogger } from "../../api/apiConnections";
 import { mapFormValuesToPayload } from "../components/form/AddLoggerForm/mappers/mapFormValuesToPayload";
+import { getErrorMessage } from "../utils/apiHelpers";
 
 export function useUpdateLogger() {
   const queryClient = useQueryClient();
   const { mutate: updateLoggerMutate, isPending: isUpdating } = useMutation<
     Logger,
-    Error,
+    unknown,
     { id: number; values: LoggerFormValues }
   >({
     mutationFn: ({ id, values }) => {
@@ -21,8 +22,8 @@ export function useUpdateLogger() {
       queryClient.invalidateQueries({ queryKey: ["logger-list"] });
       toast.success("Logger was updated");
     },
-    onError: () => {
-      toast.error("Something went wrong");
+    onError: (err) => {
+      toast.error(getErrorMessage(err, "Failed to update logger"));
     },
   });
 

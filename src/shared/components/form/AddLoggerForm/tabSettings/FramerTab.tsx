@@ -20,6 +20,7 @@ import type { EasySerialField, EasySerialFieldType } from "../../../../types";
 import { HelperText } from "../../FormHelperText/HelperText";
 import { FormSelect } from "../../FormSelect/FormSelect";
 import { makeNumberChangeHandler } from "../../../../utils/numberField";
+import { TestEasySerialParser } from "../easy-serial/TestEasySerialParser";
 
 const tableColumnHeading = [
   { key: "name", label: "Variable Name" },
@@ -70,6 +71,7 @@ export function FramerTab() {
           display: "flex",
           flexDirection: "column",
           paddingBlock: "var(--pading-equal) 2px",
+          borderTop: "var(--border-standart)",
         }}
       >
         <Controller
@@ -143,6 +145,9 @@ export function FramerTab() {
         flexItem
         sx={{ marginInline: "2rem" }}
       />
+
+      <TestEasySerialParser />
+
       <Box
         sx={{
           gridColumn: "1/-1",

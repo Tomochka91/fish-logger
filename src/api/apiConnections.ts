@@ -1,4 +1,10 @@
-import type { LogsMessage, Logger, LoggerList } from "../shared/types";
+import type {
+  LogsMessage,
+  Logger,
+  LoggerList,
+  EasySerialParserTest,
+  EasySerialParserTestResponse,
+} from "../shared/types";
 import { request } from "./apiClient";
 
 // LOGGERS
@@ -32,4 +38,13 @@ export const deleteLogger = async (id: number) => {
 
 export const getLogsMessage = async (id: number): Promise<LogsMessage> => {
   return await request<LogsMessage>(`/connections/runtime/${id}/logs`);
+};
+
+export const postEasySerialParserTest = async (
+  payload: EasySerialParserTest
+): Promise<EasySerialParserTestResponse> => {
+  return request<EasySerialParserTestResponse>("/easy-serial/parser/test", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 };

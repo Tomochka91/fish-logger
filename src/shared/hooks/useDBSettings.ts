@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import type { DBSettings } from "../types";
 import { postDBSettings } from "../../api/apiDB";
 import toast from "react-hot-toast";
+import { getErrorMessage } from "../utils/apiHelpers";
 
 export function useDBSettingsTest() {
   const { mutate: testMutate, isPending: isTesting } = useMutation({
@@ -15,8 +16,8 @@ export function useDBSettingsTest() {
       toast.success("Connection successful");
     },
 
-    onError: () => {
-      toast.error("Connection test failed");
+    onError: (err) => {
+      toast.error(getErrorMessage(err, "Connection test failed"));
     },
   });
 
@@ -35,8 +36,8 @@ export function useDBSettingsSave() {
       toast.success("Settings saved");
     },
 
-    onError: () => {
-      toast.error("Failed to save settings");
+    onError: (err) => {
+      toast.error(getErrorMessage(err, "Failed to save settings"));
     },
   });
 

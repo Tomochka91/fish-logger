@@ -1,7 +1,6 @@
 import { AppButton } from "./AppButton";
 import { LoaderMini } from "../loader/LoaderMini";
-import type { SxProps } from "@mui/material";
-import type { Theme } from "@emotion/react";
+import type { SxProps, Theme } from "@mui/material/styles";
 
 type UpdateButtonProps = {
   loading?: boolean;

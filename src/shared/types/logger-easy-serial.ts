@@ -21,3 +21,13 @@ export type EasySerialSettings = {
   port: SerialPortSettings;
   parser: EasySerialParserSettings;
 };
+
+export type EasySerialParserTest = {
+  raw_text: string;
+  parser_settings: EasySerialParserSettings;
+};
+
+export type EasySerialParserTestResponse = {
+  parsed: Record<string, unknown>;
+  error: string | null;
+};

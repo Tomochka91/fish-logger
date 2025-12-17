@@ -1,5 +1,5 @@
 import type { DBaction, DBSettings } from "../shared/types";
-import { request, type ApiResponse } from "./apiClient";
+import { request, type ApiResponse, type RequestError } from "./apiClient";
 
 type DBSettingsResponse = ApiResponse<{ data: DBSettings }>;
 
@@ -14,7 +14,11 @@ export const getDBSettings = async (): Promise<DBSettings> => {
   const data = await request<DBSettingsResponse>("/db/settings");
 
   if (!data.success) {
-    throw new Error(data.error || "Failed to load DB settings");
+    throw {
+      status: 200,
+      message: data.error || "Failed to load DB settings",
+      raw: data,
+    } satisfies RequestError;
   }
 
   return data.data;
@@ -29,8 +33,11 @@ export const postDBSettings = async (
   });
 
   if (!data.success) {
-    console.error(data.error);
-    throw new Error(data.error || "DB action failed");
+    throw {
+      status: 200,
+      message: data.error || "DB action failed",
+      raw: data,
+    } satisfies RequestError;
   }
 
   return data;

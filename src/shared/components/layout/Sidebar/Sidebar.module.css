@@ -3,10 +3,17 @@
   grid-row: 1 / -1;
   height: 100%;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr auto;
   gap: var(--gap-big);
   padding: var(--padding-main);
   border-right: var(--border-standart);
+}
+
+.sidebar-footer {
+  font-size: var(--small-font-size);
+  color: var(--color-gunmetal);
+  opacity: 0.6;
+  text-align: center;
 }
 
 @media (width<=768px) {
@@ -18,5 +25,9 @@
     padding: var(--padding-secondary);
     border-right: none;
     border-bottom: var(--border-standart);
+  }
+
+  .sidebar-footer {
+    display: none;
   }
 }
