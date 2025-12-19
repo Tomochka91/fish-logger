@@ -166,7 +166,7 @@ export function DBForm() {
           id="host"
           fullWidth
           placeholder="192.162.1.56"
-          inputMode="numeric"
+          inputMode="decimal"
           {...register("host", dbFormValidation.ipAddress)}
           error={!!errors.host}
           helperText={errors.host?.message || " "}

@@ -10,13 +10,13 @@ import {
   BsXCircle,
 } from "react-icons/bs";
 import { FormSelect } from "../../../FormSelect/FormSelect";
-import type { ModbusRTUEncodingType } from "../../../../../types";
+import type { ModbusEncodingType } from "../../../../../types";
 import { makeNullableNumberChangeHandler } from "../../../../../utils/nullableNumberField";
 import { HelperText } from "../../../FormHelperText/HelperText";
 
 type SlaveRowProps = {
   index: number;
-  fieldPrefix: "modbus_rtu";
+  fieldPrefix: "modbus_rtu" | "modbus_tcp";
   onRemove: () => void;
 };
 
@@ -90,8 +90,13 @@ export function SlaveRow({ index, fieldPrefix, onRemove }: SlaveRowProps) {
           name={`${slavePath}.slave_id`}
           control={control}
           rules={{
-            validate: (val) =>
-              val > 0 ? true : "slave id must be greater than 0",
+            required: "Id is required",
+            validate: (val) => {
+              if (typeof val !== "number") return true;
+              if (val <= 0) return "Id must be greater than 0";
+              if (!Number.isInteger(val)) return "Id must be an integer";
+              return true;
+            },
           }}
           render={({ field, fieldState }) => (
             <FormInput
@@ -173,10 +178,14 @@ export function SlaveRow({ index, fieldPrefix, onRemove }: SlaveRowProps) {
                 name={`${varPath}.address`}
                 control={control}
                 rules={{
-                  validate: (val) =>
-                    val >= 0
-                      ? true
-                      : "address must be greater than or equal to 0",
+                  required: "Address is required",
+                  validate: (val) => {
+                    if (typeof val !== "number") return true;
+                    if (val < 0) return "Address must be ≥ 0";
+                    if (!Number.isInteger(val))
+                      return "Address must be an integer";
+                    return true;
+                  },
                 }}
                 render={({ field, fieldState }) => (
                   <FormInput
@@ -201,7 +210,7 @@ export function SlaveRow({ index, fieldPrefix, onRemove }: SlaveRowProps) {
                       value={field.value ?? ""}
                       variant="outlined"
                       onChange={(e) =>
-                        field.onChange(e.target.value as ModbusRTUEncodingType)
+                        field.onChange(e.target.value as ModbusEncodingType)
                       }
                     >
                       {encodingValues.map((val) => (

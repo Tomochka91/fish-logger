@@ -235,10 +235,13 @@ export function FramerTab() {
                   control={control}
                   rules={{
                     required: "Index is required",
-                    validate: (val) =>
-                      val >= 0
-                        ? true
-                        : "index must be greater than or equal to 0",
+                    validate: (val) => {
+                      if (typeof val !== "number") return true;
+                      if (val < 0) return "Index must be ≥ 0";
+                      if (!Number.isInteger(val))
+                        return "Index must be an integer";
+                      return true;
+                    },
                   }}
                   render={({ field, fieldState }) => (
                     <FormInput

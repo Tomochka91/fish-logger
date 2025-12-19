@@ -261,7 +261,7 @@ export function AddLoggerForm() {
                         <MenuItem value={"easy_serial"}>Easy Serial</MenuItem>
                         {/* <MenuItem value={"mbox"}>Mbox</MenuItem> */}
                         <MenuItem value={"modbus_rtu"}>Modbus RTU</MenuItem>
-                        {/* <MenuItem value={"modbus_tcp"}>Modbus TCP</MenuItem> */}
+                        <MenuItem value={"modbus_tcp"}>Modbus TCP</MenuItem>
                       </FormSelect>
                       <HelperText>
                         {fieldState.error?.message ?? " "}

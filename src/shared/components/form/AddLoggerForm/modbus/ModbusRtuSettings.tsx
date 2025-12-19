@@ -41,7 +41,7 @@ export function ModbusRtuSettings() {
       >
         {tab === 0 && <ComPortTab fieldPrefix="modbus_rtu" />}
 
-        {tab === 1 && <PollIntervalTab />}
+        {tab === 1 && <PollIntervalTab fieldPrefix="modbus_rtu" />}
 
         {tab === 2 && <SlavesTab fieldPrefix="modbus_rtu" />}
 

@@ -2,23 +2,31 @@ import type {
   EasySerialSettings,
   LoggerBase,
   ModbusRTUSettings,
+  ModbusTCPSettings,
 } from "../../../types";
 
-// 🔹 Форма для easy_serial
 export type EasySerialLoggerFormType = LoggerBase & {
   type: "easy_serial";
   easy_serial: EasySerialSettings;
   modbus_rtu: null;
+  modbus_tcp: null;
 };
 
-// 🔹 Форма для modbus_rtu
 export type ModbusRtuLoggerFormType = LoggerBase & {
   type: "modbus_rtu";
-  easy_serial: null;
   modbus_rtu: ModbusRTUSettings;
+  easy_serial: null;
+  modbus_tcp: null;
 };
 
-// 🔹 Объединённый тип формы
+export type ModbusTcpLoggerFormType = LoggerBase & {
+  type: "modbus_tcp";
+  modbus_tcp: ModbusTCPSettings;
+  modbus_rtu: null;
+  easy_serial: null;
+};
+
 export type LoggerFormValues =
   | EasySerialLoggerFormType
-  | ModbusRtuLoggerFormType;
+  | ModbusRtuLoggerFormType
+  | ModbusTcpLoggerFormType;

@@ -1,6 +1,6 @@
 import type { SerialPortSettings } from "./serial-port";
 
-export type ModbusRTUEncodingType =
+export type ModbusEncodingType =
   | "u16"
   | "s16"
   | "u16_scaled"
@@ -18,23 +18,36 @@ export type ModbusRTUEncodingType =
   | "f32_scaled_abcd"
   | "f32_scaled_cdab";
 
-export type ModbusRTUVariable = {
+export type ModbusVariable = {
   name: string;
   address: number;
-  encoding: ModbusRTUEncodingType;
+  encoding: ModbusEncodingType;
   k: number;
   b: number;
   default: number | null;
 };
 
-export type ModbusRTUSlave = {
+export type ModbusSlave = {
   slave_name: string;
   slave_id: number;
-  variables: ModbusRTUVariable[];
+  variables: ModbusVariable[];
+};
+
+export type ModbusHost = {
+  address: string;
+  port: number;
+  autoconnect: boolean;
+  timeout: number;
 };
 
 export type ModbusRTUSettings = {
   port: SerialPortSettings;
   poll_interval: number;
-  slaves: ModbusRTUSlave[];
+  slaves: ModbusSlave[];
+};
+
+export type ModbusTCPSettings = {
+  host: ModbusHost;
+  poll_interval: number;
+  slaves: ModbusSlave[];
 };

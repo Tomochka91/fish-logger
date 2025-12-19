@@ -6,7 +6,7 @@ import { HelperText } from "../../../FormHelperText/HelperText";
 import { SlaveRow } from "./SlaveRow";
 
 type SlavesTabProps = {
-  fieldPrefix: "modbus_rtu";
+  fieldPrefix: "modbus_rtu" | "modbus_tcp";
 };
 
 export function SlavesTab({ fieldPrefix }: SlavesTabProps) {

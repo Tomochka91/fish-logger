@@ -1,5 +1,5 @@
 import type { EasySerialSettings } from "./logger-easy-serial";
-import type { ModbusRTUSettings } from "./logger-modbus-rtu";
+import type { ModbusRTUSettings, ModbusTCPSettings } from "./logger-modbus";
 
 export type LoggerTypeRegistry =
   | "easy_serial"
@@ -23,16 +23,25 @@ export type EasySerialLogger = LoggerBase & {
   type: "easy_serial";
   easy_serial: EasySerialSettings;
   modbus_rtu: null;
+  modbus_tcp: null;
 };
 
 export type ModbusRtuLogger = LoggerBase & {
   type: "modbus_rtu";
-  easy_serial: null;
   modbus_rtu: ModbusRTUSettings;
+  easy_serial: null;
+  modbus_tcp: null;
+};
+
+export type ModbusTcpLogger = LoggerBase & {
+  type: "modbus_tcp";
+  modbus_tcp: ModbusTCPSettings;
+  easy_serial: null;
+  modbus_rtu: null;
 };
 
 // Logger from API
-export type Logger = EasySerialLogger | ModbusRtuLogger;
+export type Logger = EasySerialLogger | ModbusRtuLogger | ModbusTcpLogger;
 
 // Logger list
 export type LoggerList = Logger[];

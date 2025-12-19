@@ -10,6 +10,9 @@ import { Controller, useFormContext } from "react-hook-form";
 import type { LoggerFormValues } from "../loggerForm.types";
 import { HelperText } from "../../FormHelperText/HelperText";
 import { useMemo } from "react";
+import { hasMax2Decimals } from "../../../../utils/validation/hasMaxDecimalPlaces";
+import { FormInput } from "../../FormInput/FormInput";
+import { makeNumberChangeHandler } from "../../../../utils/numberField";
 
 const baudrate: number[] = [
   1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600,
@@ -35,7 +38,6 @@ export function ComPortTab({ fieldPrefix }: ComPortTabProps) {
   });
 
   const portFieldName = `${fieldPrefix}.port.port` as const;
-
   const selectedPort = watch(portFieldName);
   const selectedPortData = useMemo(
     () => serialPorts?.find((port) => port.name === selectedPort),
@@ -67,7 +69,7 @@ export function ComPortTab({ fieldPrefix }: ComPortTabProps) {
           <FormRow label="Port" labelWidth="30%">
             <FormControl fullWidth>
               <Controller
-                name={portFieldName}
+                name={`${fieldPrefix}.port.port`}
                 control={control}
                 rules={{ required: "Port is required" }}
                 render={({ field, fieldState }) => {
@@ -223,6 +225,33 @@ export function ComPortTab({ fieldPrefix }: ComPortTabProps) {
             />
           </FormControl>
         </FormRow>
+
+        <Controller
+          name={`${fieldPrefix}.port.timeout`}
+          control={control}
+          rules={{
+            required: "Timeout is required",
+            min: { value: 0.1, message: "Timeout must be ≥ 0.1" },
+            validate: (value) =>
+              hasMax2Decimals(value) ||
+              "Timeout can have at most 2 decimal places",
+          }}
+          render={({ field, fieldState }) => (
+            <FormRow label="Timeout" labelWidth="25%">
+              <FormInput
+                {...field}
+                type="number"
+                slotProps={{ htmlInput: { min: "0.1", step: "any" } }}
+                value={field.value ?? ""}
+                onChange={makeNumberChangeHandler(field)}
+                id="comport_timeout"
+                inputMode="decimal"
+                fullWidth
+                helperText={fieldState.error?.message ?? " "}
+              />
+            </FormRow>
+          )}
+        />
 
         <Controller
           name={`${fieldPrefix}.port.autoconnect`}
