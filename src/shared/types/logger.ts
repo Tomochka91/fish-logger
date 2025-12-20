@@ -1,11 +1,14 @@
 import type { EasySerialSettings } from "./logger-easy-serial";
+import type { MboxSettings } from "./logger-mbox";
+import type { MboxCounterSettings } from "./logger-mbox-counter";
 import type { ModbusRTUSettings, ModbusTCPSettings } from "./logger-modbus";
 
 export type LoggerTypeRegistry =
   | "easy_serial"
   | "mbox"
   | "modbus_rtu"
-  | "modbus_tcp";
+  | "modbus_tcp"
+  | "mbox_counter";
 
 export type LoggerBase = {
   id?: number;
@@ -24,6 +27,8 @@ export type EasySerialLogger = LoggerBase & {
   easy_serial: EasySerialSettings;
   modbus_rtu: null;
   modbus_tcp: null;
+  mbox: null;
+  mbox_counter: null;
 };
 
 export type ModbusRtuLogger = LoggerBase & {
@@ -31,6 +36,8 @@ export type ModbusRtuLogger = LoggerBase & {
   modbus_rtu: ModbusRTUSettings;
   easy_serial: null;
   modbus_tcp: null;
+  mbox: null;
+  mbox_counter: null;
 };
 
 export type ModbusTcpLogger = LoggerBase & {
@@ -38,10 +45,35 @@ export type ModbusTcpLogger = LoggerBase & {
   modbus_tcp: ModbusTCPSettings;
   easy_serial: null;
   modbus_rtu: null;
+  mbox: null;
+  mbox_counter: null;
+};
+
+export type MboxLogger = LoggerBase & {
+  type: "mbox";
+  mbox: MboxSettings;
+  modbus_tcp: null;
+  easy_serial: null;
+  modbus_rtu: null;
+  mbox_counter: null;
+};
+
+export type MboxCounterLogger = LoggerBase & {
+  type: "mbox_counter";
+  mbox_counter: MboxCounterSettings;
+  mbox: null;
+  modbus_tcp: null;
+  easy_serial: null;
+  modbus_rtu: null;
 };
 
 // Logger from API
-export type Logger = EasySerialLogger | ModbusRtuLogger | ModbusTcpLogger;
+export type Logger =
+  | EasySerialLogger
+  | ModbusRtuLogger
+  | ModbusTcpLogger
+  | MboxLogger
+  | MboxCounterLogger;
 
 // Logger list
 export type LoggerList = Logger[];

@@ -1,12 +1,11 @@
 import { Box } from "@mui/material";
 import { useState, type SyntheticEvent } from "react";
 import { SettingsTab, SettingsTabs } from "../../../ui/tab/TabStyled";
-import { DBWriterTab } from "../tabSettings/DBWriterTab";
 import { ComPortTab } from "../tabSettings/ComPortTab";
-import { ProcessingTab } from "../tabSettings/ProcessingTab";
-import { CounterTab } from "../tabSettings/CounterTab";
+import { PollIntervalTab } from "../tabSettings/PollIntervalTab";
+import { DevicesTab } from "../tabSettings/DevicesTab";
 
-export function MboxSettings() {
+export function MboxCounterSettings() {
   const [tab, setTab] = useState(0);
 
   const handleTabChange = (_e: SyntheticEvent, tabValue: number) => {
@@ -24,9 +23,8 @@ export function MboxSettings() {
     >
       <SettingsTabs value={tab} onChange={handleTabChange}>
         <SettingsTab label="com-port" />
-        <SettingsTab label="counter" />
-        <SettingsTab label="processing" />
-        <SettingsTab label="db-writer" />
+        <SettingsTab label="poll interval" />
+        <SettingsTab label="devices" />
       </SettingsTabs>
 
       <Box
@@ -39,13 +37,11 @@ export function MboxSettings() {
           gridTemplateRows: "auto 1fr",
         }}
       >
-        {tab === 0 && <ComPortTab fieldPrefix="mbox" />}
+        {tab === 0 && <ComPortTab fieldPrefix="mbox_counter" />}
 
-        {tab === 1 && <CounterTab />}
+        {tab === 1 && <PollIntervalTab fieldPrefix="mbox_counter" />}
 
-        {tab === 2 && <ProcessingTab />}
-
-        {tab === 3 && <DBWriterTab />}
+        {tab === 2 && <DevicesTab />}
       </Box>
     </Box>
   );

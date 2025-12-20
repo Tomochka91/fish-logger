@@ -23,7 +23,7 @@ const stopbits: number[] = [1.0, 1.5, 2.0];
 const flowcontrol: string[] = ["None", "RTSCTS", "XONXOFF"];
 
 type ComPortTabProps = {
-  fieldPrefix: "easy_serial" | "modbus_rtu";
+  fieldPrefix: "easy_serial" | "modbus_rtu" | "mbox" | "mbox_counter";
 };
 
 export function ComPortTab({ fieldPrefix }: ComPortTabProps) {

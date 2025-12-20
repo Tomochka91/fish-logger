@@ -16,3 +16,6 @@ export function hasMaxDecimalPlaces(
 
 export const hasMax2Decimals = (value: unknown) =>
   hasMaxDecimalPlaces(value, 2);
+
+export const hasMax3Decimals = (value: unknown) =>
+  hasMaxDecimalPlaces(value, 3);

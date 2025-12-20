@@ -4,12 +4,16 @@ import type {
   ModbusRTUSettings,
   ModbusTCPSettings,
 } from "../../../types";
+import type { MboxSettings } from "../../../types/logger-mbox";
+import type { MboxCounterSettings } from "../../../types/logger-mbox-counter";
 
 export type EasySerialLoggerFormType = LoggerBase & {
   type: "easy_serial";
   easy_serial: EasySerialSettings;
   modbus_rtu: null;
   modbus_tcp: null;
+  mbox: null;
+  mbox_counter: null;
 };
 
 export type ModbusRtuLoggerFormType = LoggerBase & {
@@ -17,6 +21,8 @@ export type ModbusRtuLoggerFormType = LoggerBase & {
   modbus_rtu: ModbusRTUSettings;
   easy_serial: null;
   modbus_tcp: null;
+  mbox: null;
+  mbox_counter: null;
 };
 
 export type ModbusTcpLoggerFormType = LoggerBase & {
@@ -24,9 +30,31 @@ export type ModbusTcpLoggerFormType = LoggerBase & {
   modbus_tcp: ModbusTCPSettings;
   modbus_rtu: null;
   easy_serial: null;
+  mbox: null;
+  mbox_counter: null;
+};
+
+export type MboxLoggerFormType = LoggerBase & {
+  type: "mbox";
+  mbox: MboxSettings;
+  modbus_tcp: null;
+  modbus_rtu: null;
+  easy_serial: null;
+  mbox_counter: null;
+};
+
+export type MboxCounterLoggerFormType = LoggerBase & {
+  type: "mbox_counter";
+  mbox_counter: MboxCounterSettings;
+  mbox: null;
+  modbus_tcp: null;
+  modbus_rtu: null;
+  easy_serial: null;
 };
 
 export type LoggerFormValues =
   | EasySerialLoggerFormType
   | ModbusRtuLoggerFormType
-  | ModbusTcpLoggerFormType;
+  | ModbusTcpLoggerFormType
+  | MboxLoggerFormType
+  | MboxCounterLoggerFormType;

@@ -4,6 +4,7 @@ import { EasySerialSettings } from "./easy-serial/EasySerialSettings";
 import { MboxSettings } from "./mbox/MboxSettings";
 import { ModbusRtuSettings } from "./modbus/ModbusRtuSettings";
 import { ModbusTcpSettings } from "./modbus/ModbusTcpSettings";
+import { MboxCounterSettings } from "./mbox/MboxCounterSettings";
 
 interface TypeSettingsProps {
   type: LoggerTypeRegistry;
@@ -42,6 +43,8 @@ function renderSettings(type: LoggerTypeRegistry) {
       return <ModbusRtuSettings />;
     case "modbus_tcp":
       return <ModbusTcpSettings />;
+    case "mbox_counter":
+      return <MboxCounterSettings />;
     default:
       return null;
   }

@@ -37,6 +37,7 @@ const tableSx = {
   justifyContent: "center",
   backgroundColor: "white",
   border: "var(--border-standart)",
+  paddingInline: "1rem",
 };
 
 const typeValues = ["string", "int", "float", "datetime"];
@@ -151,7 +152,6 @@ export function FramerTab() {
       <Box
         sx={{
           gridColumn: "1/-1",
-          marginTop: "var(--border-standart)",
           display: "flex",
           flexDirection: "column",
           minHeight: 0,
@@ -205,7 +205,7 @@ export function FramerTab() {
                 sx={{
                   ...tableSx,
                   borderTop: 0,
-                  padding: "1rem 2px 0",
+                  padding: "1rem 1rem 0",
                   "&:nth-of-type(odd)": {
                     backgroundColor: "var(--color-honeydew)",
                     "& .MuiOutlinedInput-root": {

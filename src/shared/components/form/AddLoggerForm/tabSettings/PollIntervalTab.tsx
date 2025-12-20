@@ -7,7 +7,7 @@ import { makeNumberChangeHandler } from "../../../../utils/numberField";
 import { hasMax2Decimals } from "../../../../utils/validation/hasMaxDecimalPlaces";
 
 type PollIntervalTabProps = {
-  fieldPrefix: "modbus_rtu" | "modbus_tcp";
+  fieldPrefix: "modbus_rtu" | "modbus_tcp" | "mbox_counter";
 };
 
 export function PollIntervalTab({ fieldPrefix }: PollIntervalTabProps) {
