@@ -4,6 +4,7 @@ import type {
   LoggerList,
   EasySerialParserTest,
   EasySerialParserTestResponse,
+  LoggerStatus,
 } from "../shared/types";
 import { request } from "./apiClient";
 
@@ -47,4 +48,8 @@ export const postEasySerialParserTest = async (
     method: "POST",
     body: JSON.stringify(payload),
   });
+};
+
+export const getLoggerStatus = async (id: number): Promise<LoggerStatus> => {
+  return await request<LoggerStatus>(`/connections/runtime/${id}/status`);
 };

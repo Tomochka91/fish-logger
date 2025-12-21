@@ -90,3 +90,23 @@ export type LogsMessage = {
   };
   error: string;
 };
+
+export type LoggerStateType =
+  | "created"
+  | "running"
+  | "stopping"
+  | "stopped"
+  | "error";
+
+export type LoggerStatus = {
+  success: boolean;
+  data: {
+    conn_id: number;
+    name: string;
+    enabled: false;
+    registered: boolean;
+    state: LoggerStateType;
+    last_error: string | null;
+  } | null;
+  error: string | null;
+};
