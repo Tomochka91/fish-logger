@@ -5,6 +5,7 @@ import { DBWriterTab } from "../tabSettings/DBWriterTab";
 import { ComPortTab } from "../tabSettings/ComPortTab";
 import { ProcessingTab } from "../tabSettings/ProcessingTab";
 import { CounterTab } from "../tabSettings/CounterTab";
+import { MissDefaultTab } from "../tabSettings/MissDefaultTab";
 
 export function MboxSettings() {
   const [tab, setTab] = useState(0);
@@ -27,6 +28,7 @@ export function MboxSettings() {
         <SettingsTab label="counter" />
         <SettingsTab label="processing" />
         <SettingsTab label="db-writer" />
+        <SettingsTab label="miss default" />
       </SettingsTabs>
 
       <Box
@@ -46,6 +48,8 @@ export function MboxSettings() {
         {tab === 2 && <ProcessingTab />}
 
         {tab === 3 && <DBWriterTab />}
+
+        {tab === 4 && <MissDefaultTab />}
       </Box>
     </Box>
   );

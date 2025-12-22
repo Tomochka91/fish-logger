@@ -37,6 +37,33 @@ export function ProcessingTab() {
         />
 
         <Controller
+          name="mbox.mbox_id"
+          control={control}
+          rules={{
+            validate: (val) => {
+              if (typeof val !== "number") return true;
+              if (val <= 0) return "Id must be greater than 0";
+              if (!Number.isInteger(val)) return "Id must be an integer";
+              return true;
+            },
+          }}
+          render={({ field, fieldState }) => (
+            <FormRow label="Mbox id" labelWidth="40%">
+              <FormInput
+                {...field}
+                type="number"
+                id="mbox-id"
+                slotProps={{ htmlInput: { step: 1, min: 1 } }}
+                value={field.value ?? ""}
+                onChange={makeNumberChangeHandler(field)}
+                fullWidth
+                helperText={fieldState.error?.message ?? " "}
+              />
+            </FormRow>
+          )}
+        />
+
+        <Controller
           name="mbox.tare"
           control={control}
           rules={{

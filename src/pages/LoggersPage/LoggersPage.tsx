@@ -116,7 +116,7 @@ export function LoggersPage() {
           alignItems: "stretch",
         }}
       >
-        <FormRow label="Select logger:" labelWidth="15%">
+        <FormRow label="Select logger:" labelWidth="20%">
           <FormAutocomplete
             fullWidth
             options={options}
@@ -133,7 +133,7 @@ export function LoggersPage() {
           />
         </FormRow>
 
-        <Box sx={{ minWidth: "7.5rem", display: "flex" }}>
+        <Box sx={{ minWidth: "8rem", display: "flex" }}>
           <Fade in={showStatusChip} timeout={250}>
             <Chip
               label={chipMeta?.label}
@@ -148,7 +148,7 @@ export function LoggersPage() {
                 height: "100%",
                 alignSelf: "stretch",
                 borderRadius: "999px",
-                minWidth: "7.5rem",
+                minWidth: "8rem",
                 justifyContent: "center",
               }}
             />

@@ -252,7 +252,10 @@ export function AddLoggerForm() {
                             table_name: current.table_name,
                             autostart: current.autostart,
                             enabled: current.enabled,
-                            query_template: current.query_template,
+                            query_template:
+                              nextType === "mbox"
+                                ? defaults.query_template
+                                : "",
                           };
                           reset(merged);
                           setState({ values: merged });

@@ -6,6 +6,7 @@ import type {
   EasySerialParserTestResponse,
   LoggerStatus,
 } from "../shared/types";
+import type { MboxAvailableCounters } from "../shared/types/logger-mbox";
 import { request } from "./apiClient";
 
 // LOGGERS
@@ -53,3 +54,11 @@ export const postEasySerialParserTest = async (
 export const getLoggerStatus = async (id: number): Promise<LoggerStatus> => {
   return await request<LoggerStatus>(`/connections/runtime/${id}/status`);
 };
+
+export const getMboxAvailableCounters =
+  async (): Promise<MboxAvailableCounters> => {
+    const data = await request<MboxAvailableCounters>(
+      "/mbox/available-counters"
+    );
+    return data;
+  };

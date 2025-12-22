@@ -7,13 +7,51 @@ import { makeNumberChangeHandler } from "../../../../utils/numberField";
 import { FormCheckbox } from "../../FormCheckBox/FormCheckBox";
 import { FormSelect } from "../../FormSelect/FormSelect";
 import { HelperText } from "../../FormHelperText/HelperText";
+import { hasMax2Decimals } from "../../../../utils/validation/hasMaxDecimalPlaces";
+import { useEffect } from "react";
+import { MBOX_COUNTER_DEFAULTS } from "../mbox/mboxFormDefaults";
+import { useQuery } from "@tanstack/react-query";
+import { getMboxAvailableCounters } from "../../../../../api/apiConnections";
 
 const strategy: string[] = ["last", "default"];
 
-export function CounterTab() {
-  const { control, watch } = useFormContext<LoggerFormValues>();
+const MBOX_COUNTER_DEFAULT_PATHS = [
+  ["mbox.counter_connection_id", MBOX_COUNTER_DEFAULTS.counter_connection_id],
+  ["mbox.counter_device_id", MBOX_COUNTER_DEFAULTS.counter_device_id],
+  ["mbox.counter_clean_timeout", MBOX_COUNTER_DEFAULTS.counter_clean_timeout],
+  ["mbox.counter_miss_timeout", MBOX_COUNTER_DEFAULTS.counter_miss_timeout],
+  ["mbox.miss_strategy", MBOX_COUNTER_DEFAULTS.miss_strategy],
+  ["mbox.miss_insert_limit", MBOX_COUNTER_DEFAULTS.miss_insert_limit],
+  ["mbox.miss_error_label", MBOX_COUNTER_DEFAULTS.miss_error_label],
+] as const;
 
-  const extCounterEnabled = watch("mbox.ext_counter");
+export function CounterTab() {
+  const { control, watch, clearErrors, setValue } =
+    useFormContext<LoggerFormValues>();
+
+  const {
+    data: availableCountersList,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["mbox-available-counters"],
+    queryFn: getMboxAvailableCounters,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
+
+  const counters = availableCountersList?.data ?? [];
+
+  const extCounterEnabled = !!watch("mbox.ext_counter");
+
+  useEffect(() => {
+    if (!extCounterEnabled) {
+      clearErrors(MBOX_COUNTER_DEFAULT_PATHS.map(([path]) => path));
+      MBOX_COUNTER_DEFAULT_PATHS.forEach(([path, value]) => {
+        setValue(path, value);
+      });
+    }
+  }, [extCounterEnabled, clearErrors, setValue]);
 
   return (
     <>
@@ -40,6 +78,71 @@ export function CounterTab() {
           )}
         />
 
+        <FormRow label="Counter connection" labelWidth="25%">
+          <FormControl fullWidth>
+            <Controller
+              name="mbox.counter_connection_id"
+              control={control}
+              rules={{
+                required: extCounterEnabled
+                  ? "Required when ext counter enabled"
+                  : false,
+                validate: (val) => {
+                  if (!extCounterEnabled) return true;
+                  if (typeof val !== "number") return "Select connection";
+                  if (val <= 0) return "Select connection";
+                  return true;
+                },
+              }}
+              render={({ field, fieldState }) => {
+                const currentValue = field.value;
+                const hasOption =
+                  typeof currentValue === "number" &&
+                  counters.some(
+                    (c) => c.counter_connection_id === currentValue
+                  );
+
+                const selectValue =
+                  extCounterEnabled && hasOption ? currentValue : "";
+                return (
+                  <>
+                    <FormSelect
+                      {...field}
+                      displayEmpty
+                      disabled={!extCounterEnabled || isLoading || isError}
+                      variant="outlined"
+                      value={selectValue}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    >
+                      <MenuItem value="">
+                        {isLoading
+                          ? "Loading..."
+                          : isError
+                          ? "Failed to load"
+                          : "Select counter"}
+                      </MenuItem>
+
+                      {counters.map((c) => (
+                        <MenuItem
+                          key={`${c.counter_connection_id}-${c.device_id}-${c.serial}`}
+                          value={c.counter_connection_id}
+                        >
+                          {`${c.device_name} (${c.counter_connection_id} : ${c.device_id} : ${c.serial})`}
+                        </MenuItem>
+                      ))}
+                    </FormSelect>
+
+                    <HelperText>
+                      {fieldState.error?.message ??
+                        (isError ? "Failed to load counters" : " ")}
+                    </HelperText>
+                  </>
+                );
+              }}
+            />
+          </FormControl>
+        </FormRow>
+
         <Controller
           name="mbox.counter_device_id"
           control={control}
@@ -60,9 +163,68 @@ export function CounterTab() {
                 {...field}
                 type="number"
                 id="mbox-device-id"
-                slotProps={{ htmlInput: { step: 1, min: 1 } }}
                 value={field.value ?? ""}
                 onChange={makeNumberChangeHandler(field)}
+                disabled={!extCounterEnabled}
+                slotProps={{ htmlInput: { step: 1, min: 1 } }}
+                fullWidth
+                helperText={fieldState.error?.message ?? " "}
+              />
+            </FormRow>
+          )}
+        />
+
+        <Controller
+          name="mbox.counter_clean_timeout"
+          control={control}
+          rules={{
+            required: extCounterEnabled
+              ? "Required when ext counter enabled"
+              : false,
+            min: { value: 0.1, message: "Clean timeout must be ≥ 0.1" },
+            validate: (value) =>
+              hasMax2Decimals(value) ||
+              "Clean timeout can have at most 2 decimal places",
+          }}
+          render={({ field, fieldState }) => (
+            <FormRow label="Clean timeout" labelWidth="25%">
+              <FormInput
+                {...field}
+                value={field.value ?? ""}
+                type="number"
+                id="mbox-clean-timeout"
+                onChange={makeNumberChangeHandler(field)}
+                disabled={!extCounterEnabled}
+                slotProps={{ htmlInput: { min: "0.1", step: "any" } }}
+                fullWidth
+                helperText={fieldState.error?.message ?? " "}
+              />
+            </FormRow>
+          )}
+        />
+
+        <Controller
+          name="mbox.counter_miss_timeout"
+          control={control}
+          rules={{
+            required: extCounterEnabled
+              ? "Required when ext counter enabled"
+              : false,
+            min: { value: 0.1, message: "Miss timeout must be ≥ 0.1" },
+            validate: (value) =>
+              hasMax2Decimals(value) ||
+              "Miss timeout can have at most 2 decimal places",
+          }}
+          render={({ field, fieldState }) => (
+            <FormRow label="Miss timeout" labelWidth="25%">
+              <FormInput
+                {...field}
+                value={field.value ?? ""}
+                type="number"
+                id="mbox-miss-timeout"
+                onChange={makeNumberChangeHandler(field)}
+                disabled={!extCounterEnabled}
+                slotProps={{ htmlInput: { min: "0.1", step: "any" } }}
                 fullWidth
                 helperText={fieldState.error?.message ?? " "}
               />
@@ -84,6 +246,7 @@ export function CounterTab() {
                 <>
                   <FormSelect
                     {...field}
+                    disabled={!extCounterEnabled}
                     variant="outlined"
                     value={field.value ?? ""}
                     onChange={(e) => field.onChange(e.target.value)}
@@ -122,9 +285,10 @@ export function CounterTab() {
                 {...field}
                 type="number"
                 id="mbox-insert-limit"
-                slotProps={{ htmlInput: { step: 1, min: 1 } }}
                 value={field.value ?? ""}
                 onChange={makeNumberChangeHandler(field)}
+                disabled={!extCounterEnabled}
+                slotProps={{ htmlInput: { step: 1, min: 1 } }}
                 fullWidth
                 helperText={fieldState.error?.message ?? " "}
               />
@@ -146,27 +310,7 @@ export function CounterTab() {
                 {...field}
                 value={field.value ?? ""}
                 id="mbox-error-label"
-                fullWidth
-                helperText={fieldState.error?.message ?? " "}
-              />
-            </FormRow>
-          )}
-        />
-
-        <Controller
-          name="mbox.miss_default"
-          control={control}
-          rules={{
-            required: extCounterEnabled
-              ? "Required when ext counter enabled"
-              : false,
-          }}
-          render={({ field, fieldState }) => (
-            <FormRow label="Default" labelWidth="25%">
-              <FormInput
-                {...field}
-                value={field.value ?? ""}
-                id="mbox-default"
+                disabled={!extCounterEnabled}
                 fullWidth
                 helperText={fieldState.error?.message ?? " "}
               />
