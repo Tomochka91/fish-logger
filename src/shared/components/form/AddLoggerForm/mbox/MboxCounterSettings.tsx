@@ -37,11 +37,17 @@ export function MboxCounterSettings() {
           gridTemplateRows: "auto 1fr",
         }}
       >
-        {tab === 0 && <ComPortTab fieldPrefix="mbox_counter" />}
+        <Box sx={{ display: tab === 0 ? "contents" : "none" }}>
+          <ComPortTab fieldPrefix="mbox_counter" />
+        </Box>
 
-        {tab === 1 && <PollIntervalTab fieldPrefix="mbox_counter" />}
+        <Box sx={{ display: tab === 1 ? "contents" : "none" }}>
+          <PollIntervalTab fieldPrefix="mbox_counter" />
+        </Box>
 
-        {tab === 2 && <DevicesTab />}
+        <Box sx={{ display: tab === 2 ? "contents" : "none" }}>
+          <DevicesTab />
+        </Box>
       </Box>
     </Box>
   );

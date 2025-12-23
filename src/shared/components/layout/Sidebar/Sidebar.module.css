@@ -10,10 +10,11 @@
 }
 
 .sidebar-footer {
+  display: flex;
+  flex-direction: column;
   font-size: var(--small-font-size);
   color: var(--color-gunmetal);
   opacity: 0.6;
-  text-align: center;
 }
 
 @media (width<=768px) {

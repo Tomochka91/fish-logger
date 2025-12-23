@@ -8,7 +8,7 @@ import { FormCheckbox } from "../../FormCheckBox/FormCheckBox";
 import { FormSelect } from "../../FormSelect/FormSelect";
 import { HelperText } from "../../FormHelperText/HelperText";
 import { hasMax2Decimals } from "../../../../utils/validation/hasMaxDecimalPlaces";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { MBOX_COUNTER_DEFAULTS } from "../mbox/mboxFormDefaults";
 import { useQuery } from "@tanstack/react-query";
 import { getMboxAvailableCounters } from "../../../../../api/apiConnections";
@@ -40,7 +40,10 @@ export function CounterTab() {
     refetchOnWindowFocus: false,
   });
 
-  const counters = availableCountersList?.data ?? [];
+  const counters = useMemo(
+    () => availableCountersList?.data ?? [],
+    [availableCountersList?.data]
+  );
 
   const extCounterEnabled = !!watch("mbox.ext_counter");
 
@@ -52,6 +55,34 @@ export function CounterTab() {
       });
     }
   }, [extCounterEnabled, clearErrors, setValue]);
+
+  const selectedConnectionId = watch("mbox.counter_connection_id");
+  const currentDeviceId = watch("mbox.counter_device_id");
+
+  useEffect(() => {
+    if (!extCounterEnabled) return;
+
+    if (typeof selectedConnectionId !== "number") return;
+
+    const selected = counters.find(
+      (c) => c.counter_connection_id === selectedConnectionId
+    );
+    if (!selected) return;
+
+    if (currentDeviceId === selected.device_id) return;
+
+    setValue("mbox.counter_device_id", selected.device_id ?? null, {
+      shouldValidate: true,
+      shouldDirty: false,
+      shouldTouch: false,
+    });
+  }, [
+    extCounterEnabled,
+    selectedConnectionId,
+    currentDeviceId,
+    counters,
+    setValue,
+  ]);
 
   return (
     <>
@@ -69,7 +100,7 @@ export function CounterTab() {
           render={({ field }) => (
             <FormRow label="Ext-counter" labelWidth="25%">
               <FormCheckbox
-                id="mbox_zero"
+                id="mbox-ext-counter"
                 checked={!!field.value}
                 onChange={(e) => field.onChange(e.target.checked)}
                 sx={{ mb: "0.8rem" }}
@@ -112,7 +143,30 @@ export function CounterTab() {
                       disabled={!extCounterEnabled || isLoading || isError}
                       variant="outlined"
                       value={selectValue}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      onChange={(e) => {
+                        const raw = e.target.value;
+
+                        const connectionId = raw === "" ? null : Number(raw);
+
+                        field.onChange(connectionId);
+
+                        const selected =
+                          typeof connectionId === "number"
+                            ? counters.find(
+                                (c) => c.counter_connection_id === connectionId
+                              )
+                            : undefined;
+
+                        setValue(
+                          "mbox.counter_device_id",
+                          selected?.device_id ?? null,
+                          {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                            shouldTouch: true,
+                          }
+                        );
+                      }}
                     >
                       <MenuItem value="">
                         {isLoading

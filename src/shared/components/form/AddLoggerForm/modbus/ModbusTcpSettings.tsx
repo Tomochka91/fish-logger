@@ -39,13 +39,21 @@ export function ModbusTcpSettings() {
           gridTemplateRows: "auto 1fr",
         }}
       >
-        {tab === 0 && <HostTab />}
+        <Box sx={{ display: tab === 0 ? "contents" : "none" }}>
+          <HostTab />
+        </Box>
 
-        {tab === 1 && <PollIntervalTab fieldPrefix="modbus_tcp" />}
+        <Box sx={{ display: tab === 1 ? "contents" : "none" }}>
+          <PollIntervalTab fieldPrefix="modbus_tcp" />
+        </Box>
 
-        {tab === 2 && <SlavesTab fieldPrefix="modbus_tcp" />}
+        <Box sx={{ display: tab === 2 ? "contents" : "none" }}>
+          <SlavesTab fieldPrefix="modbus_tcp" />
+        </Box>
 
-        {tab === 3 && <DBWriterTab />}
+        <Box sx={{ display: tab === 3 ? "contents" : "none" }}>
+          <DBWriterTab />
+        </Box>
       </Box>
     </Box>
   );

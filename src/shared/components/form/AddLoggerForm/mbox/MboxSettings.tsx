@@ -41,15 +41,25 @@ export function MboxSettings() {
           gridTemplateRows: "auto 1fr",
         }}
       >
-        {tab === 0 && <ComPortTab fieldPrefix="mbox" />}
+        <Box sx={{ display: tab === 0 ? "contents" : "none" }}>
+          <ComPortTab fieldPrefix="mbox" />
+        </Box>
 
-        {tab === 1 && <CounterTab />}
+        <Box sx={{ display: tab === 1 ? "contents" : "none" }}>
+          <CounterTab />
+        </Box>
 
-        {tab === 2 && <ProcessingTab />}
+        <Box sx={{ display: tab === 2 ? "contents" : "none" }}>
+          <ProcessingTab />
+        </Box>
 
-        {tab === 3 && <DBWriterTab />}
+        <Box sx={{ display: tab === 3 ? "contents" : "none" }}>
+          <DBWriterTab />
+        </Box>
 
-        {tab === 4 && <MissDefaultTab />}
+        <Box sx={{ display: tab === 4 ? "contents" : "none" }}>
+          <MissDefaultTab />
+        </Box>
       </Box>
     </Box>
   );

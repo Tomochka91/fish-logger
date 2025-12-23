@@ -28,8 +28,8 @@ export const FormInput = styled(TextField)({
     padding: "var(--padding-special-small)",
   },
   "& .MuiInputBase-input::placeholder": {
-    color: "var(--color-honeydew)",
-    opacity: 1,
+    color: "var(--color-blue-munsell)",
+    opacity: 0.5,
   },
   "& .MuiFormHelperText-root": {
     margin: "0.2rem 0 0 0",

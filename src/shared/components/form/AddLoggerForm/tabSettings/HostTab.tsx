@@ -33,7 +33,7 @@ export function HostTab() {
               <FormInput
                 {...field}
                 value={field.value ?? ""}
-                id="modbus_host"
+                id="modbus-host"
                 inputMode="decimal"
                 placeholder="192.162.1.56"
                 fullWidth
@@ -61,7 +61,7 @@ export function HostTab() {
                 {...field}
                 value={field.value ?? ""}
                 onChange={makeNumberChangeHandler(field)}
-                id="modbus_port"
+                id="modbus-port"
                 inputMode="numeric"
                 placeholder="1502"
                 fullWidth
@@ -89,7 +89,7 @@ export function HostTab() {
                 slotProps={{ htmlInput: { min: "0.1", step: "any" } }}
                 value={field.value ?? ""}
                 onChange={makeNumberChangeHandler(field)}
-                id="modbus_timeout"
+                id="modbus-timeout"
                 inputMode="decimal"
                 fullWidth
                 helperText={fieldState.error?.message ?? " "}
@@ -104,7 +104,7 @@ export function HostTab() {
           render={({ field }) => (
             <FormRow label="Autoconnect" labelWidth="25%">
               <FormCheckbox
-                id="modbus_autoconnect"
+                id="modbus-autoconnect"
                 checked={!!field.value}
                 onChange={(e) => field.onChange(e.target.checked)}
               />

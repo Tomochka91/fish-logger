@@ -8,7 +8,10 @@ export function Sidebar() {
       <Logo />
       <MainNav />
       <div className={styles["sidebar-footer"]}>
-        © {new Date().getFullYear()} TTL &amp; SEM — engineering team
+        <span>Fish Logger v1.0</span>
+        <span>
+          © {new Date().getFullYear()} TTL &amp; SEM — engineering team
+        </span>
       </div>
     </aside>
   );

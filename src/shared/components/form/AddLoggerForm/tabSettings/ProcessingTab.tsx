@@ -78,7 +78,7 @@ export function ProcessingTab() {
                 type="number"
                 value={field.value ?? ""}
                 onChange={makeNumberChangeHandler(field)}
-                id="mbox_tare"
+                id="mbox-tare"
                 inputMode="decimal"
                 fullWidth
                 helperText={fieldState.error?.message ?? " "}
@@ -125,7 +125,7 @@ export function ProcessingTab() {
           render={({ field }) => (
             <FormRow label="Treat zero as error:" labelWidth="40%">
               <FormCheckbox
-                id="mbox_zero"
+                id="mbox-zero"
                 checked={!!field.value}
                 onChange={(e) => field.onChange(e.target.checked)}
                 sx={{ mb: "0.8rem" }}
@@ -140,7 +140,7 @@ export function ProcessingTab() {
           render={({ field }) => (
             <FormRow label="Treat duplicate as error:" labelWidth="40%">
               <FormCheckbox
-                id="mbox_duplicate"
+                id="mbox-duplicate"
                 checked={!!field.value}
                 onChange={(e) => field.onChange(e.target.checked)}
                 sx={{ mb: "0.8rem" }}

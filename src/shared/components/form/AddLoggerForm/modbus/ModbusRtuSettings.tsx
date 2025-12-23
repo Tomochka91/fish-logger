@@ -39,13 +39,21 @@ export function ModbusRtuSettings() {
           gridTemplateRows: "auto 1fr",
         }}
       >
-        {tab === 0 && <ComPortTab fieldPrefix="modbus_rtu" />}
+        <Box sx={{ display: tab === 0 ? "contents" : "none" }}>
+          <ComPortTab fieldPrefix="modbus_rtu" />
+        </Box>
 
-        {tab === 1 && <PollIntervalTab fieldPrefix="modbus_rtu" />}
+        <Box sx={{ display: tab === 1 ? "contents" : "none" }}>
+          <PollIntervalTab fieldPrefix="modbus_rtu" />
+        </Box>
 
-        {tab === 2 && <SlavesTab fieldPrefix="modbus_rtu" />}
+        <Box sx={{ display: tab === 2 ? "contents" : "none" }}>
+          <SlavesTab fieldPrefix="modbus_rtu" />
+        </Box>
 
-        {tab === 3 && <DBWriterTab />}
+        <Box sx={{ display: tab === 3 ? "contents" : "none" }}>
+          <DBWriterTab />
+        </Box>
       </Box>
     </Box>
   );

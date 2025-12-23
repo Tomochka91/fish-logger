@@ -132,7 +132,7 @@ export function FramerTab() {
               <FormInput
                 {...field}
                 value={field.value ?? ""}
-                id="encoding"
+                id="encoding-parser"
                 fullWidth
                 helperText={fieldState.error?.message ?? " "}
               />
@@ -220,12 +220,13 @@ export function FramerTab() {
                 <Controller
                   name={`easy_serial.parser.fields.${index}.name`}
                   control={control}
-                  render={({ field }) => (
+                  rules={{ required: "Variable name is required" }}
+                  render={({ field, fieldState }) => (
                     <FormInput
                       {...field}
                       value={field.value ?? ""}
                       placeholder="value"
-                      helperText={" "}
+                      helperText={fieldState.error?.message ?? " "}
                     />
                   )}
                 />

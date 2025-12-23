@@ -128,7 +128,7 @@ export function DevicesTab() {
                     {...field}
                     value={field.value ?? ""}
                     type="number"
-                    slotProps={{ htmlInput: { step: 1, min: 0 } }}
+                    slotProps={{ htmlInput: { step: 1, min: 1 } }}
                     onChange={makeNumberChangeHandler(field)}
                     placeholder="Device Id"
                     helperText={fieldState.error?.message ?? " "}

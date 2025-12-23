@@ -166,6 +166,7 @@ export function AddLoggerForm() {
                 <Controller
                   name="name"
                   control={control}
+                  rules={{ required: "Logger name is required" }}
                   render={({ field }) => {
                     const { value, onChange, ref } = field;
 

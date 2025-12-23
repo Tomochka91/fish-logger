@@ -37,11 +37,17 @@ export function EasySerialSettings() {
           gridTemplateRows: "auto 1fr",
         }}
       >
-        {tab === 0 && <ComPortTab fieldPrefix="easy_serial" />}
+        <Box sx={{ display: tab === 0 ? "contents" : "none" }}>
+          <ComPortTab fieldPrefix="easy_serial" />
+        </Box>
 
-        {tab === 1 && <FramerTab />}
+        <Box sx={{ display: tab === 1 ? "contents" : "none" }}>
+          <FramerTab />
+        </Box>
 
-        {tab === 2 && <DBWriterTab />}
+        <Box sx={{ display: tab === 2 ? "contents" : "none" }}>
+          <DBWriterTab />
+        </Box>
       </Box>
     </Box>
   );

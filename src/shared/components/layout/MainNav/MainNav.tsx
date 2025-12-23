@@ -15,7 +15,7 @@ export function MainNav() {
         <li>
           <AppNavLink to="/add">
             <BsFileEarmarkPlus />
-            <span className={styles.caption}>Add Logger</span>
+            <span className={styles.caption}>Settings</span>
           </AppNavLink>
         </li>
         <li>

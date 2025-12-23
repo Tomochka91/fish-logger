@@ -103,6 +103,7 @@ export function SlaveRow({ index, fieldPrefix, onRemove }: SlaveRowProps) {
               {...field}
               slotProps={{ htmlInput: { step: 1, min: 1 } }}
               value={field.value ?? ""}
+              placeholder="Slave Id"
               type="number"
               onChange={makeNumberChangeHandler(field)}
               helperText={fieldState.error?.message ?? " "}
