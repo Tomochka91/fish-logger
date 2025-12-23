@@ -12,6 +12,11 @@ import {
 } from "../../api/apiConnections";
 import { useMemo, useState } from "react";
 import { defaultAutocompleteSlotProps } from "../../shared/components/form/FormAutocomplete/AutocompleteSlotProps";
+import { RuntimeControls } from "../../shared/components/runtime/RuntimeControls";
+import { useRuntimeControls } from "../../shared/hooks/useRuntimeControls";
+import { useMboxStartLogger } from "../../shared/hooks/useMboxStartLogger";
+import { MboxStartButton } from "../../shared/components/ui/button/MboxStartButton";
+import toast from "react-hot-toast";
 
 type LoggerOption = { id: number; name: string };
 
@@ -23,7 +28,7 @@ const LOGGER_STATE_META: Record<
 > = {
   created: {
     label: "created",
-    colorVar: "var(--color-tropical-mint)",
+    colorVar: "var(--color-blue-munsell)",
   },
   running: {
     label: "running",
@@ -53,6 +58,13 @@ export function LoggersPage() {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
+
+  const selectedLogger = useMemo(() => {
+    if (!selectedId) return null;
+    return (loggerList ?? []).find((l) => l.id === selectedId) ?? null;
+  }, [loggerList, selectedId]);
+
+  const isMboxLogger = selectedLogger?.type === "mbox";
 
   const options: LoggerOption[] = useMemo(
     () =>
@@ -106,6 +118,46 @@ export function LoggersPage() {
 
   const showStatusChip = selectedId !== null && chipMeta !== null;
 
+  const isWorkerRunning = loggerState === "running";
+
+  const {
+    runtimeStart,
+    isStarting,
+    runtimeStop,
+    isStopping,
+    runtimeRestart,
+    isRestarting,
+  } = useRuntimeControls();
+
+  const handleStartLogger = () => {
+    if (!selectedId) return;
+    runtimeStart(selectedId!);
+  };
+
+  const handleStopLogger = () => {
+    if (!selectedId) return;
+    runtimeStop(selectedId!);
+  };
+
+  const handleRestartLogger = () => {
+    if (!selectedId) return;
+    runtimeRestart(selectedId!);
+  };
+
+  const { mboxStart, isMboxStarting } = useMboxStartLogger();
+
+  const handleMboxStart = () => {
+    if (!selectedId) return;
+
+    if (!isWorkerRunning) {
+      toast("First start the logger (worker), then send the command.", {
+        icon: "⚠️",
+      });
+      return;
+    }
+    mboxStart({ logId: selectedId, send: true });
+  };
+
   return (
     <section className={styles.section}>
       <h2>Runtime logs</h2>
@@ -133,27 +185,29 @@ export function LoggersPage() {
           />
         </FormRow>
 
-        <Box sx={{ minWidth: "8rem", display: "flex" }}>
-          <Fade in={showStatusChip} timeout={250}>
-            <Chip
-              label={chipMeta?.label}
-              variant="outlined"
-              sx={{
-                fontFamily: "var(--main-font)",
-                fontWeight: "var(--font-weight-8)",
-                fontSize: "var(--small-font-size)",
-                color: chipMeta?.colorVar,
-                borderColor: chipMeta?.colorVar,
-                backgroundColor: "transparent",
-                height: "100%",
-                alignSelf: "stretch",
-                borderRadius: "999px",
-                minWidth: "8rem",
-                justifyContent: "center",
-              }}
-            />
-          </Fade>
-        </Box>
+        {selectedId && (
+          <Box sx={{ minWidth: "8rem", display: "flex" }}>
+            <Fade in={showStatusChip} timeout={250}>
+              <Chip
+                label={chipMeta?.label}
+                variant="outlined"
+                sx={{
+                  fontFamily: "var(--main-font)",
+                  fontWeight: "var(--font-weight-8)",
+                  fontSize: "var(--small-font-size)",
+                  color: chipMeta?.colorVar,
+                  borderColor: chipMeta?.colorVar,
+                  backgroundColor: "transparent",
+                  height: "100%",
+                  alignSelf: "stretch",
+                  borderRadius: "999px",
+                  minWidth: "8rem",
+                  justifyContent: "center",
+                }}
+              />
+            </Fade>
+          </Box>
+        )}
       </Box>
 
       {showPanels && (
@@ -181,6 +235,8 @@ export function LoggersPage() {
                   whiteSpace: "pre-wrap",
                   wordBreak: "break-word",
                   fontSize: "var(--standart-font-size)",
+                  fontFamily: "var(--secondary-font)",
+                  fontWeight: "var(--font-weight-2)",
                 }}
               >
                 {messages.join("\n")}
@@ -215,6 +271,30 @@ export function LoggersPage() {
           )}
         </Box>
       )}
+
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        gap="var(--gap-standart)"
+      >
+        <RuntimeControls
+          disabled={!selectedId}
+          isStarting={isStarting}
+          isStopping={isStopping}
+          isRestarting={isRestarting}
+          onStart={handleStartLogger}
+          onStop={handleStopLogger}
+          onRestart={handleRestartLogger}
+        />
+
+        {isMboxLogger && (
+          <MboxStartButton
+            disabled={!selectedId || isMboxStarting}
+            onClick={handleMboxStart}
+            loading={isMboxStarting}
+          />
+        )}
+      </Box>
     </section>
   );
 }

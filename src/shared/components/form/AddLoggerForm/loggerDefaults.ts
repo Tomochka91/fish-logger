@@ -7,7 +7,7 @@ import {
 } from "./loggerRegistry";
 
 export const MBOX_DEFAULT_QUERY_TEMPLATE =
-  "INSERT INTO storehouse_view VALUES (DEFAULT, DEFAULT, DEFAULT, {mbox_id}, {on_error}, NULL, {created_at}, {fish_name}, {fish_grade}, {lot}, {n_weight}, {r_weight}, {sn}, {error_info}, {tare})";
+  "INSERT INTO storehouse_view VALUES (DEFAULT, DEFAULT, DEFAULT, {mbox_id}, {on_error}, NULL, {created_at}, {fish_name}, {fish_grade}, {lot}, {n_weight}, {r_weight}, {sn}, {error_info}, {tare});";
 
 export const defaultLoggerCommonFields: LoggerBase = {
   name: "",

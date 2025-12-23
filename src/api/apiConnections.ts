@@ -5,6 +5,7 @@ import type {
   EasySerialParserTest,
   EasySerialParserTestResponse,
   LoggerStatus,
+  MetricsMessage,
 } from "../shared/types";
 import type { MboxAvailableCounters } from "../shared/types/logger-mbox";
 import { request } from "./apiClient";
@@ -42,6 +43,10 @@ export const getLogsMessage = async (id: number): Promise<LogsMessage> => {
   return await request<LogsMessage>(`/connections/runtime/${id}/logs`);
 };
 
+export const getMetrics = async (id: number): Promise<MetricsMessage> => {
+  return await request<MetricsMessage>(`/connections/runtime/${id}/metrics`);
+};
+
 export const postEasySerialParserTest = async (
   payload: EasySerialParserTest
 ): Promise<EasySerialParserTestResponse> => {
@@ -55,6 +60,24 @@ export const getLoggerStatus = async (id: number): Promise<LoggerStatus> => {
   return await request<LoggerStatus>(`/connections/runtime/${id}/status`);
 };
 
+export const startLogger = async (id: number): Promise<LoggerStatus> => {
+  return await request<LoggerStatus>(`/connections/runtime/${id}/start`, {
+    method: "POST",
+  });
+};
+
+export const stopLogger = async (id: number): Promise<LoggerStatus> => {
+  return await request<LoggerStatus>(`/connections/runtime/${id}/stop`, {
+    method: "POST",
+  });
+};
+
+export const restartLogger = async (id: number): Promise<LoggerStatus> => {
+  return await request<LoggerStatus>(`/connections/runtime/${id}/restart`, {
+    method: "POST",
+  });
+};
+
 export const getMboxAvailableCounters =
   async (): Promise<MboxAvailableCounters> => {
     const data = await request<MboxAvailableCounters>(
@@ -62,3 +85,13 @@ export const getMboxAvailableCounters =
     );
     return data;
   };
+
+export const startMboxLogger = async (
+  id: number,
+  send: boolean
+): Promise<string> => {
+  return await request<string>(`/mbox/${id}/start-command`, {
+    method: "POST",
+    body: JSON.stringify({ send }),
+  });
+};

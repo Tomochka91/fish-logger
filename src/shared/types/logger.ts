@@ -91,6 +91,16 @@ export type LogsMessage = {
   error: string;
 };
 
+export type MetricsMessage = {
+  success: boolean;
+  data: {
+    conn_id: number;
+    registered: boolean;
+    metrics: Record<string, number>;
+    extra: Record<string, number>;
+  };
+};
+
 export type LoggerStateType =
   | "created"
   | "running"

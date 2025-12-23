@@ -5,10 +5,10 @@ import { HomePage } from "../pages/HomePage/HomePage";
 import { AddPage } from "../pages/AddPage/AddPage";
 import { LoggersPage } from "../pages/LoggersPage/LoggersPage";
 import { DBConnectionPage } from "../pages/DBConnectionPage/DBConnectionPage";
-import { StatisticsPage } from "../pages/StatisticsPage/StatisticsPage";
 import { DebugPage } from "../pages/DebugPage/DebugPage";
 import { DebugProvider } from "../shared/context/debug/debugProvider";
 import { Toaster } from "react-hot-toast";
+import { MetricsPage } from "../pages/MetricsPage/MetricsPage";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
             <Route path={"/add"} element={<AddPage />} />
             <Route path={"/loggers"} element={<LoggersPage />} />
             <Route path={"/connection"} element={<DBConnectionPage />} />
-            <Route path={"/statistics"} element={<StatisticsPage />} />
+            <Route path={"/statistics"} element={<MetricsPage />} />
             <Route path={"/debug"} element={<DebugPage />} />
           </Route>
         </Routes>

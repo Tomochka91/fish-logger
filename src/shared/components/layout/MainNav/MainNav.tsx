@@ -21,7 +21,7 @@ export function MainNav() {
         <li>
           <AppNavLink to="/loggers">
             <BsReverseListColumnsReverse />
-            <span className={styles.caption}>Loggers</span>
+            <span className={styles.caption}>Runtime logs</span>
           </AppNavLink>
         </li>
         <li>
@@ -33,7 +33,7 @@ export function MainNav() {
         <li>
           <AppNavLink to="/statistics">
             <BsBoxes />
-            <span className={styles.caption}>Statistics</span>
+            <span className={styles.caption}>Metrics</span>
           </AppNavLink>
         </li>
         <li>
