@@ -24,6 +24,7 @@ export function UpdateButton({
       disabled={disabled || loading}
       onClick={onClick}
       sx={{
+        fontSize: "var(--standart-font-size)",
         padding: "0.9rem 1.2rem",
         boxShadow: 0,
         border: "var(--border-standart)",

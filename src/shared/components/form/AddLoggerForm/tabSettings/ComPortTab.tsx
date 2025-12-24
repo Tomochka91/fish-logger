@@ -9,7 +9,6 @@ import { getSerialPorts } from "../../../../../api/apiSerialPorts";
 import { Controller, useFormContext } from "react-hook-form";
 import type { LoggerFormValues } from "../loggerForm.types";
 import { HelperText } from "../../FormHelperText/HelperText";
-import { useMemo } from "react";
 import { hasMax2Decimals } from "../../../../utils/validation/hasMaxDecimalPlaces";
 import { FormInput } from "../../FormInput/FormInput";
 import { makeNumberChangeHandler } from "../../../../utils/numberField";
@@ -27,7 +26,7 @@ type ComPortTabProps = {
 };
 
 export function ComPortTab({ fieldPrefix }: ComPortTabProps) {
-  const { control, watch } = useFormContext<LoggerFormValues>();
+  const { control } = useFormContext<LoggerFormValues>();
 
   const { data: serialPorts, refetch } = useQuery<SerialPort[]>({
     queryKey: ["serial-port"],
@@ -37,14 +36,8 @@ export function ComPortTab({ fieldPrefix }: ComPortTabProps) {
     refetchOnWindowFocus: false,
   });
 
-  const portFieldName = `${fieldPrefix}.port.port` as const;
-  const selectedPort = watch(portFieldName);
-  const selectedPortData = useMemo(
-    () => serialPorts?.find((port) => port.name === selectedPort),
-    [serialPorts, selectedPort]
-  );
-
   const handleUpdate = () => {
+    console.log(serialPorts);
     refetch();
   };
 
@@ -73,33 +66,63 @@ export function ComPortTab({ fieldPrefix }: ComPortTabProps) {
                 control={control}
                 rules={{ required: "Port is required" }}
                 render={({ field, fieldState }) => {
-                  const ports = serialPorts ?? [];
-                  const currentValue = field.value ?? "";
-                  const isValidValue = ports.some(
-                    (p) => p.name === currentValue
-                  );
+                  const availablePorts = serialPorts ?? [];
+                  const savedPort = (field.value ?? "") as string;
+                  const isSavedPortAvailable =
+                    savedPort === "" ||
+                    availablePorts.some((p) => p.name === savedPort);
+
+                  const portsForSelect =
+                    !savedPort || isSavedPortAvailable
+                      ? availablePorts
+                      : [
+                          {
+                            name: savedPort,
+                            description: "Currently assigned (may be in use)",
+                          },
+                          ...availablePorts,
+                        ];
+
+                  const selectedPortData =
+                    portsForSelect.find((p) => p.name === savedPort) ?? null;
 
                   return (
                     <>
                       <FormSelect
                         {...field}
                         variant="outlined"
-                        value={isValidValue ? currentValue : ""}
+                        value={savedPort || ""}
                         onChange={(e) => field.onChange(e.target.value)}
+                        displayEmpty
                       >
-                        {ports.map((val) => (
-                          <MenuItem key={val.name} value={val.name}>
-                            {val.name}
-                          </MenuItem>
-                        ))}
+                        <MenuItem value="">Select port</MenuItem>
+
+                        {portsForSelect.map((p) => {
+                          const isVirtual = !availablePorts.some(
+                            (ap) => ap.name === p.name
+                          );
+
+                          return (
+                            <MenuItem
+                              key={p.name}
+                              value={p.name}
+                              disabled={isVirtual}
+                            >
+                              {p.name}
+                              {isVirtual ? " (in use)" : ""}
+                            </MenuItem>
+                          );
+                        })}
                       </FormSelect>
                       <HelperText
                         sx={{ gridColumn: "1/-1", minHeight: "1.6rem" }}
                       >
                         {fieldState.error
-                          ? fieldState.error?.message
-                          : selectedPortData
-                          ? selectedPortData?.description
+                          ? fieldState.error.message
+                          : selectedPortData?.description
+                          ? selectedPortData.description
+                          : !isSavedPortAvailable && savedPort
+                          ? "Currently assigned (may be in use)"
                           : " "}
                       </HelperText>
                     </>

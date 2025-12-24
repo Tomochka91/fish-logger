@@ -31,6 +31,7 @@ import { useLoggerFormState } from "../../../hooks/useLoggerFormState";
 import type { LoggerFormValues } from "./loggerForm.types";
 import { createLoggerDefaultValues } from "./loggerDefaults";
 import type { UsedLoggerType } from "./loggerRegistry";
+import { PasswordInput } from "../PasswordInput/PasswordInput";
 
 const NEW_LOGGER_DEFAULTS = createLoggerDefaultValues("easy_serial");
 
@@ -345,28 +346,30 @@ export function AddLoggerForm() {
               }}
               render={({ field, fieldState }) => (
                 <FormRow label="DB password" labelWidth="25%">
-                  <FormInput
+                  <PasswordInput
                     {...field}
                     value={field.value ?? ""}
-                    id="password"
+                    id="logform-auth-secret"
                     fullWidth
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="current-password"
+                    type="text"
+                    inputMode="text"
+                    autoComplete="off"
+                    masked={!showPassword}
                     helperText={fieldState.error?.message ?? " "}
                     slotProps={{
                       input: {
                         endAdornment: (
-                          <InputAdornment position="end">
+                          <InputAdornment
+                            position="end"
+                            sx={{ ml: 0, pr: "0.6rem" }}
+                          >
                             <IconButton
                               edge="end"
                               onClick={togglePassword}
                               tabIndex={-1}
                               sx={{
-                                marginRight: 0,
-                                "& svg": {
-                                  width: "1.8rem",
-                                  height: "1.8rem",
-                                },
+                                p: 0,
+                                "& svg": { width: "1.8rem", height: "1.8rem" },
                               }}
                             >
                               {showPassword ? <BsEyeSlash /> : <BsEye />}

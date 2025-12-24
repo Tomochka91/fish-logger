@@ -20,6 +20,7 @@ import {
 } from "../../../hooks/useDBSettings";
 import { TestButton } from "../../ui/button/TestButton";
 import { SaveButton } from "../../ui/button/SaveButton";
+import { PasswordInput } from "../PasswordInput/PasswordInput";
 
 const defaultDbValues: DBSettings = {
   host: "192.162.1.56",
@@ -168,7 +169,6 @@ export function DBForm() {
           placeholder="192.162.1.56"
           inputMode="decimal"
           {...register("host", dbFormValidation.ipAddress)}
-          error={!!errors.host}
           helperText={errors.host?.message || " "}
         />
       </FormRow>
@@ -181,7 +181,6 @@ export function DBForm() {
           inputMode="numeric"
           pattern="[0-9]*"
           {...register("port", dbFormValidation.port)}
-          error={!!errors.port}
           helperText={errors.port?.message || " "}
         />
       </FormRow>
@@ -192,34 +191,30 @@ export function DBForm() {
           fullWidth
           autoComplete="username"
           {...register("user", dbFormValidation.login)}
-          error={!!errors.user}
           helperText={errors.user?.message || " "}
         />
       </FormRow>
 
       <FormRow label="Password">
-        <FormInput
-          id="password"
+        <PasswordInput
+          id="db-auth-secret"
           fullWidth
-          type={showPassword ? "text" : "password"}
-          autoComplete="current-password"
+          type="text"
+          autoComplete="off"
+          masked={!showPassword}
           {...register("password", dbFormValidation.password)}
-          error={!!errors.password}
           helperText={errors.password?.message || " "}
           slotProps={{
             input: {
               endAdornment: (
-                <InputAdornment position="end">
+                <InputAdornment position="end" sx={{ ml: 0, pr: "0.6rem" }}>
                   <IconButton
                     edge="end"
                     onClick={togglePassword}
                     tabIndex={-1}
                     sx={{
-                      margin: 0,
-                      "& svg": {
-                        width: "1.8rem",
-                        height: "1.8rem",
-                      },
+                      p: 0,
+                      "& svg": { width: "1.8rem", height: "1.8rem" },
                     }}
                   >
                     {showPassword ? <BsEyeSlash /> : <BsEye />}
@@ -236,7 +231,6 @@ export function DBForm() {
           id="database"
           fullWidth
           {...register("database", dbFormValidation.dbName)}
-          error={!!errors.database}
           helperText={errors.database?.message || " "}
         />
       </FormRow>

@@ -17,7 +17,7 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename="/logger">
+      <BrowserRouter basename="/logger/ui">
         <App />
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />

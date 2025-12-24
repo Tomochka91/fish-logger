@@ -8,6 +8,7 @@ export const FormInput = styled(TextField)({
   "& .MuiOutlinedInput-root": {
     lineHeight: "var(--line-height-standart)",
     padding: 0,
+    paddingRight: "1.4rem",
     background: "var(--color-mint-cream)",
     borderRadius: "var(--border-radius-main)",
     "& fieldset": {
@@ -21,6 +22,7 @@ export const FormInput = styled(TextField)({
       borderWidth: 1,
     },
   },
+
   "& .MuiInputBase-input": {
     fontSize: "var(--standart-font-size)",
     fontFamily: "var(--secondary-font)",
