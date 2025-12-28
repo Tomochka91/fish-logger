@@ -37,7 +37,6 @@ export function ComPortTab({ fieldPrefix }: ComPortTabProps) {
   });
 
   const handleUpdate = () => {
-    console.log(serialPorts);
     refetch();
   };
 

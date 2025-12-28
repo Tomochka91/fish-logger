@@ -18,11 +18,9 @@ export const dbFormValidation = {
   },
   login: {
     required: "Login is required",
-    minLength: { value: 2, message: "At least 2 characters" },
   },
   password: {
     required: "Password is required",
-    minLength: { value: 4, message: "At least 4 characters" },
   },
   dbName: {
     required: "DataBase name is required",

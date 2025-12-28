@@ -83,6 +83,7 @@ export const getMboxAvailableCounters =
     const data = await request<MboxAvailableCounters>(
       "/mbox/available-counters"
     );
+    console.log(data);
     return data;
   };
 

@@ -47,7 +47,6 @@ export function SlavesTab({ fieldPrefix }: SlavesTabProps) {
           flexDirection: "column",
           flex: 1,
           minHeight: 0,
-          // flexShrink: 0,
           justifyContent: "flex-start",
           alignItems: "flex-start",
         }}

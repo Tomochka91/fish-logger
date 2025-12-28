@@ -6,6 +6,14 @@ export const defaultAutocompleteSlotProps = {
       boxShadow: "0 0.8rem 2rem rgba(15, 30, 40, 0.18)",
       border: "none",
       overflow: "hidden",
+
+      "& .MuiAutocomplete-noOptions": {
+        fontFamily: "var(--secondary-font)",
+        fontSize: "var(--standart-font-size)",
+        color: "var(--color-gunmetal)",
+        padding: "0.8rem 1rem",
+        opacity: 0.4,
+      },
     },
   },
   listbox: {

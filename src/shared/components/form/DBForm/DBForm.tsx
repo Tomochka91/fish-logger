@@ -99,6 +99,7 @@ export function DBForm() {
   return (
     <Box
       component="form"
+      noValidate
       onSubmit={handleSaveSettings}
       sx={{
         maxWidth: "50%",
@@ -207,7 +208,7 @@ export function DBForm() {
           slotProps={{
             input: {
               endAdornment: (
-                <InputAdornment position="end" sx={{ ml: 0, pr: "0.6rem" }}>
+                <InputAdornment position="end" sx={{ ml: 0, pr: "1.4rem" }}>
                   <IconButton
                     edge="end"
                     onClick={togglePassword}

@@ -10,8 +10,9 @@ import { HelperText } from "../../FormHelperText/HelperText";
 import { hasMax2Decimals } from "../../../../utils/validation/hasMaxDecimalPlaces";
 import { useEffect, useMemo } from "react";
 import { MBOX_COUNTER_DEFAULTS } from "../mbox/mboxFormDefaults";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMboxAvailableCounters } from "../../../../../api/apiConnections";
+import type { LoggerList } from "../../../../types";
 
 const strategy: string[] = ["last", "default"];
 
@@ -29,23 +30,81 @@ export function CounterTab() {
   const { control, watch, clearErrors, setValue } =
     useFormContext<LoggerFormValues>();
 
+  const type = watch("type");
+  const extCounterEnabled = !!watch("mbox.ext_counter");
+  const selectedConnectionId = watch("mbox.counter_connection_id");
+  const currentDeviceId = watch("mbox.counter_device_id");
+
+  const queryClient = useQueryClient();
+  const loggerList = useMemo(
+    () => queryClient.getQueryData<LoggerList>(["logger-list"]) ?? [],
+    [queryClient]
+  );
+
   const {
     data: availableCountersList,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["mbox-available-counters"],
+    queryKey: ["mbox-available-counters", type],
     queryFn: getMboxAvailableCounters,
+    enabled: type === "mbox",
     staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchOnMount: "always",
   });
 
   const counters = useMemo(
     () => availableCountersList?.data ?? [],
     [availableCountersList?.data]
   );
+  type CounterOption = (typeof counters)[number] & { __inUse?: boolean };
 
-  const extCounterEnabled = !!watch("mbox.ext_counter");
+  const makeCombo = (connId: number, devId: number) => `${connId}:${devId}`;
+
+  const inUseOption = useMemo<CounterOption | null>(() => {
+    if (!extCounterEnabled) return null;
+    if (typeof selectedConnectionId !== "number") return null;
+    if (typeof currentDeviceId !== "number") return null;
+
+    const existsInAvailable = counters.some(
+      (c) =>
+        c.counter_connection_id === selectedConnectionId &&
+        c.device_id === currentDeviceId
+    );
+    if (existsInAvailable) return null;
+
+    const counterLogger = loggerList.find(
+      (l) => l.type === "mbox_counter" && l.id === selectedConnectionId
+    );
+
+    const device = counterLogger?.mbox_counter?.devices?.find(
+      (d) => d.device_id === currentDeviceId
+    );
+
+    return {
+      counter_connection_id: selectedConnectionId,
+      counter_connection_name:
+        counterLogger?.name ?? `Counter #${selectedConnectionId}`,
+      device_id: currentDeviceId,
+      device_name: device?.name ?? `Device #${currentDeviceId}`,
+      serial: device?.serial ?? 0,
+      runtime_state: "in_use",
+      total_count: 0,
+      __inUse: true,
+    } as CounterOption;
+  }, [
+    extCounterEnabled,
+    selectedConnectionId,
+    currentDeviceId,
+    counters,
+    loggerList,
+  ]);
+
+  const counterOptions: CounterOption[] = useMemo(
+    () => (inUseOption ? [inUseOption, ...counters] : counters),
+    [inUseOption, counters]
+  );
 
   useEffect(() => {
     if (!extCounterEnabled) {
@@ -56,22 +115,26 @@ export function CounterTab() {
     }
   }, [extCounterEnabled, clearErrors, setValue]);
 
-  const selectedConnectionId = watch("mbox.counter_connection_id");
-  const currentDeviceId = watch("mbox.counter_device_id");
-
   useEffect(() => {
     if (!extCounterEnabled) return;
-
     if (typeof selectedConnectionId !== "number") return;
 
-    const selected = counters.find(
+    const pairIsValid =
+      typeof currentDeviceId === "number" &&
+      counterOptions.some(
+        (c) =>
+          c.counter_connection_id === selectedConnectionId &&
+          c.device_id === currentDeviceId
+      );
+
+    if (pairIsValid) return;
+
+    const firstForConn = counters.find(
       (c) => c.counter_connection_id === selectedConnectionId
     );
-    if (!selected) return;
+    if (!firstForConn) return;
 
-    if (currentDeviceId === selected.device_id) return;
-
-    setValue("mbox.counter_device_id", selected.device_id ?? null, {
+    setValue("mbox.counter_device_id", firstForConn.device_id ?? null, {
       shouldValidate: true,
       shouldDirty: false,
       shouldTouch: false,
@@ -81,6 +144,7 @@ export function CounterTab() {
     selectedConnectionId,
     currentDeviceId,
     counters,
+    counterOptions,
     setValue,
   ]);
 
@@ -126,46 +190,51 @@ export function CounterTab() {
                 },
               }}
               render={({ field, fieldState }) => {
-                const currentValue = field.value;
-                const hasOption =
-                  typeof currentValue === "number" &&
-                  counters.some(
-                    (c) => c.counter_connection_id === currentValue
-                  );
+                const comboValue =
+                  extCounterEnabled &&
+                  typeof selectedConnectionId === "number" &&
+                  typeof currentDeviceId === "number" &&
+                  counterOptions.some(
+                    (c) =>
+                      c.counter_connection_id === selectedConnectionId &&
+                      c.device_id === currentDeviceId
+                  )
+                    ? makeCombo(selectedConnectionId, currentDeviceId)
+                    : "";
 
-                const selectValue =
-                  extCounterEnabled && hasOption ? currentValue : "";
                 return (
                   <>
                     <FormSelect
-                      {...field}
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      inputRef={field.ref}
                       displayEmpty
                       disabled={!extCounterEnabled || isLoading || isError}
                       variant="outlined"
-                      value={selectValue}
+                      value={comboValue}
                       onChange={(e) => {
-                        const raw = e.target.value;
+                        const raw = String(e.target.value);
 
-                        const connectionId = raw === "" ? null : Number(raw);
-
-                        field.onChange(connectionId);
-
-                        const selected =
-                          typeof connectionId === "number"
-                            ? counters.find(
-                                (c) => c.counter_connection_id === connectionId
-                              )
-                            : undefined;
-
-                        setValue(
-                          "mbox.counter_device_id",
-                          selected?.device_id ?? null,
-                          {
+                        if (raw === "") {
+                          field.onChange(null);
+                          setValue("mbox.counter_device_id", null, {
                             shouldValidate: true,
                             shouldDirty: true,
                             shouldTouch: true,
-                          }
-                        );
+                          });
+                          return;
+                        }
+
+                        const [connStr, devStr] = raw.split(":");
+                        const connectionId = Number(connStr);
+                        const deviceId = Number(devStr);
+
+                        field.onChange(connectionId);
+                        setValue("mbox.counter_device_id", deviceId, {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                          shouldTouch: true,
+                        });
                       }}
                     >
                       <MenuItem value="">
@@ -176,12 +245,21 @@ export function CounterTab() {
                           : "Select counter"}
                       </MenuItem>
 
-                      {counters.map((c) => (
+                      {counterOptions.map((c, i) => (
                         <MenuItem
-                          key={`${c.counter_connection_id}-${c.device_id}-${c.serial}`}
-                          value={c.counter_connection_id}
+                          key={`${c.counter_connection_id}-${c.device_id}-${
+                            c.serial ?? "na"
+                          }-${i}`}
+                          value={makeCombo(
+                            c.counter_connection_id,
+                            c.device_id
+                          )}
                         >
-                          {`${c.device_name} (${c.counter_connection_id} : ${c.device_id} : ${c.serial})`}
+                          {`${c.device_name} (${c.counter_connection_id} : ${
+                            c.device_id
+                          }${c.serial != null ? ` : ${c.serial}` : ""})${
+                            c.__inUse ? " (in use)" : ""
+                          }`}
                         </MenuItem>
                       ))}
                     </FormSelect>

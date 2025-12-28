@@ -361,7 +361,7 @@ export function AddLoggerForm() {
                         endAdornment: (
                           <InputAdornment
                             position="end"
-                            sx={{ ml: 0, pr: "0.6rem" }}
+                            sx={{ ml: 0, pr: "1.4rem" }}
                           >
                             <IconButton
                               edge="end"
